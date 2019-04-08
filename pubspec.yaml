@@ -16,6 +16,12 @@ dependencies:
   cloud_firestore: ^0.9.13
   firebase_database: ^2.0.2
   cloud_functions: ^0.1.2+1
+  flutter_launcher_icons: "^0.7.0"
+  
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/images/icon.png"
 
 dev_dependencies:
   flutter_test:
