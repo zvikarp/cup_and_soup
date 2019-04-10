@@ -16,6 +16,14 @@ dependencies:
   cloud_firestore: ^0.9.13
   firebase_database: ^2.0.2
   cloud_functions: ^0.1.2+1
+  flutter_launcher_icons: "^0.7.0"
+  shared_preferences: ^0.5.1+2
+  flare_flutter: ^1.3.8
+  
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/images/icon.png"
 
 dev_dependencies:
   flutter_test:
@@ -29,13 +37,15 @@ flutter:
    - assets/images/logo.png
    - assets/images/room10.png
 
+   - assets/flare/phoneVerify.flr
+
   fonts:
     - family: BrandFont
       fonts:
         - asset: assets/fonts/BillionaireMediumGrunge.ttf
     - family: PrimaryFont
       fonts:
-        - asset: assets/fonts/coffee+teademo-Regular.ttf
+        - asset: assets/fonts/UbuntuCondensed-Regular.ttf
     - family: SeconderyFont
       fonts:
         - asset: assets/fonts/coffee+teademo-Regular.ttf
