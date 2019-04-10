@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cup_and_soup/services/sharedPreferences.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/pages/home.dart';
+import 'package:cup_and_soup/pages/signin.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,11 +22,18 @@ class AuthService {
         sharedPreferencesService.setPhoneNumber(_phoneNumber);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));
+            cloudFirestoreService.getUserData();
+      } else {
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SigninPage()));
       }
     };
 
     final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) {};
+        (AuthException authException) {
+          Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SigninPage()));
+        };
 
     final PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
@@ -77,6 +86,10 @@ class AuthService {
   Future<bool> signOut() async {
     await FirebaseAuth.instance.signOut();
     return true;
+  }
+
+  String getUid() {
+    return _uid;
   }
 }
 

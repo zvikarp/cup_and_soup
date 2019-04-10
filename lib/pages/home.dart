@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/pages/shop.dart';
-import 'package:cup_and_soup/pages/account.dart';
-import 'package:cup_and_soup/pages/scanner.dart';
+import 'package:cup_and_soup/pages/home/shop.dart';
+import 'package:cup_and_soup/pages/home/account.dart';
+import 'package:cup_and_soup/pages/home/scanner.dart';
+import 'package:cup_and_soup/pages/home/admin.dart';
 import 'package:cup_and_soup/widgets/home/navigationBar.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     AccountPage(),
     ShopPage(),
     ScannerPage(),
+    AdminPage(),
   ];
   int _currentPage = 1;
 

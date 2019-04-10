@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
-import 'package:cup_and_soup/pages/home.dart';
-import 'package:cup_and_soup/pages/signin.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -13,16 +11,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  void _signInUser() async {
-    String uid = await authService.signIn(context) ?? "";
-    if (uid != "") {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SigninPage()));
-    }
-    print("the user is " + uid);
+  void _signInUser() {
+    authService.signIn(context);
   }
 
   @override
