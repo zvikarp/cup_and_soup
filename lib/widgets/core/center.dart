@@ -6,7 +6,7 @@ class CenterWidget extends StatelessWidget {
     @required this.child,
   });
 
-  Widget child;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

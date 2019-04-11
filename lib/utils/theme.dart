@@ -16,6 +16,17 @@ class ThemeUtil {
           color: Colors.white,
         ),
       ),
+
+      textTheme: TextTheme(
+        body1: TextStyle(
+                fontFamily: "PrimaryFont",
+                fontSize: 18,
+              ),
+        body2: TextStyle(
+                fontFamily: "PrimaryFont",
+                fontSize: 24,
+              ),
+      )
     );
   }
 }

@@ -17,7 +17,6 @@ class _SigninPageState extends State<SigninPage> {
   final TextEditingController _smsController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _phoneNumber = "";
-  String _uid = "";
   int step = 1;
 
   String validatePhoneNumber() {

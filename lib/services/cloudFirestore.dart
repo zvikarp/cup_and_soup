@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
-import 'package:cup_and_soup/services/sharedPreferences.dart';
 
 class CloudFirestoreService {
   final Firestore _db = Firestore.instance;
