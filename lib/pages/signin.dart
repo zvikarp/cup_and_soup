@@ -17,14 +17,12 @@ class _SigninPageState extends State<SigninPage> {
   final TextEditingController _smsController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _phoneNumber = "";
-  String _uid = "";
   int step = 1;
 
   String validatePhoneNumber() {
     String input = _phoneNumberController.text.toString();
     if ((input == "") || (input == null)) {
       SnackbarWidget.show(_scaffoldKey, "Please enter your phone number.");
-      print("sfsdf");
       return null;
     } else if (input.length != 9) {
       SnackbarWidget.show(_scaffoldKey, "The entered number doesn't exist.");

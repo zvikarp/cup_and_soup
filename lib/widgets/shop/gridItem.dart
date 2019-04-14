@@ -2,35 +2,47 @@ import 'package:flutter/material.dart';
 
 class GridItemWidget extends StatelessWidget {
   GridItemWidget({
-    @required this.text,
+    @required this.price,
+    @required this.image,
     @required this.onTap,
+    this.onLongPress,
   });
 
-  final String text;
+  final double price;
+  final String image;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return GridTile(
       child: GestureDetector(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Container(
           margin: EdgeInsets.all(16),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 24,
-                color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Opacity(
+                opacity: 0.2,
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/room10.png',
+                    image: image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+              Text(
+                "${price.toString()} NIS",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "PrimaryFont",
+                  fontSize: 28,
+                ),
+              ),
+            ],
           ),
         ),
       ),
