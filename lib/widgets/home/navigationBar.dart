@@ -5,34 +5,16 @@ class NavigationBarWidget extends StatelessWidget {
     Key key,
     @required this.index,
     @required this.tabTapped,
+    @required this.isAdmin,
   }) : super(key: key);
 
   final int index;
   final void Function(int) tabTapped;
+  final bool isAdmin;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: new BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[600],
-            blurRadius: 5.0,
-            spreadRadius: 1.0,
-          )
-        ],
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        color: Theme.of(context).accentColor,
-      ),
-      child: BottomAppBar(
-        elevation: 0,
-        color: Theme.of(context).accentColor,
-        child: new Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            IconButton(
+  List<Widget> appBarIcons(BuildContext context) {
+return [
+  IconButton(
               icon: Icon(
                 Icons.account_circle,
                 color: index != 0
@@ -59,7 +41,13 @@ class NavigationBarWidget extends StatelessWidget {
               ),
               onPressed: () => tabTapped(2),
             ),
-            IconButton(
+];
+  }
+
+  List<Widget> adminAppBarWIcons(BuildContext context) {
+    List<Widget> list = appBarIcons(context);
+    list.add(
+      IconButton(
               icon: Icon(
                 Icons.star,
                 color: index != 3
@@ -67,8 +55,33 @@ class NavigationBarWidget extends StatelessWidget {
                     : Theme.of(context).primaryColor,
               ),
               onPressed: () => tabTapped(3),
-            ),
-          ],
+            )
+    );
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12),
+      decoration: new BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[600],
+            blurRadius: 5.0,
+            spreadRadius: 1.0,
+          )
+        ],
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        color: Theme.of(context).accentColor,
+      ),
+      child: BottomAppBar(
+        elevation: 0,
+        color: Theme.of(context).accentColor,
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
         ),
       ), //bottomAppBar
     );

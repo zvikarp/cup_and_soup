@@ -4,15 +4,15 @@ import 'package:cup_and_soup/widgets/core/page.dart';
 
 class ItemPage extends StatelessWidget {
   ItemPage({
-    @required this.name,
+    @required this.item,
   });
 
-  final String name;
+  final Map<String, dynamic> item;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageWidget(
-        title: name,
+        title: item['name'],
         child: Container(),
       ),
     );

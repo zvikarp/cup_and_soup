@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ListWidget extends StatelessWidget {
-  ListWidget({
+class TableWidget extends StatelessWidget {
+  TableWidget({
     @required this.items,
     this.headings = const [],
   });
@@ -25,9 +25,8 @@ class ListWidget extends StatelessWidget {
             child: headings == []
                 ? Container()
                 : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
-                        headings.map((heading) => Text(heading)).toList()),
+                        headings.map((heading) => Expanded(child:Text(heading), flex: 1)).toList()),
           ),
           ListView.builder(
             shrinkWrap: true,

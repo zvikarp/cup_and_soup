@@ -5,8 +5,8 @@ import 'package:cup_and_soup/pages/signin.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/widgets/core/list.dart';
-import 'package:cup_and_soup/widgets/core/listItem.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
+import 'package:cup_and_soup/widgets/core/tableItem.dart';
 
 class AccountPage extends StatefulWidget {
   AccountPage({Key key}) : super(key: key);
@@ -68,9 +68,9 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
         
-        ListWidget(
+        TableWidget(
           headings: ["title", "subtitle", "price"],
-          items: (historyList.map((item) => ListItemWidget(
+          items: (historyList.map((item) => TableItemWidget(
             title: item["title"],
             subTitle: item["subtitle"],
             price: item["price"],

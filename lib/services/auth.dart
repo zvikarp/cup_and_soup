@@ -11,18 +11,20 @@ class AuthService {
   String _verificationId;
   String _uid;
   String _phoneNumber;
+  String _role;
 
   Future verifyPhoneNumber(String phoneNumber, BuildContext context) async {
     _phoneNumber = phoneNumber;
     final PhoneVerificationCompleted verificationCompleted =
-        (FirebaseUser user) {
+        (FirebaseUser user) async {
       _uid = user.uid ?? "";
-      print("the uid" + _uid);
+      print("uid: " + _uid);
       if (_uid != "") {
         sharedPreferencesService.setPhoneNumber(_phoneNumber);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));
-            cloudFirestoreService.getUserData();
+            var user = await cloudFirestoreService.getUserData();
+            _role = user['role'];
       } else {
         Navigator.push(
           context, MaterialPageRoute(builder: (context) => SigninPage()));
@@ -90,6 +92,14 @@ class AuthService {
 
   String getUid() {
     return _uid;
+  }
+
+  Future<String> getRole() async {
+    if (_role == null) {
+      var data = await cloudFirestoreService.getUserData();
+      _role = data['role'];
+    }
+    return _role;
   }
 }
 

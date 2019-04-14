@@ -23,7 +23,6 @@ class _SigninPageState extends State<SigninPage> {
     String input = _phoneNumberController.text.toString();
     if ((input == "") || (input == null)) {
       SnackbarWidget.show(_scaffoldKey, "Please enter your phone number.");
-      print("sfsdf");
       return null;
     } else if (input.length != 9) {
       SnackbarWidget.show(_scaffoldKey, "The entered number doesn't exist.");
