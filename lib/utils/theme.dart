@@ -12,9 +12,9 @@ class ThemeUtil {
         color: Colors.white,
       ),
       appBarTheme: AppBarTheme(
-        actionsIconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+        // actionsIconTheme: IconThemeData(
+        //   color: Colors.white,
+        // ),
       ),
 
       textTheme: TextTheme(
