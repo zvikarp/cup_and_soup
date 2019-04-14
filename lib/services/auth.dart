@@ -3,9 +3,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 
-import 'package:cup_and_soup/pages/home.dart';
-import 'package:cup_and_soup/pages/signin.dart';
-
 class AuthService {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();

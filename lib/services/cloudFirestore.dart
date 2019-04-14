@@ -22,7 +22,6 @@ class CloudFirestoreService {
 
   Future loadUserData() async {
     String uid = await authService.getUid();
-    print("1 user id is" + uid);
     var data = await _db.collection('users').document(uid).get();
     var userData = {
       "name": data["name"],
@@ -59,6 +58,21 @@ class CloudFirestoreService {
         .collection('store')
         .document(id.toString())
         .delete();
+    return true;
+  }
+
+  Future<bool> buyItem(String barcode) async {
+    String uid = await authService.getUid();
+    if (uid == null) return false;
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .add({
+      'type': 'buy',
+      'barcode': barcode,
+      'client': 'server',
+    });
     return true;
   }
 

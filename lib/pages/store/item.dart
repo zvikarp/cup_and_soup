@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/widgets/shop/actionSection.dart';
+import 'package:cup_and_soup/widgets/store/actionSection.dart';
 import 'package:cup_and_soup/models/item.dart';
 
 class ItemPage extends StatelessWidget {
@@ -19,13 +19,14 @@ class ItemPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Opacity(
-                  opacity: 0.2,
-                  child: Container(
-                    height: 200,
+                Container(
+                  height: 250,
+                  child: Hero(
+                    tag: item.barcode,
                     child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/room10.png',
-                      image: 'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
+                      placeholder: 'assets/images/loading.png',
+                      image:
+                          'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -39,7 +40,7 @@ class ItemPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: ActionSectionWidget(),
+      bottomNavigationBar: ActionSectionWidget(barcode: item.barcode, price:item.price),
     );
   }
 }

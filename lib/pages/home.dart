@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/pages/home/shop.dart';
+import 'package:cup_and_soup/pages/home/store.dart';
 import 'package:cup_and_soup/pages/home/account.dart';
 import 'package:cup_and_soup/pages/home/scanner.dart';
 import 'package:cup_and_soup/pages/home/admin.dart';
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> pages = [
     AccountPage(),
-    ShopPage(),
+    StorePage(),
     ScannerPage(),
   ];
   int _currentPage = 1;
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       if (_isAdmin) {
         pages.add(AdminPage());
         pages.removeAt(1);
-        pages.insert(1, ShopPage(isAdmin: true,));
+        pages.insert(1, StorePage(isAdmin: true,));
       }
     });
   }

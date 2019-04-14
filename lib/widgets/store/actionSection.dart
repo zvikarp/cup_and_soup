@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/widgets/core/button.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class ActionSectionWidget extends StatelessWidget {
+
+  ActionSectionWidget({
+    @required this.barcode,
+    @required this.price,
+  });
+
+  final String barcode;
+  final double price;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +32,10 @@ class ActionSectionWidget extends StatelessWidget {
         elevation: 0,
         color: Theme.of(context).accentColor,
         child: ButtonWidget(
-          text: "Buy Now for 23.4 NIS",
-          onPressed: () {},
+          text: "Buy Now for ${price.toString()} NIS",
+          onPressed: () {
+            cloudFirestoreService.buyItem(barcode);
+          },
         )
       ),
     );

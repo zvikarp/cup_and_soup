@@ -3,23 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/pages/shop/item.dart';
-import 'package:cup_and_soup/pages/shop/editItem.dart';
-import 'package:cup_and_soup/widgets/shop/gridItem.dart';
+import 'package:cup_and_soup/pages/store/item.dart';
+import 'package:cup_and_soup/pages/store/editItem.dart';
+import 'package:cup_and_soup/widgets/store/gridItem.dart';
 import 'package:cup_and_soup/models/item.dart';
 
-class ShopPage extends StatefulWidget {
-  ShopPage({
+class StorePage extends StatefulWidget {
+  StorePage({
     Key key,
     this.isAdmin = false,
   }) : super(key: key);
 
-  bool isAdmin;
+  final bool isAdmin;
 
-  _ShopPageState createState() => _ShopPageState();
+  _StorePageState createState() => _StorePageState();
 }
 
-class _ShopPageState extends State<ShopPage> {
+class _StorePageState extends State<StorePage> {
   Widget _addItemButton() {
     return GridTile(
       child: Container(
@@ -76,8 +76,7 @@ class _ShopPageState extends State<ShopPage> {
                 );
 
                 return GridItemWidget(
-                  price: doc['price'],
-                  image: doc['image'],
+                  item: item,
                   onTap: () {
                     Navigator.push(
                       context,

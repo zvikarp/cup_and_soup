@@ -39,6 +39,7 @@ flutter:
   assets:
    - assets/images/logo.png
    - assets/images/room10.png
+   - assets/images/loading.png
 
    - assets/flare/phoneVerify.flr
 
