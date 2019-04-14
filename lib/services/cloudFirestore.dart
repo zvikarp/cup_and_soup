@@ -32,8 +32,8 @@ class CloudFirestoreService {
     String uid = authService.getUid();
     if (uid == null) return false;
     await _db
-        .collection('items')
-        .document(item.id.toString())
+        .collection('store')
+        .document(item.barcode.toString())
         .setData({
       'name': item.name,
       'desc': item.desc,
@@ -50,7 +50,7 @@ class CloudFirestoreService {
     String uid = authService.getUid();
     if (uid == null) return false;
     await _db
-        .collection('items')
+        .collection('store')
         .document(id.toString())
         .delete();
     return true;

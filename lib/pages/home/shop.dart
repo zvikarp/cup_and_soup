@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/pages/shop/item.dart';
@@ -18,118 +19,87 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  List<Map<String, dynamic>> _gridListItems = [
-    {
-      'name': 'item 1',
-      'desc': 'desc 1',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 2',
-      'desc': 'desc 2',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 3',
-      'desc': 'desc 3',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 4',
-      'desc': 'desc 4',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 5',
-      'desc': 'desc 5',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 6',
-      'desc': 'desc 6',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-    {
-      'name': 'item 7',
-      'desc': 'desc 7',
-      'price': 25.1,
-      'tags': 'tag a, tag b',
-      'stock': 5
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
     return PageWidget(
       title: "shop",
-      child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemCount: widget.isAdmin ? _gridListItems.length + 1 : _gridListItems.length,
-        itemBuilder: (context, index) {
-          if (index == _gridListItems.length) {
-            return GridItemWidget(
-              text: "Add Item",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ItemPage(
-                          item: _gridListItems[0],
-                        ),
-                  ),
-                );
-              },
-              onLongPress: widget.isAdmin ? () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ItemPage(
-                          item: _gridListItems[0],
-                        ),
-                  ),
-                );
-              } : () {},
-            );
-          }
-          return GridItemWidget(
-            text: _gridListItems[index]["name"],
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ItemPage(
-                        item: _gridListItems[index],
+      child: StreamBuilder(
+        stream: Firestore.instance.collection('store').snapshots(),
+        builder: (context, snapshot) {
+          int length = 0;
+              if(snapshot.hasData && snapshot.data.documents != null)
+                length += (snapshot.data.documents.length ?? 0);
+          return GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemCount: widget.isAdmin ? length + 1 : length,
+            itemBuilder: (context, index) {
+              if (index == length) {
+                return GridItemWidget(
+                  text: "Add Item",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditItemPage(
+                              newItem: true
+                            ),
                       ),
-                ),
+                    );
+                  },
+                  onLongPress: widget.isAdmin ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditItemPage(
+                              newItem: true
+                            ),
+                      ),
+                    );
+                  } : () {},
+                );
+              }
+              var doc = snapshot.data.documents[index];
+              Item item = Item(
+                barcode: doc.documentID,
+                name: doc['name'],
+                desc: doc['desc'],
+                image: doc['image'],
+                price: doc['price'],
+                stock: doc['stock'],
+                tags: doc['tags'],
+                hechsherim: doc['hecchsherim'],
               );
-            },
-            onLongPress: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditItemPage(
-                        item: _gridListItems[index],
-                      ),
-                ),
+
+              return GridItemWidget(
+                text: doc['name'],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemPage(
+                            item: item,
+                          ),
+                    ),
+                  );
+                },
+                onLongPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditItemPage(
+                            item: item,
+                          ),
+                    ),
+                  );
+                },
               );
             },
           );
-        },
+        }
       ),
     );
   }

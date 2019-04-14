@@ -1,7 +1,7 @@
 /// Todo object
 class Item {
   Item({
-    this.id,
+    this.barcode,
     this.name,
     this.desc,
     this.image,
@@ -11,7 +11,7 @@ class Item {
     this.hechsherim,
   });
 
-  int id;
+  String barcode;
   String name;
   String desc;
   String image;
@@ -21,7 +21,7 @@ class Item {
   String hechsherim;
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
-        id: json["id"],
+        barcode: json["barcode"],
         name: json["name"],
         desc: json["desc"],
         image: json["image"],
@@ -32,7 +32,7 @@ class Item {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        "barcode": barcode,
         "name": name,
         "desc": desc,
         "image": image,
