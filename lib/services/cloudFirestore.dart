@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:rxdart/subjects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
@@ -5,6 +9,7 @@ import 'package:cup_and_soup/models/item.dart';
 
 class CloudFirestoreService {
   final Firestore _db = Firestore.instance;
+  final _requestsStream = PublishSubject();
   Map<String, dynamic> _userData;
 
   Future<String> getRole() async {
@@ -18,6 +23,37 @@ class CloudFirestoreService {
       else
         return null;
     }
+  }
+
+  void getRequests() async {
+    String uid = await authService.getUid();
+    _db.collection('users').document(uid).collection('requests').where('client', isEqualTo: 'app').snapshots().listen((snap) {
+      snap.documentChanges.forEach((doc) {
+        var request = {
+          "rid": doc.document.documentID,
+          "barcode": doc.document.data['barcode'],
+          "message": doc.document.data['response']['message'],
+          "code": doc.document.data['response']['code'],
+        };
+        _requestsStream.add(request);
+      });
+    });
+  }
+
+  Stream subscribeToRequestsStream() {
+    return _requestsStream.stream;
+  }
+
+  Future<bool> deleteRequest(int id) async {
+    String uid = await authService.getUid();
+    if (uid == null) return false;
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document(id.toString())
+        .delete();
+    return true;
   }
 
   Future loadUserData() async {

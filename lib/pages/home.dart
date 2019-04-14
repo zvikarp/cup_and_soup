@@ -6,6 +6,7 @@ import 'package:cup_and_soup/pages/home/scanner.dart';
 import 'package:cup_and_soup/pages/home/admin.dart';
 import 'package:cup_and_soup/widgets/home/navigationBar.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getRole();
+    cloudFirestoreService.getRequests();
   }
 
   void _onTabTaped(int tab) {

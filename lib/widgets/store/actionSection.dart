@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 
-class ActionSectionWidget extends StatelessWidget {
-
+class ActionSectionWidget extends StatefulWidget {
   ActionSectionWidget({
     @required this.barcode,
     @required this.price,
@@ -12,6 +11,27 @@ class ActionSectionWidget extends StatelessWidget {
 
   final String barcode;
   final double price;
+
+  @override
+  _ActionSectionWidgetState createState() => _ActionSectionWidgetState();
+}
+
+class _ActionSectionWidgetState extends State<ActionSectionWidget> {
+  bool loading = false;
+
+  void _waitForResponce() {
+    cloudFirestoreService.subscribeToRequestsStream().listen((snap) {
+      print(snap['barcode']);
+      if (snap['barcode'] == widget.barcode) {
+        print("jobdone!" + snap['message'].toString());
+        setState(() {
+          loading = false;
+        });
+        cloudFirestoreService.deleteRequest(snap['id']);
+        return;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +49,28 @@ class ActionSectionWidget extends StatelessWidget {
         color: Theme.of(context).accentColor,
       ),
       child: BottomAppBar(
-        elevation: 0,
-        color: Theme.of(context).accentColor,
-        child: ButtonWidget(
-          text: "Buy Now for ${price.toString()} NIS",
-          onPressed: () {
-            cloudFirestoreService.buyItem(barcode);
-          },
-        )
-      ),
+          elevation: 0,
+          color: Theme.of(context).accentColor,
+          child: loading
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ],
+                )
+              : ButtonWidget(
+                  text: "Buy Now for ${widget.price.toString()} NIS",
+                  onPressed: () {
+                    setState(() {
+                      loading = true;
+                    });
+                    _waitForResponce();
+                    cloudFirestoreService.buyItem(widget.barcode);
+                  },
+                )),
     );
   }
 }
