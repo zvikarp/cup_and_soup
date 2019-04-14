@@ -64,7 +64,7 @@ return [
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12),
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: Colors.grey[600],
@@ -78,7 +78,7 @@ return [
       child: BottomAppBar(
         elevation: 0,
         color: Theme.of(context).accentColor,
-        child: new Row(
+        child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),

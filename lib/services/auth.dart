@@ -101,6 +101,11 @@ class AuthService {
     }
     return _role;
   }
+
+  Future<String> loadUID() async {
+    FirebaseUser user = await _auth.currentUser();
+    return user.uid;
+  }
 }
 
 final AuthService authService = AuthService();
