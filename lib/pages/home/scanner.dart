@@ -10,6 +10,7 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
+
   @override
   Widget build(BuildContext context) {
     return PageWidget(
@@ -26,6 +27,7 @@ class _ScannerPageState extends State<ScannerPage> {
         child: Container(
           constraints: BoxConstraints.expand(height: 400),
           color: Colors.blue,
+         
         ),
       ),
     );
