@@ -19,7 +19,8 @@ class _SplashPageState extends State<SplashPage> {
     if ((phoneNumber != "") && (phoneNumber != null)) {
       String uid = await authService.signIn(context);
     }
-    Navigator.push(
+    else {
+      Navigator.push(
       context, MaterialPageRoute(builder: (context) => SigninPage()));
     }
   }
