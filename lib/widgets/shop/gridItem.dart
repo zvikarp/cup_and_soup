@@ -29,7 +29,7 @@ class GridItemWidget extends StatelessWidget {
                   width: MediaQuery.of(context).size.width / 2,
                   child: FadeInImage.assetNetwork(
                     placeholder: 'assets/images/room10.png',
-                    image: image,
+                    image: 'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
                     fit: BoxFit.contain,
                   ),
                 ),

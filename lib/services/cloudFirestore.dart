@@ -5,10 +5,24 @@ import 'package:cup_and_soup/models/item.dart';
 
 class CloudFirestoreService {
   final Firestore _db = Firestore.instance;
-  Map<String, dynamic> _userData = {};
+  Map<String, dynamic> _userData;
+
+  Future<String> getRole() async {
+    if (_userData != null) {
+      print("1 user role is" + _userData['role']);
+      return _userData['role'];
+    } else {
+      await loadUserData();
+      if (_userData != null)
+        return _userData['role'];
+      else
+        return null;
+    }
+  }
 
   Future loadUserData() async {
-    String uid = authService.getUid();
+    String uid = await authService.getUid();
+    print("1 user id is" + uid);
     var data = await _db.collection('users').document(uid).get();
     var userData = {
       "name": data["name"],
@@ -16,20 +30,12 @@ class CloudFirestoreService {
       "allowdCredit": data["allowedCredit"],
       "role": data["role"],
     };
+    _userData = userData;
     return userData;
   }
 
-  Future<Map<String, dynamic>> getUserData() async {
-    // print("1" + _userData.toString());
-    // if ((_userData == {}) || (_userData == null)) {
-    // print("5" + _userData.toString());
-       _userData = await loadUserData();
-    // }
-    return _userData;
-  }
-
   Future<bool> updateItem(Item item) async {
-    String uid = authService.getUid();
+    String uid = await authService.getUid();
     if (uid == null) return false;
     await _db
         .collection('store')
@@ -47,7 +53,7 @@ class CloudFirestoreService {
   }
 
   Future<bool> deleteItem(int id) async {
-    String uid = authService.getUid();
+    String uid = await authService.getUid();
     if (uid == null) return false;
     await _db
         .collection('store')

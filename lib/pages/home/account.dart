@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
-import 'package:cup_and_soup/pages/signin.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
@@ -78,15 +77,15 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
 
-        ButtonWidget(
-          primary: false,
-          onPressed: () async {
-            await authService.signOut();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SigninPage()));
-          },
-          text: "Sign Out",
-        ),
+        // ButtonWidget(
+        //   primary: false,
+        //   onPressed: () async {
+        //     await authService.signOut();
+        //     Navigator.push(
+        //         context, MaterialPageRoute(builder: (context) => SigninPage()));
+        //   },
+        //   text: "Sign Out",
+        // ),
       ],
     );
   }

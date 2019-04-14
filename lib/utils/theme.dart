@@ -6,7 +6,7 @@ class ThemeUtil {
     return ThemeData(
       // color theme
       primaryColor: Color(0xffd8d738),
-      accentColor: Color(0xff22211f),
+      accentColor: Color(0xff000000),
 
       accentIconTheme: IconThemeData(
         color: Colors.white,

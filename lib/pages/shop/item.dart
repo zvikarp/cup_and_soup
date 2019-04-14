@@ -25,7 +25,7 @@ class ItemPage extends StatelessWidget {
                     height: 200,
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/images/room10.png',
-                      image: item.image,
+                      image: 'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
                       fit: BoxFit.contain,
                     ),
                   ),
