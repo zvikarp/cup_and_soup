@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/trasferMoney.dart/amountInput.dart';
 import 'package:cup_and_soup/widgets/trasferMoney.dart/barcodeGenerator.dart';
@@ -12,11 +13,14 @@ class TransferMoneyPage extends StatefulWidget {
 class _TransferMoneyPageState extends State<TransferMoneyPage> {
   int _step = 1;
   double _amount = 0.0;
+  String _barcode = "";
 
-  void _amountSubmited(String amount) {
+  void _amountSubmited(String amount) async {
+    String barcode = await cloudFirestoreService.uploadBarcode(double.parse(amount), "M");
     setState(() {
       _step = 2;
       _amount = double.parse(amount);
+      _barcode = barcode;
     });
   }
 
@@ -35,6 +39,7 @@ class _TransferMoneyPageState extends State<TransferMoneyPage> {
             ? AmountInputWidget(onAmountSubmit: _amountSubmited)
             : BarcodeGeneratorWidget(
               amount: _amount,
+              barcode: _barcode,
               backPressed: _stepBack
             ),
       ),

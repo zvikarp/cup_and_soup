@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:math';
 
 import 'package:rxdart/subjects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +22,30 @@ class CloudFirestoreService {
         return _userData['role'];
       else
         return null;
+    }
+  }
+
+  String generateBarcode(String prefix) {
+    DateTime now = DateTime.now();
+    String barcode = prefix + (now.minute%10).toString() + now.second.toString() + now.millisecond.toString() +(Random().nextInt(99)).toString();
+    return barcode;
+  }
+
+  Future<String> uploadBarcode(double amount, String prefix) async {
+    String barcode = generateBarcode(prefix);
+    var data = await _db.collection('surpriseBox').document(barcode).get();
+    if (data.exists) return uploadBarcode(amount, prefix);
+    else {
+      await _db
+        .collection('surpriseBox')
+        .document(barcode)
+        .setData({
+      'type': "money",
+      'amount': amount,
+      'timestamp': DateTime.now(),
+      'author': "a admin",
+    });
+      return barcode;
     }
   }
 
@@ -106,6 +130,21 @@ class CloudFirestoreService {
         .collection('requests')
         .add({
       'type': 'buy',
+      'barcode': barcode,
+      'client': 'server',
+    });
+    return true;
+  }
+
+  Future<bool> sendRequest(String barcode) async {
+    String uid = await authService.getUid();
+    if (uid == null) return false;
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .add({
+      'type': barcode[0],
       'barcode': barcode,
       'client': 'server',
     });
