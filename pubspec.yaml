@@ -41,6 +41,11 @@ flutter:
    - assets/images/logo.png
    - assets/images/room10.png
    - assets/images/loading.png
+   - assets/images/header.png
+   - assets/images/navBar.png
+   - assets/images/center.png
+   - assets/images/divider.png
+   - assets/images/dialog.png
 
    - assets/flare/phoneVerify.flr
 

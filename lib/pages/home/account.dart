@@ -36,6 +36,16 @@ class _AccountPageState extends State<AccountPage> {
               BalenceWidget(
                 uid: _uid,
               ),
+              // SizedBox(
+              //   height: 42
+              // ),
+              Padding(
+                padding: EdgeInsets.all(45),
+                child: Image.asset(
+                  "assets/images/divider.png",
+                  width: 50,
+                ),
+              ),
               ActivityWidget(
                 uid: _uid,
               ),

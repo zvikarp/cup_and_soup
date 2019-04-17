@@ -16,29 +16,13 @@ class ActivityWidget extends StatefulWidget {
 }
 
 class _ActivityWidgetState extends State<ActivityWidget> {
-  List<Map<String, dynamic>> historyList = [
-    {
-      "title": "title 1",
-      "subtitle": "subtitle 1",
-      "price": "25",
-    },
-    {
-      "title": "title 2",
-      "subtitle": "subtitle 2",
-      "price": "6554",
-    },
-    {
-      "title": "title 3",
-      "subtitle": "subtitle 3",
-      "price": "43",
-    },
-  ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Text(
-          "Full transsaction history:",
+          "Activity",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: "PrimaryFont",

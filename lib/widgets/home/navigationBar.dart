@@ -13,77 +13,68 @@ class NavigationBarWidget extends StatelessWidget {
   final bool isAdmin;
 
   List<Widget> appBarIcons(BuildContext context) {
-return [
-  IconButton(
-              icon: Icon(
-                Icons.account_circle,
-                color: index != 0
-                    ? Theme.of(context).accentIconTheme.color
-                    : Theme.of(context).primaryColor,
-              ),
-              onPressed: () => tabTapped(0),
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.shopping_cart,
-                color: index != 1
-                    ? Theme.of(context).accentIconTheme.color
-                    : Theme.of(context).primaryColor,
-              ),
-              onPressed: () => tabTapped(1),
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.center_focus_strong,
-                color: index != 2
-                    ? Theme.of(context).accentIconTheme.color
-                    : Theme.of(context).primaryColor,
-              ),
-              onPressed: () => tabTapped(2),
-            ),
-];
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.account_circle,
+          color: index != 0
+              ? Colors.white70
+              : Theme.of(context).primaryColor,
+        ),
+        onPressed: () => tabTapped(0),
+      ),
+      IconButton(
+        icon: Icon(
+          Icons.shopping_cart,
+          color: index != 1
+              ? Colors.white70
+              : Theme.of(context).primaryColor,
+        ),
+        onPressed: () => tabTapped(1),
+      ),
+      IconButton(
+        icon: Icon(
+          Icons.center_focus_strong,
+          color: index != 2
+              ? Colors.white70
+              : Theme.of(context).primaryColor,
+        ),
+        onPressed: () => tabTapped(2),
+      ),
+    ];
   }
 
   List<Widget> adminAppBarWIcons(BuildContext context) {
     List<Widget> list = appBarIcons(context);
-    list.add(
-      IconButton(
-              icon: Icon(
-                Icons.star,
-                color: index != 3
-                    ? Theme.of(context).accentIconTheme.color
-                    : Theme.of(context).primaryColor,
-              ),
-              onPressed: () => tabTapped(3),
-            )
-    );
+    list.add(IconButton(
+      icon: Icon(
+        Icons.star,
+        color: index != 3
+            ? Colors.white70
+            : Theme.of(context).primaryColor,
+      ),
+      onPressed: () => tabTapped(3),
+    ));
     return list;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[600],
-            blurRadius: 5.0,
-            spreadRadius: 1.0,
-          )
-        ],
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        color: Theme.of(context).accentColor,
-      ),
-      child: BottomAppBar(
-        elevation: 0,
-        color: Theme.of(context).accentColor,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
+    return Stack(
+      children: <Widget>[
+        Image.asset("assets/images/navBar.png", height: 70, width: double.infinity,
+        fit: BoxFit.cover,),
+        Container(
+          height: 65,
+          color: Colors.transparent,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
+          ),
         ),
-      ), //bottomAppBar
+      ],
     );
   }
 }

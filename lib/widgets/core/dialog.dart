@@ -41,7 +41,12 @@ class DialogWidget extends StatelessWidget {
               ],
             ),
             margin: EdgeInsets.symmetric(horizontal: 42.0, vertical: 120.0),
-            child: child,
+            child: Stack(
+              children: <Widget>[
+                // Image.asset("assets/images/dialog.png", fit: BoxFit.cover, width: double.infinity,),
+                child,
+              ],
+            ),
           ),
         ),
       ),

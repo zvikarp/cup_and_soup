@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/widgets/core/pageHeader.dart';
-
 class PageWidget extends StatelessWidget {
   PageWidget({
     @required this.title,
@@ -14,28 +12,34 @@ class PageWidget extends StatelessWidget {
   final Widget child;
   final List<Widget> children;
 
+  Widget _titleWidget() {
+    return Center(
+      child: Padding(
+          padding: const EdgeInsets.only(top: 60, bottom: 40),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontFamily: "BrandFont",
+              fontSize: 65,
+            ),
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          PageHeaderWidget(
-            title: title,
+    return Stack(
+      children: <Widget>[
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: List.from([_titleWidget()])
+              ..addAll(child == null ? children : [child]),
           ),
-          Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                              child: child != null
-                    ? child
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: children,
-                      ),
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
+        Image.asset("assets/images/header.png"),
+      ],
     );
   }
 }

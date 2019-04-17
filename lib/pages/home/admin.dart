@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
 
-import 'package:cup_and_soup/widgets/core/pageHeader.dart';
 import 'package:cup_and_soup/widgets/admin/gridItem.dart';
 
 class AdminPage extends StatefulWidget {
@@ -23,9 +22,6 @@ class _AdminPageState extends State<AdminPage> {
     return Container(
       child: Column(
         children: <Widget>[
-          PageHeaderWidget(
-            title: "admin",
-          ),
           GridView.builder(
             shrinkWrap: true,
             gridDelegate:

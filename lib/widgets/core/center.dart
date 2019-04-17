@@ -10,14 +10,15 @@ class CenterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.grey[900],
-      ),
-      child: child,
+    return Stack(
+      children: <Widget>[
+        Image.asset("assets/images/center.png"),
+        Container(
+          margin: EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
+          child: child,
+        ),
+      ],
     );
   }
 }
