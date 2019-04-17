@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/widgets/core/tableItem.dart';
+
 class TableWidget extends StatelessWidget {
   TableWidget({
     @required this.items,
     this.headings = const [],
   });
 
-  final List<Widget> items;
+  final List<List<Widget>> items;
   final List<String> headings;
 
   @override
@@ -33,7 +35,7 @@ class TableWidget extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
-              return items[index];
+              return TableItemWidget(columns:  items[index],);
             },
           ),
           Container(
