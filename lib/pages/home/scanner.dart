@@ -50,7 +50,9 @@ class _ScannerPageState extends State<ScannerPage> {
     try {
       barcodeScanRes =
           await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", false);
-      if (barcodeScanRes[0] == 'M') {
+      if (barcodeScanRes == "")
+        widget.goToShop();
+      else if (barcodeScanRes[0] == 'M') {
         cloudFirestoreService.sendMoneyRequest(barcodeScanRes);
         _waitForResponce(barcodeScanRes);
       }
