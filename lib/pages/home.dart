@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> pages = [
     AccountPage(),
     StorePage(),
-    ScannerPage(),
   ];
   int _currentPage = 1;
 
@@ -31,14 +30,23 @@ class _HomePageState extends State<HomePage> {
       if (_isAdmin) {
         pages.add(AdminPage());
         pages.removeAt(1);
-        pages.insert(1, StorePage(isAdmin: true,));
+        pages.insert(
+            1,
+            StorePage(
+              isAdmin: true,
+            ));
       }
     });
+  }
+
+  void addScanner() {
+    pages.add(ScannerPage(goToShop: () => _onTabTaped(1)));
   }
 
   @override
   void initState() {
     super.initState();
+    addScanner();
     getRole();
     cloudFirestoreService.getRequests();
   }
