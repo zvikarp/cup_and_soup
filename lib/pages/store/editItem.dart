@@ -2,12 +2,9 @@ import 'dart:io';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_tags/input_tags.dart';
 
-import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/models/item.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
-import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class EditItemPage extends StatefulWidget {
@@ -242,50 +239,4 @@ class _EditItemPageState extends State<EditItemPage> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: PageWidget(
-  //         title:
-  //             widget.newItem ? "create new item" : "edit ${widget.item.name}",
-  //         child: Column(
-  //           children: <Widget>[
-  //             Container(
-  //               child: image == null
-  //                   ? Container()
-  //                   : Image.file(
-  //                       image,
-  //                       height: 200,
-  //                     ),
-  //             ),
-  //             TextFormField(
-  //               controller: nameCtr,
-  //             ), // name
-  //             TextFormField(
-  //               controller: descCtr,
-  //             ), // description
-  //             TextFormField(
-  //               controller: barcodeCtr,
-  //             ), // description
-  //             TextFormField(
-  //               controller: priceCtr,
-  //             ), // price
-  //             TextFormField(
-  //               controller: tagsCtr,
-  //             ), // tags
-  //             TextFormField(
-  //               controller: stockCtr,
-  //             ), // stock
-  //             TextFormField(
-  //               controller: hechsherimCtr,
-  //             ), // hechsherim
-  //             ButtonWidget(
-  //               text: "upload image",
-  //               onPressed: _getImage,
-  //             ),
-  //           ],
-  //         )),
-  //   );
-  // }
 }
