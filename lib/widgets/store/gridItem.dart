@@ -27,11 +27,16 @@ class GridItemWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width / 2,
                 child: Hero(
                   tag: item.barcode,
-                                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/loading.png',
-                    image: 'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
-                    fit: BoxFit.contain,
-                  ),
+                  child: item.image != "no image"
+                      ? FadeInImage.assetNetwork(
+                          placeholder: 'assets/images/loading.png',
+                          image: item.image,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          'assets/images/loading.png',
+                          fit: BoxFit.contain,
+                        ),
                 ),
               ),
               Text(

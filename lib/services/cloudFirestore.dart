@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:cup_and_soup/services/firebaseStorage.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -123,14 +125,21 @@ class CloudFirestoreService {
     return userData;
   }
 
-  Future<bool> updateItem(Item item) async {
+  Future<bool> updateItem(Item item, [File image]) async {
     String uid = await authService.getUid();
+    String imageUrl = item.image;
     if (uid == null) return false;
+    if (image != null) {
+      if (imageUrl != "no image") {
+        await firebaseStorageService.deleteImage(imageUrl);
+      }
+      imageUrl = await firebaseStorageService.uploadImage(image, item.barcode);
+    }
     await _db.collection('store').document(item.barcode.toString()).setData({
       'name': item.name,
       'desc': item.desc,
       'price': item.price,
-      'image': item.image,
+      'image': imageUrl,
       'tags': item.tags,
       'stock': item.stock,
       'hechsherim': item.hechsherim

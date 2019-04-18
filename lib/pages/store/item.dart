@@ -29,12 +29,16 @@ class ItemPage extends StatelessWidget {
                         height: 230,
                         child: Hero(
                           tag: item.barcode,
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/images/loading.png',
-                            image:
-                                'https://www.osem.co.il/tm-content/uploads/2014/12/instant_0016_manaHamaChickenTasteNoodles.png',
-                            fit: BoxFit.contain,
-                          ),
+                          child: item.image != "no image"
+                      ? FadeInImage.assetNetwork(
+                          placeholder: 'assets/images/loading.png',
+                          image: item.image,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          'assets/images/loading.png',
+                          fit: BoxFit.contain,
+                        ),
                         ),
                       ),
                     ),
@@ -61,6 +65,7 @@ class ItemPage extends StatelessWidget {
                 ),
                 Text(
                   item.name,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "BrandFont",
                     fontSize: 65,
