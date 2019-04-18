@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/dialogs/message.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 
 class ActionSectionWidget extends StatefulWidget {
   ActionSectionWidget({
@@ -18,16 +22,25 @@ class ActionSectionWidget extends StatefulWidget {
 
 class _ActionSectionWidgetState extends State<ActionSectionWidget> {
   bool loading = false;
+  StreamSubscription _requestStream;
 
   void _waitForResponce() {
-    cloudFirestoreService.subscribeToRequestsStream().listen((snap) {
+    _requestStream = cloudFirestoreService.subscribeToRequestsStream().listen((snap) {
       print(snap['barcode']);
       if (snap['barcode'] == widget.barcode) {
-        print("jobdone!" + snap['message'].toString());
+        print("jobdone! " + snap['message'].toString());
+        _requestStream.cancel();
+        cloudFirestoreService.deleteRequest(snap['id']);
         setState(() {
           loading = false;
         });
-        cloudFirestoreService.deleteRequest(snap['id']);
+        Navigator.of(context).push(
+      TransparentRoute(
+        builder: (BuildContext context) => MessageDialog(
+          message: snap['message'].toString(),
+        ),
+      ),
+    );
         return;
       }
     });

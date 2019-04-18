@@ -22,8 +22,12 @@ dependencies:
   flare_flutter: ^1.3.8
   image_picker: ^0.5.3+1
   flutter_barcode_scanner: ^0.0.8
+<<<<<<< HEAD
   flutter_tags: "^0.1.9"
 
+=======
+  barcode_flutter: ^1.0.0
+>>>>>>> e7c0294135a60a2fa1f617682b201efa7a2cd89f
   
 flutter_icons:
   android: "launcher_icon" 
