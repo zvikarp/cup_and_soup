@@ -91,6 +91,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                   .collection('users')
                   .document(widget.uid)
                   .collection('activity')
+                  .orderBy("timestamp", descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data.documents == null)

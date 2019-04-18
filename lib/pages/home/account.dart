@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cup_and_soup/services/auth.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
+import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/account/activity.dart';
 import 'package:cup_and_soup/widgets/account/balence.dart';
 import 'package:cup_and_soup/widgets/account/settings.dart';
@@ -43,24 +44,12 @@ class _AccountPageState extends State<AccountPage> {
                 uid: _uid,
                 userData: _userData,
               ),
-              Padding(
-                padding: EdgeInsets.all(45),
-                child: Image.asset(
-                  "assets/images/divider.png",
-                  width: 50,
-                ),
-              ),
+              DividerWidget(),
               SettingsWidget(
                 uid: _uid,
                 userData: _userData,
               ),
-              Padding(
-                padding: EdgeInsets.all(45),
-                child: Image.asset(
-                  "assets/images/divider.png",
-                  width: 50,
-                ),
-              ),
+              DividerWidget(),
               ActivityWidget(
                 uid: _uid,
               ),

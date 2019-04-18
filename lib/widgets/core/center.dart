@@ -14,8 +14,9 @@ class CenterWidget extends StatelessWidget {
       children: <Widget>[
         Image.asset("assets/images/center.png"),
         Container(
-          margin: EdgeInsets.all(16),
-          padding: EdgeInsets.all(16),
+          height: 110,
+          // margin: EdgeInsets.all(16),
+          // padding: EdgeInsets.all(16),
           child: child,
         ),
       ],

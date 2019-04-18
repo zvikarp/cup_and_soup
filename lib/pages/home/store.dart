@@ -22,19 +22,19 @@ class StorePage extends StatefulWidget {
 class _StorePageState extends State<StorePage> {
   Widget _addItemButton() {
     return GridTile(
-      child: Container(
-        margin: EdgeInsets.all(16),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditItemPage(newItem: true),
+            ),
+          );
+        },
         child: Center(
-          child: ButtonWidget(
-            text: "Add Item",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditItemPage(newItem: true),
-                ),
-              );
-            },
+          child: Image.asset(
+            "assets/images/add.png",
+            height: 50,
           ),
         ),
       ),
@@ -44,7 +44,7 @@ class _StorePageState extends State<StorePage> {
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      title: "shop",
+      title: "store",
       child: StreamBuilder(
           stream: Firestore.instance.collection('store').snapshots(),
           builder: (context, snapshot) {

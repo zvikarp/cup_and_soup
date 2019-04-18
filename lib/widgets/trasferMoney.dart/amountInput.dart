@@ -16,7 +16,7 @@ class AmountInputWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(24.0),
           child: Text(
             "Please enter the amout of money you want to trasfer:",
             textAlign: TextAlign.center,
@@ -26,24 +26,28 @@ class AmountInputWidget extends StatelessWidget {
             ),
           ),
         ),
-        CenterWidget(
-          child: Center(
-            child: Container(
-              width: 200,
-              child: TextFormField(
-                autofocus: true,
-                cursorColor: Colors.white,
-                controller: _amountInputCtr,
-                textAlign: TextAlign.center,
-                onFieldSubmitted: onAmountSubmit,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "PrimaryFont",
-                  fontSize: 30,
-                ),
-                keyboardType: TextInputType.numberWithOptions(),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: CenterWidget(
+            child: Center(
+              child: Container(
+                width: 200,
+                child: TextFormField(
+                  autofocus: true,
+                  cursorColor: Colors.white,
+                  controller: _amountInputCtr,
+                  textAlign: TextAlign.center,
+                  onFieldSubmitted: (s) => onAmountSubmit(s),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "PrimaryFont",
+                    fontSize: 30,
+                  ),
+                  keyboardType: TextInputType.numberWithOptions(),
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),

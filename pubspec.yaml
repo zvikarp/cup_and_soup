@@ -47,8 +47,7 @@ flutter:
    - assets/images/center.png
    - assets/images/divider.png
    - assets/images/dialog.png
-
-   - assets/flare/phoneVerify.flr
+   - assets/images/add.png
 
   fonts:
     - family: BrandFont
