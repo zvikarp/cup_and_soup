@@ -96,7 +96,7 @@ class _EditItemPageState extends State<EditItemPage> {
                       margin: EdgeInsets.all(36),
                       height: 230,
                       child: Hero(
-                        tag: widget.item.barcode,
+                        tag: !widget.newItem ? widget.item.barcode : "new",
                         child: _imageUrl == "file" ? Image.file(
                                 _imageFile,
                                 fit: BoxFit.contain,
@@ -203,6 +203,21 @@ class _EditItemPageState extends State<EditItemPage> {
                       border: InputBorder.none,
                       hintText: "0"),
                   keyboardType: TextInputType.numberWithOptions(),
+                  style: TextStyle(
+                    fontFamily: "PrimaryFont",
+                    color: Colors.black54,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: TextFormField(
+                  controller: barcodeCtr,
+                  decoration: InputDecoration(
+                      prefixText: "Barcode: ",
+                      border: InputBorder.none,
+                      hintText: ""),
                   style: TextStyle(
                     fontFamily: "PrimaryFont",
                     color: Colors.black54,

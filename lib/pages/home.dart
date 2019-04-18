@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
             StorePage(
               isAdmin: true,
             ));
+        cloudFirestoreService.clearSupriseBox();
       }
     });
   }

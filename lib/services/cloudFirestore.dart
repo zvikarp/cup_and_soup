@@ -120,6 +120,7 @@ class CloudFirestoreService {
       "money": data["money"],
       "allowdCredit": data["allowedCredit"],
       "role": data["role"],
+      "email": data["email"],
     };
     _userData = userData;
     return userData;
@@ -224,6 +225,14 @@ class CloudFirestoreService {
       'expiringDate': DateTime.now().add(Duration(minutes: 1)),
     });
     return true;
+  }
+
+  void clearSupriseBox() async {
+    _db.collection('surpriseBox').where('expiringDate', isLessThan: DateTime.now()).getDocuments().then((snapshot) {
+      for (var doc in snapshot.documents) {
+        doc.reference.delete();
+      }
+    });
   }
 }
 

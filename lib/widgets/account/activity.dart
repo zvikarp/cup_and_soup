@@ -97,6 +97,13 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                 if (!snapshot.hasData || snapshot.data.documents == null)
                   return Text("No, data!");
                 List<List<Widget>> list = [];
+                int length = snapshot.data.documents.length;
+                if (length == 0) {
+                  list = [[
+                    Text("Hey! it looks like there is nothing to see here.", textAlign: TextAlign.center,)
+                  ]];
+                }
+                else {
                 snapshot.data.documents.forEach((doc) {
                   list.add([
                     Container(
@@ -107,11 +114,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                     Text(doc['money'].toString()),
                     _date(doc['timestamp'].toString()),
                   ]);
-                });
+                }); }
                 return TableWidget(
-                  headings: [" ", " ", " ", " "],
+                  headings: length == 0 ? [""] : [" ", " ", " ", " "],
                   items: list,
-                  flex: [1, 5, 2, 2],
+                  flex: length == 0 ? [1] : [1, 5, 2, 2],
                 );
               }),
         ),
