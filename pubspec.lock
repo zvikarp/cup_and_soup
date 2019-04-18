@@ -161,7 +161,11 @@ packages:
       name: flutter_tags
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.3.0"
+=======
+    version: "0.1.9"
+>>>>>>> 8f9568b055e7eef0c658977e554dc082572ea2e6
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -222,7 +226,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.4.0"
   petitparser:
     dependency: transitive
     description:
@@ -262,7 +266,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.5"
+    version: "1.5.4"
   stack_trace:
     dependency: transitive
     description:
@@ -327,5 +331,5 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.2.0 <3.0.0"
+  dart: ">=2.1.0 <3.0.0"
   flutter: ">=1.2.0 <2.0.0"
