@@ -25,13 +25,13 @@ class _EditItemPageState extends State<EditItemPage> {
   TextEditingController barcodeCtr = TextEditingController();
   TextEditingController descCtr = TextEditingController();
   TextEditingController priceCtr = TextEditingController();
-  TextEditingController tagsCtr = TextEditingController();
   TextEditingController stockCtr = TextEditingController();
   TextEditingController hechsherimCtr = TextEditingController();
 
   File _imageFile;
   String _imageUrl = "no image";
   String _placeholder = "assets/images/loading.png";
+  List<String> _tags = [];
 
   void _saveChanges() async {
     Item item = Item(
@@ -41,7 +41,7 @@ class _EditItemPageState extends State<EditItemPage> {
       image: widget.newItem ? "no image" : widget.item.image,
       price: double.parse(priceCtr.text),
       stock: int.parse(stockCtr.text),
-      tags: tagsCtr.text,
+      tags: _tags.join(","),
       hechsherim: hechsherimCtr.text,
     );
     bool res = await cloudFirestoreService.updateItem(item, _imageUrl == "file" ? _imageFile : null);
@@ -70,7 +70,7 @@ class _EditItemPageState extends State<EditItemPage> {
         nameCtr.text = widget.item.name;
         descCtr.text = widget.item.desc;
         priceCtr.text = widget.item.price.toString();
-        tagsCtr.text = widget.item.tags;
+        _tags = widget.item.tags.split(",");
         stockCtr.text = widget.item.stock.toString();
         barcodeCtr.text = widget.item.barcode;
         hechsherimCtr.text = widget.item.hechsherim;
@@ -233,7 +233,7 @@ class _EditItemPageState extends State<EditItemPage> {
                   fontSize: 18,
                   color: Colors.white,
                 ),
-                tags: tagsCtr.text.split(","),
+                tags: _tags,
                 columns: 3,
                 onDelete: (tag) => print(tag),
                 onInsert: (tag) => print(tag),

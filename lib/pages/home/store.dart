@@ -75,28 +75,29 @@ class _StorePageState extends State<StorePage> {
                 );
 
                 return GridItemWidget(
-                  item: item,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ItemPage(
-                              item: item,
-                            ),
-                      ),
-                    );
-                  },
-                  onLongPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditItemPage(
-                              item: item,
-                            ),
-                      ),
-                    );
-                  },
-                );
+                    item: item,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemPage(
+                                item: item,
+                              ),
+                        ),
+                      );
+                    },
+                    onLongPress: () {
+                      if (widget.isAdmin) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditItemPage(
+                                  item: item,
+                                ),
+                          ),
+                        );
+                      }
+                    });
               },
             );
           }),
