@@ -17,27 +17,21 @@ class NavigationBarWidget extends StatelessWidget {
       IconButton(
         icon: Icon(
           Icons.account_circle,
-          color: index != 0
-              ? Colors.white70
-              : Theme.of(context).primaryColor,
+          color: index != 0 ? Colors.white70 : Theme.of(context).primaryColor,
         ),
         onPressed: () => tabTapped(0),
       ),
       IconButton(
         icon: Icon(
           Icons.shopping_cart,
-          color: index != 1
-              ? Colors.white70
-              : Theme.of(context).primaryColor,
+          color: index != 1 ? Colors.white70 : Theme.of(context).primaryColor,
         ),
         onPressed: () => tabTapped(1),
       ),
       IconButton(
         icon: Icon(
           Icons.center_focus_strong,
-          color: index != 2
-              ? Colors.white70
-              : Theme.of(context).primaryColor,
+          color: index != 2 ? Colors.white70 : Theme.of(context).primaryColor,
         ),
         onPressed: () => tabTapped(2),
       ),
@@ -49,9 +43,7 @@ class NavigationBarWidget extends StatelessWidget {
     list.add(IconButton(
       icon: Icon(
         Icons.star,
-        color: index != 3
-            ? Colors.white70
-            : Theme.of(context).primaryColor,
+        color: index != 3 ? Colors.white70 : Theme.of(context).primaryColor,
       ),
       onPressed: () => tabTapped(3),
     ));
@@ -62,8 +54,12 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset("assets/images/navBar.png", height: 70, width: double.infinity,
-        fit: BoxFit.cover,),
+        Image.asset(
+          "assets/images/navBar.png",
+          height: 70,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
         Container(
           height: 65,
           color: Colors.transparent,
@@ -71,7 +67,8 @@ class NavigationBarWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
+            children:
+                isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
           ),
         ),
       ],

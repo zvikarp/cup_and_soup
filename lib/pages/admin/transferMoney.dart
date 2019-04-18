@@ -16,7 +16,7 @@ class _TransferMoneyPageState extends State<TransferMoneyPage> {
   String _barcode = "";
 
   void _amountSubmited(String amount) async {
-    String barcode = await cloudFirestoreService.uploadBarcode(double.parse(amount), "M");
+    String barcode = await cloudFirestoreService.uploadMoneyBarcode(double.parse(amount), true, -1);
     setState(() {
       _step = 2;
       _amount = double.parse(amount);

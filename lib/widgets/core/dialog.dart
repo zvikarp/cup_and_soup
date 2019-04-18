@@ -1,9 +1,9 @@
 import 'dart:ui' as ui;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 class DialogWidget extends StatelessWidget {
-
   DialogWidget({
     @required this.child,
     this.backgroundColor = const Color(0xffffffff),
@@ -41,10 +41,27 @@ class DialogWidget extends StatelessWidget {
               ],
             ),
             margin: EdgeInsets.symmetric(horizontal: 42.0, vertical: 120.0),
-            child: Stack(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // Image.asset("assets/images/dialog.png", fit: BoxFit.cover, width: double.infinity,),
+                Transform.rotate(
+                  angle: -math.pi / 1.0,
+                  child: Image.asset(
+                    "assets/images/navBar.png",
+                    height: 30,
+                    alignment: Alignment(0, -1),
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 child,
+                Image.asset(
+                  "assets/images/navBar.png",
+                  height: 30,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  alignment: Alignment(0, -1),
+                ),
               ],
             ),
           ),

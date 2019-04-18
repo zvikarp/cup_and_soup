@@ -41,7 +41,10 @@ class TableWidget extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (BuildContext context, int index) {
-            return TableItemWidget(columns: items[index], flex: flex);
+            if (items[index].toString() == "[Container]")
+              return Container();
+            else
+              return TableItemWidget(columns: items[index], flex: flex);
           },
         ),
         Container(

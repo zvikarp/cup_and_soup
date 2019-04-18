@@ -75,7 +75,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
           child: Text(
-            "This list contains every successful activity that scored in your account.",
+            "This list contains every successful activity that occurred in your account.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: "PrimaryFont",
@@ -85,7 +85,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: StreamBuilder(
               stream: Firestore.instance
                   .collection('users')

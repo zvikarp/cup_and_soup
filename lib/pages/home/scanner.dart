@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:barcode_scan/barcode_scan.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/pages/transaction.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
     try {
       barcodeScanRes =
           await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", false);
+          cloudFirestoreService.sendMoneyRequest(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
