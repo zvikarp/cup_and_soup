@@ -31,8 +31,12 @@ class _EditItemPageState extends State<EditItemPage> {
   File _imageFile;
   String _imageChanged = "no image";
   List<String> _tags = [];
+  bool _loading = false;
 
   void _saveChanges() async {
+    setState(() {
+     _loading = true; 
+    });
     Item item = Item(
       barcode: barcodeCtr.text,
       name: nameCtr.text,
@@ -45,6 +49,9 @@ class _EditItemPageState extends State<EditItemPage> {
     );
     bool res = await cloudFirestoreService.updateItem(
         item, _imageFile, _imageChanged);
+    setState(() {
+      _loading = false;
+    });
     if (res) {
       Navigator.pop(context);
     }
@@ -202,7 +209,7 @@ class _EditItemPageState extends State<EditItemPage> {
                 leftOnPressed: () {
                   Navigator.pop(context);
                 },
-                rightText: "Save",
+                rightText: _loading ? "Saving..." : "Save",
                 rightOnPressed: _saveChanges,
               ),
               SizedBox(height: 42),
