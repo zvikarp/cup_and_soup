@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:cup_and_soup/models/item.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/widgets/store/editItem/imagePicker.dart';
 
 class EditItemPage extends StatefulWidget {
   EditItemPage({
@@ -29,8 +29,7 @@ class _EditItemPageState extends State<EditItemPage> {
   TextEditingController hechsherimCtr = TextEditingController();
 
   File _imageFile;
-  String _imageUrl = "no image";
-  String _placeholder = "assets/images/loading.png";
+  String _imageChanged = "no image";
   List<String> _tags = [];
 
   void _saveChanges() async {
@@ -44,18 +43,17 @@ class _EditItemPageState extends State<EditItemPage> {
       tags: _tags.join(","),
       hechsherim: hechsherimCtr.text,
     );
-    bool res = await cloudFirestoreService.updateItem(item, _imageUrl == "file" ? _imageFile : null);
+    bool res = await cloudFirestoreService.updateItem(
+        item, _imageFile, _imageChanged);
     if (res) {
       Navigator.pop(context);
     }
   }
 
-  void _getImage() async {
-    var newImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (newImage == null) return;
+  void _onImageChanged(File file, String change) {
     setState(() {
-      _imageFile = newImage;
-      _imageUrl = "file";
+      _imageFile = file;
+      _imageChanged = change;
     });
   }
 
@@ -64,9 +62,6 @@ class _EditItemPageState extends State<EditItemPage> {
     super.initState();
     if (!widget.newItem) {
       setState(() {
-        if (widget.item.image != "no image") {
-          _imageUrl = widget.item.image;
-        }
         nameCtr.text = widget.item.name;
         descCtr.text = widget.item.desc;
         priceCtr.text = widget.item.price.toString();
@@ -80,7 +75,6 @@ class _EditItemPageState extends State<EditItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -88,48 +82,12 @@ class _EditItemPageState extends State<EditItemPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      margin: EdgeInsets.all(36),
-                      height: 230,
-                      child: Hero(
-                        tag: !widget.newItem ? widget.item.barcode : "new",
-                        child: _imageUrl == "file" ? Image.file(
-                                _imageFile,
-                                fit: BoxFit.contain,
-                              )
-                            : _imageUrl == "no image" ? Image.asset(
-                                _placeholder,
-                                fit: BoxFit.contain,
-                              ) : FadeInImage.assetNetwork(
-                                placeholder: 'assets/images/loading.png',
-                                image: _imageUrl,
-                                fit: BoxFit.contain,
-                              ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.black,
-                      ),
-                      child: IconButton(
-                        iconSize: 36,
-                        color: Colors.white,
-                        icon: Icon(Icons.camera_alt),
-                        onPressed: _getImage,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              Hero(
+                  tag: !widget.newItem ? widget.item.barcode : "new",
+                  child: ImagePickerWidget(
+                    currantImage: widget.item.image,
+                    onImageChanged: _onImageChanged,
+                  )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(

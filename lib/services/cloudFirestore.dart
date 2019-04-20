@@ -126,14 +126,17 @@ class CloudFirestoreService {
     return userData;
   }
 
-  Future<bool> updateItem(Item item, [File image]) async {
+  Future<bool> updateItem(Item item, [File image, String imageState]) async {
     String uid = await authService.getUid();
     String imageUrl = item.image;
     if (uid == null) return false;
-    if (image != null) {
-      if (imageUrl != "no image") {
-        await firebaseStorageService.deleteImage(imageUrl);
-      }
+    if (imageState == "deleted") {
+      await firebaseStorageService.deleteImage(imageUrl);
+      imageUrl = "no image";
+    } else if (imageState == "added") {
+      imageUrl = await firebaseStorageService.uploadImage(image, item.barcode);
+    } else if (imageState == "changed") {
+      await firebaseStorageService.deleteImage(imageUrl);
       imageUrl = await firebaseStorageService.uploadImage(image, item.barcode);
     }
     await _db.collection('store').document(item.barcode.toString()).setData({
@@ -228,7 +231,11 @@ class CloudFirestoreService {
   }
 
   void clearSupriseBox() async {
-    _db.collection('surpriseBox').where('expiringDate', isLessThan: DateTime.now()).getDocuments().then((snapshot) {
+    _db
+        .collection('surpriseBox')
+        .where('expiringDate', isLessThan: DateTime.now())
+        .getDocuments()
+        .then((snapshot) {
       for (var doc in snapshot.documents) {
         doc.reference.delete();
       }
