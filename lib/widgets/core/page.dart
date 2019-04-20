@@ -38,7 +38,9 @@ class PageWidget extends StatelessWidget {
               ..addAll(child == null ? children : [child]),
           ),
         ),
-        Image.asset("assets/images/header.png"),
+        IgnorePointer(
+          child: Image.asset("assets/images/header.png"),
+        ),
       ],
     );
   }
