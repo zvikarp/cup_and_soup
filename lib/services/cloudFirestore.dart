@@ -126,10 +126,19 @@ class CloudFirestoreService {
     return userData;
   }
 
-  Future<bool> updateItem(Item item, [File image, String imageState]) async {
+  Future<String> updateItem(Item item, [File image, String imageState, String oldBarcode = ""]) async {
     String uid = await authService.getUid();
+    if (uid == null) return "Can't connect to your account, try restarting the app.";
     String imageUrl = item.image;
-    if (uid == null) return false;
+    if (oldBarcode != item.barcode) {
+      var doc = await _db
+          .collection('store')
+          .document(item.barcode.toString())
+          .get();
+      if (doc.exists) {
+        return "This barcode already exists, the barcode needs to be unique.";
+      }
+    }
     if (imageState == "deleted") {
       await firebaseStorageService.deleteImage(imageUrl);
       imageUrl = "no image";
@@ -148,10 +157,10 @@ class CloudFirestoreService {
       'stock': item.stock,
       'hechsherim': item.hechsherim
     });
-    return true;
+    return "ok";
   }
 
-  Future<bool> deleteItem(int id) async {
+  Future<bool> deleteItem(String id) async {
     String uid = await authService.getUid();
     if (uid == null) return false;
     await _db.collection('store').document(id.toString()).delete();

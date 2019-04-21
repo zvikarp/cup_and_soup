@@ -25,6 +25,7 @@ dependencies:
   flutter_barcode_scanner: ^0.0.8
   barcode_flutter: ^1.0.0
   flutter_tags: ^0.3.0
+  flushbar: ^1.4.0
   
 flutter_icons:
   android: "launcher_icon" 
