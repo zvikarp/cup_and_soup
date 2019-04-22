@@ -14,6 +14,7 @@ class CloudFirestoreService {
   final _buyRequestsStream = PublishSubject();
   final _moneyRequestsStream = PublishSubject();
   Map<String, dynamic> _userData;
+  List<dynamic> _activityList = [];
 
   Future<String> getRole() async {
     if (_userData != null) {
@@ -126,15 +127,15 @@ class CloudFirestoreService {
     return userData;
   }
 
-  Future<String> updateItem(Item item, [File image, String imageState, String oldBarcode = ""]) async {
+  Future<String> updateItem(Item item,
+      [File image, String imageState, String oldBarcode = ""]) async {
     String uid = await authService.getUid();
-    if (uid == null) return "Can't connect to your account, try restarting the app.";
+    if (uid == null)
+      return "Can't connect to your account, try restarting the app.";
     String imageUrl = item.image;
     if (oldBarcode != item.barcode) {
-      var doc = await _db
-          .collection('store')
-          .document(item.barcode.toString())
-          .get();
+      var doc =
+          await _db.collection('store').document(item.barcode.toString()).get();
       if (doc.exists) {
         return "This barcode already exists, the barcode needs to be unique.";
       }
@@ -249,6 +250,55 @@ class CloudFirestoreService {
         doc.reference.delete();
       }
     });
+  }
+
+  Future<int> getActivityItemsCount() async {
+    String uid = await authService.getUid();
+    if (uid == null) return 0;
+    int length = 0;
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('activity')
+        // .orderBy('__name__', descending: true)
+        .limit(1)
+        .getDocuments()
+        .then((docs) {
+      docs.documents.forEach((doc) {
+        length = doc.data['counter'] + (100 * int.parse(doc.documentID));
+      });
+    });
+    return length;
+  }
+
+  Future<List<dynamic>> getActivityItems(int first, int last) async {
+    String uid = await authService.getUid();
+    _activityList
+        .sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
+    if (_activityList.length < last) {
+      if (((_activityList.length - 1) - first) > 0)
+        _activityList.removeRange(first, _activityList.length - 1);
+      var doc = await _db
+          .collection('users')
+          .document(uid)
+          .collection('activity')
+          .document(((_activityList.length + 1) ~/ 100).toInt().toString())
+          .get();
+      print(((_activityList.length + 1) ~/ 100).toInt());
+      doc.data['activities'].forEach((k, v) {
+        Map data = {
+          'timestamp': v['timestamp'],
+          'desc': v['desc'],
+          'money': v['money'],
+          'type': v['type'],
+        };
+        _activityList.add(data);
+      });
+      _activityList
+          .sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
+      // _activityList = List.from(_activityList)..addAll(doc.data['activities'].values().toList());
+    }
+    return _activityList.sublist(first, last);
   }
 }
 

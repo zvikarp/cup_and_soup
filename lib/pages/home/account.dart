@@ -45,13 +45,13 @@ class _AccountPageState extends State<AccountPage> {
                 userData: _userData,
               ),
               DividerWidget(),
+              ActivityWidget(
+                uid: _uid,
+              ),
+              DividerWidget(),
               SettingsWidget(
                 uid: _uid,
                 userData: _userData,
-              ),
-              DividerWidget(),
-              ActivityWidget(
-                uid: _uid,
               ),
               SizedBox(height: 42)
             ]
