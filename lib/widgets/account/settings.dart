@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
@@ -91,18 +93,17 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ],
           ),
         ),
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Center(
-              child: ButtonWidget(
-                text: "Log Out",
-                onPressed: () {authService.signOut(); Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SplashPage()));
-        },
-                primary: false,
-                size: "small",
-              ),
-            )),
+        // Padding(
+        //     padding: EdgeInsets.symmetric(horizontal: 24),
+        //     child: Center(
+        //       child: ButtonWidget(
+        //         text: "Sign Out",
+        //         onPressed: () {authService.signOut(); exit(0);
+        // },
+        //         primary: false,
+        //         size: "small",
+        //       ),
+            // )),
       ],
     );
   }
