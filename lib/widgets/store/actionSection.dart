@@ -30,7 +30,6 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
         cloudFirestoreService.subscribeToBuyRequestsStream().listen((snap) {
       print(snap['barcode']);
       if (snap['barcode'] == widget.barcode) {
-        print("jobdone! " + snap['message'].toString());
         _requestStream.cancel();
         cloudFirestoreService.deleteRequest("buy");
         setState(() {
@@ -39,8 +38,7 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
         Navigator.of(context).push(
           TransparentRoute(
             builder: (BuildContext context) => MessageDialog(
-                  message: snap['message'].toString(),
-                  code: snap['code'].toString(),
+                  responseCode: snap['responseCode'].toString(),
                 ),
           ),
         );
@@ -57,8 +55,7 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
     Navigator.of(context).push(
       TransparentRoute(
         builder: (BuildContext context) => MessageDialog(
-              message: "can not connect",
-              code: "e7",
+              responseCode: "b-ge2",
             ),
       ),
     );

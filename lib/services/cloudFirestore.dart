@@ -65,13 +65,14 @@ class CloudFirestoreService {
         .document('buy')
         .snapshots()
         .listen((snap) {
-      if (snap.exists) {
-        var request = {
-          "barcode": snap.data['barcode'],
-          "message": snap.data['response']['message'],
-          "code": snap.data['response']['code'],
-        };
-        _buyRequestsStream.add(request);
+        if (snap.exists) {
+      if (snap.data['client'] == "app") {
+          var request = {
+            "barcode": snap.data['barcode'],
+            "responseCode": snap.data['responseCode'],
+          };
+          _buyRequestsStream.add(request);
+        }
       }
     });
     _db
@@ -81,13 +82,14 @@ class CloudFirestoreService {
         .document('money')
         .snapshots()
         .listen((snap) {
-      if (snap.exists) {
-        var request = {
-          "barcode": snap.data['barcode'],
-          "message": snap.data['response']['message'],
-          "code": snap.data['response']['code'],
-        };
-        _moneyRequestsStream.add(request);
+        if (snap.exists) {
+      if (snap.data['client'] == "app") {
+          var request = {
+            "barcode": snap.data['barcode'],
+            "responseCode": snap.data['responseCode']
+          };
+          _moneyRequestsStream.add(request);
+        }
       }
     });
   }
@@ -275,49 +277,6 @@ class CloudFirestoreService {
     _activityList.sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
     return _activityList;
   }
-
-  // Future<List<dynamic>> getActivityItems(
-  //     int neededLength, int newPage, int itemsPerPage) async {
-  //   // print("the length is " + length.toString());
-  //   // print("first is " + first.toString());
-  //   // print("last is " + last.toString());
-  //   String uid = await authService.getUid();
-  //   // _activityList.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
-  //   // > if the requested section of the _activityList doesn't exist
-  //   // if (_activityList.length < last) {
-  //   //   if (_activityList.length > first-1) {
-  //   // if ((_activityList.length) > first) > 0)
-  //   // > remove range from requested document
-  //   if (neededLength > _activityList.length) {
-  //     print("removing from range " +
-  //         ((_activityList.length ~/ 100) * 100).toString() +
-  //         " to " +
-  //         (_activityList.length + 1).toString());
-  //     _activityList.removeRange(
-  //         ((_activityList.length ~/ 100) * 100), _activityList.length);
-  //     print("activity list is length: " + _activityList.length.toString());
-  //     var doc = await _db
-  //         .collection('users')
-  //         .document(uid)
-  //         .collection('activity')
-  //         .document(((_activityList.length + 1) ~/ 100).toInt().toString())
-  //         .get();
-  //     doc.data['activities'].forEach((k, v) {
-  //       Map data = {
-  //         'timestamp': v['timestamp'],
-  //         'desc': v['desc'],
-  //         'money': v['money'],
-  //         'type': v['type'],
-  //       };
-  //       _activityList.add(data);
-  //     });
-  //     _activityList.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
-  //     // _activityList = List.from(_activityList)..addAll(doc.data['activities'].values().toList());
-  //   }
-  //   List<dynamic> res = _activityList.reversed.toList();
-  //   return res.sublist(((newPage * itemsPerPage)),
-  //       (min(((newPage + 1) * itemsPerPage), _activityList.length)));
-  // }
 }
 
 final CloudFirestoreService cloudFirestoreService = CloudFirestoreService();

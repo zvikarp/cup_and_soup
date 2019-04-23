@@ -28,14 +28,12 @@ class _ScannerPageState extends State<ScannerPage> {
         cloudFirestoreService.subscribeToMoneyRequestsStream().listen((snap) {
       print(snap['barcode']);
       if (snap['barcode'] == barcode) {
-        print("jobdone! " + snap['message'].toString());
         _requestStream.cancel();
         cloudFirestoreService.deleteRequest("money");
         Navigator.of(context).push(
           TransparentRoute(
             builder: (BuildContext context) => MessageDialog(
-                  message: snap['message'].toString(),
-                  code: snap['code'].toString(),
+                  responseCode: snap['responseCode'],
                 ),
           ),
         );
