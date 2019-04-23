@@ -1,16 +1,22 @@
-# cup_and_soup
+# cup&soup
 
-A new Flutter project.
+cup&soup is the place you would pop in to grab a steaming hot soup. now we have a app.
+this app was written in flutter using firebase database, auth, storage and functions.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+to get started, clone this repository:
 
-A few resources to get you started if this is your first Flutter project:
+```
+git clone https://github.com/ZviKarp/cup_and_soup.git
+```
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+the app would **not** run because it is missing the `google-services.json` file. please contact the project admin if you are working on this repository for cup&soup, to get access to the file.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Versioning
+
+We use [SemVer](https://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ZviKarp/cup_and_soup/tags).
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/ZviKarp/cup_and_soup/blob/master/LICENSE) file for details.
