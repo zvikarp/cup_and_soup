@@ -18,7 +18,6 @@ class CloudFirestoreService {
 
   Future<String> getRole() async {
     if (_userData != null) {
-      print("1 user role is" + _userData['role']);
       return _userData['role'];
     } else {
       await loadUserData();
@@ -252,54 +251,73 @@ class CloudFirestoreService {
     });
   }
 
-  Future<int> getActivityItemsCount() async {
+  Future<List<dynamic>> getActivities() async {
     String uid = await authService.getUid();
-    if (uid == null) return 0;
-    int length = 0;
+    _activityList = [];
     await _db
         .collection('users')
         .document(uid)
         .collection('activity')
-        // .orderBy('__name__', descending: true)
-        .limit(1)
         .getDocuments()
-        .then((docs) {
-      docs.documents.forEach((doc) {
-        length = doc.data['counter'] + (100 * int.parse(doc.documentID));
-      });
+        .then((snapshot) {
+      for (var doc in snapshot.documents) {
+        doc.data['activities'].forEach((k, v) {
+          Map data = {
+            'timestamp': v['timestamp'],
+            'desc': v['desc'],
+            'money': v['money'],
+            'type': v['type'],
+          };
+          _activityList.add(data);
+        });
+      }
     });
-    return length;
+    _activityList.sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
+    return _activityList;
   }
 
-  Future<List<dynamic>> getActivityItems(int first, int last) async {
-    String uid = await authService.getUid();
-    _activityList
-        .sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
-    if (_activityList.length < last) {
-      if (((_activityList.length - 1) - first) > 0)
-        _activityList.removeRange(first, _activityList.length - 1);
-      var doc = await _db
-          .collection('users')
-          .document(uid)
-          .collection('activity')
-          .document(((_activityList.length + 1) ~/ 100).toInt().toString())
-          .get();
-      print(((_activityList.length + 1) ~/ 100).toInt());
-      doc.data['activities'].forEach((k, v) {
-        Map data = {
-          'timestamp': v['timestamp'],
-          'desc': v['desc'],
-          'money': v['money'],
-          'type': v['type'],
-        };
-        _activityList.add(data);
-      });
-      _activityList
-          .sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
-      // _activityList = List.from(_activityList)..addAll(doc.data['activities'].values().toList());
-    }
-    return _activityList.sublist(first, last);
-  }
+  // Future<List<dynamic>> getActivityItems(
+  //     int neededLength, int newPage, int itemsPerPage) async {
+  //   // print("the length is " + length.toString());
+  //   // print("first is " + first.toString());
+  //   // print("last is " + last.toString());
+  //   String uid = await authService.getUid();
+  //   // _activityList.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
+  //   // > if the requested section of the _activityList doesn't exist
+  //   // if (_activityList.length < last) {
+  //   //   if (_activityList.length > first-1) {
+  //   // if ((_activityList.length) > first) > 0)
+  //   // > remove range from requested document
+  //   if (neededLength > _activityList.length) {
+  //     print("removing from range " +
+  //         ((_activityList.length ~/ 100) * 100).toString() +
+  //         " to " +
+  //         (_activityList.length + 1).toString());
+  //     _activityList.removeRange(
+  //         ((_activityList.length ~/ 100) * 100), _activityList.length);
+  //     print("activity list is length: " + _activityList.length.toString());
+  //     var doc = await _db
+  //         .collection('users')
+  //         .document(uid)
+  //         .collection('activity')
+  //         .document(((_activityList.length + 1) ~/ 100).toInt().toString())
+  //         .get();
+  //     doc.data['activities'].forEach((k, v) {
+  //       Map data = {
+  //         'timestamp': v['timestamp'],
+  //         'desc': v['desc'],
+  //         'money': v['money'],
+  //         'type': v['type'],
+  //       };
+  //       _activityList.add(data);
+  //     });
+  //     _activityList.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
+  //     // _activityList = List.from(_activityList)..addAll(doc.data['activities'].values().toList());
+  //   }
+  //   List<dynamic> res = _activityList.reversed.toList();
+  //   return res.sublist(((newPage * itemsPerPage)),
+  //       (min(((newPage + 1) * itemsPerPage), _activityList.length)));
+  // }
 }
 
 final CloudFirestoreService cloudFirestoreService = CloudFirestoreService();

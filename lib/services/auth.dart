@@ -48,7 +48,6 @@ class AuthService {
   }
 
   Future<String> getRole() async {
-    print("1");
     if (_user != null)
       return await cloudFirestoreService.getRole();
     else {

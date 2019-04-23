@@ -46,7 +46,6 @@ class TableWidget extends StatelessWidget {
   }
 
   Widget _content() {
-    print(items);
     return ListView.builder(
       padding: EdgeInsets.all(0),
       shrinkWrap: true,
@@ -55,7 +54,10 @@ class TableWidget extends StatelessWidget {
           ? items.length
           : min(itemsPerPage, ((length) - (itemsPerPage * page))),
       itemBuilder: (BuildContext context, int index) {
-        return TableItemWidget(columns: items[index], flex: flex);
+        if (items[index].toString() == "[Container]")
+          return Container();
+        else
+          return TableItemWidget(columns: items[index], flex: flex);
       },
     );
   }

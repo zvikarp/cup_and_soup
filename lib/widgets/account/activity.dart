@@ -22,32 +22,18 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   int _page = 0;
   int _itemsPerPage = 10;
   int _length = 0;
-  int _newLength = 0;
   List<List<Widget>> _activities = [];
+  List<List<Widget>> _activitiesOnPage = [];
 
   @override
   void initState() {
     super.initState();
-    _getLength();
+    _getActivities();
   }
 
-  void _getLength() async {
-    int length = await cloudFirestoreService.getActivityItemsCount();
-    setState(() {
-      _newLength = length;
-    });
-    _onPageChanged(0);
-  }
-
-  void _onPageChanged(newPage) async {
-    int first = (newPage * _itemsPerPage);
-    int last = (min(((newPage + 1) * _itemsPerPage) + 1, _newLength));
-    print("first" + first.toString());
-    print("last" + last.toString());
-    if ((first >= last) && (last != 0)) return;
+  void _getActivities() async {
+    List<dynamic> list = await cloudFirestoreService.getActivities();
     List<List<Widget>> activities = [];
-    List<dynamic> list =
-        await cloudFirestoreService.getActivityItems(first, last);
     list.forEach((doc) {
       activities.add([
         Container(
@@ -60,9 +46,19 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       ]);
     });
     setState(() {
-      _page = newPage;
       _activities = activities;
-      _length = _newLength;
+      _length = _activities.length;
+    });
+    _onPageChanged(0);
+  }
+
+  void _onPageChanged(newPage) async {
+    if (newPage == -1) return;
+    if ((newPage * _itemsPerPage) >= _length) return;
+    setState(() {
+      _page = newPage;
+      _activitiesOnPage = _activities.sublist(((newPage * _itemsPerPage)),
+        (min(((newPage + 1) * _itemsPerPage), _length)));
     });
   }
 
@@ -134,6 +130,10 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             ),
           ),
         ),
+        IconButton(
+          icon: Icon(Icons.refresh, color: Colors.black54,),
+          onPressed: _getActivities,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: StreamBuilder(
@@ -145,30 +145,16 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data.documents == null)
-                  return Text("No, data!");
-                // List<List<Widget>> list = [];
-                // int length = snapshot.data.documents.length;
-                // if (length == 0) {
-                //   list = [[
-                //     Text("Hey! it looks like there is nothing to see here.", textAlign: TextAlign.center,)
-                //   ]];
-                // }
-                // else {
-                // snapshot.data.documents.forEach((doc) {
-                //   list.add([
-                //     Container(
-                //       alignment: Alignment(-1, 0),
-                //       child: _typeIcon(doc['type']),
-                //     ),
-                //     Text(doc['desc'].toString()),
-                //     Text(doc['money'].toString()),
-                //     _date(doc['timestamp'].toString()),
-                //   ]);
-                // }); }
+                  return Text("Loading...");
+                else if (_length == 0)
+                  return Text(
+                    "Hey! it looks like there is nothing to see here.",
+                    textAlign: TextAlign.center,
+                  );
                 return TableWidget(
                   length: _length,
                   headings: _length == 0 ? [""] : [" ", " ", " ", " "],
-                  items: _activities,
+                  items: _activitiesOnPage,
                   flex: _length == 0 ? [1] : [1, 5, 2, 2],
                   page: _page,
                   onPageChange: _onPageChanged,
