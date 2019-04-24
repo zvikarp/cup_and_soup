@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/pages/admin/customersData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
@@ -109,13 +110,16 @@ class _AdminPageState extends State<AdminPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "View customers activity",
+                "View customers details",
               ),
               ButtonWidget(
                 text: "View",
                 onPressed: () {
-                  SnackbarWidget.errorBar(
-                      context, "This feature dosn't exist yet.");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomersDataPage()),
+                  );
                 },
                 primary: false,
                 size: "small",
