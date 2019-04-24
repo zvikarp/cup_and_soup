@@ -258,6 +258,17 @@ class CloudFirestoreService {
     });
   }
 
+  Future<bool> deleteBarcode(String barcode) async {
+    String uid = await authService.getUid();
+    if (uid == null) return false;
+    await _db
+        .collection('surpriseBox')
+        .document(barcode)
+        .delete();
+    return true;
+
+  }
+
   Future<List<dynamic>> getActivities() async {
     String uid = await authService.getUid();
     _activityList = [];

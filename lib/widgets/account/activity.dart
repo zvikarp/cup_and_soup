@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
@@ -136,30 +135,20 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: StreamBuilder(
-              stream: Firestore.instance
-                  .collection('users')
-                  .document(widget.uid)
-                  .collection('activity')
-                  .orderBy("timestamp", descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data.documents == null)
-                  return Text("Loading...");
-                else if (_length == 0)
-                  return Text(
+          child:
+                _length == 0 ?
+                  Text(
                     "Hey! it looks like there is nothing to see here.",
                     textAlign: TextAlign.center,
-                  );
-                return TableWidget(
+                  ) :
+                TableWidget(
                   length: _length,
-                  headings: _length == 0 ? [""] : [" ", " ", " ", " "],
+                  headings: [" ", " ", " ", " "],
                   items: _activitiesOnPage,
-                  flex: _length == 0 ? [1] : [1, 5, 2, 2],
+                  flex: [1, 5, 2, 2],
                   page: _page,
                   onPageChange: _onPageChanged,
-                );
-              }),
+                ),
         ),
       ],
     );

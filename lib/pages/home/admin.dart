@@ -6,6 +6,7 @@ import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -52,7 +53,10 @@ class _AdminPageState extends State<AdminPage> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: GestureDetector(
-            onTap: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
+            onTap: () {
+              SnackbarWidget.errorBar(
+                  context, "This feature dosn't exist yet.");
+            },
             child: CenterWidget(
               child: Center(
                 child: Text(
@@ -69,14 +73,13 @@ class _AdminPageState extends State<AdminPage> {
         ),
         DividerWidget(),
         Text(
-          "More Settings",
+          "More Options",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: "PrimaryFont",
             fontSize: 24,
           ),
         ),
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Row(
@@ -87,14 +90,19 @@ class _AdminPageState extends State<AdminPage> {
               ),
               ButtonWidget(
                 text: "View",
-                onPressed: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ActiveBarcodesPage()),
+                  );
+                },
                 primary: false,
                 size: "small",
               ),
             ],
           ),
         ),
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Row(
@@ -105,14 +113,16 @@ class _AdminPageState extends State<AdminPage> {
               ),
               ButtonWidget(
                 text: "View",
-                onPressed: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
+                onPressed: () {
+                  SnackbarWidget.errorBar(
+                      context, "This feature dosn't exist yet.");
+                },
                 primary: false,
                 size: "small",
               ),
             ],
           ),
         ),
-
         SizedBox(height: 42)
       ]),
     );

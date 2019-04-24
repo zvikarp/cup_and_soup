@@ -62,7 +62,8 @@ class NavigationBarWidget extends StatelessWidget {
           fit: BoxFit.cover,
         ),
         Container(
-          height: 65,
+          alignment: Alignment.bottomCenter,
+          height: 63,
           color: Colors.transparent,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -13,7 +13,7 @@ class TableItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 4),
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       color: Colors.grey[200],
       child: Row(
           children: columns.map((item) {

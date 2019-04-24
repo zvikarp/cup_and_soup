@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cup_and_soup/dialogs/action.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter/material.dart';
 
@@ -272,15 +274,26 @@ class _EditItemPageState extends State<EditItemPage> {
                 rightText: _loading ? "Saving..." : "Save",
                 rightOnPressed: _saveChanges,
               ),
-              !widget.newItem ? ButtonWidget(
-                primary: false,
-                size: "small",
-                text: "Delete Item",
-                onPressed: () async {
-                  await cloudFirestoreService.deleteItem(widget.item.barcode);
-                  Navigator.pop(context);
-                },
-              ) : Container(),
+              !widget.newItem
+                  ? ButtonWidget(
+                      primary: false,
+                      size: "small",
+                      text: "Delete Item",
+                      onPressed: () async {
+                        bool res = await Navigator.of(context).push(
+                          TransparentRoute(
+                            builder: (BuildContext context) =>
+                                ActionDialog(type: "delete"),
+                          ),
+                        );
+                        if (res) {
+                          await cloudFirestoreService
+                              .deleteItem(widget.item.barcode);
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  : Container(),
               SizedBox(height: 42),
             ],
           ),
