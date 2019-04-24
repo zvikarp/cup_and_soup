@@ -39,16 +39,16 @@ class CloudFirestoreService {
   }
 
   Future<String> uploadMoneyBarcode(
-      double amount, bool userLimit, int quantity) async {
+      double amount, DateTime dateTime, bool userLimit, int quantity) async {
     String barcode = generateBarcode("M");
     var data = await _db.collection('surpriseBox').document(barcode).get();
     if (data.exists)
-      return uploadMoneyBarcode(amount, userLimit, quantity);
+      return uploadMoneyBarcode(amount, dateTime, userLimit, quantity);
     else {
       await _db.collection('surpriseBox').document(barcode).setData({
         'type': "money",
         'amount': amount,
-        'expiringDate': DateTime.now().add(Duration(minutes: 5)),
+        'expiringDate': dateTime,
         'userLimit': userLimit,
         'quantity': quantity,
       });
