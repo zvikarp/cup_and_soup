@@ -72,6 +72,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Icons.monetization_on,
         size: 16,
       );
+    } else if (type == "credit") {
+      return Icon(
+        Icons.atm,
+        size: 16,
+      );
     } else {
       return Icon(
         Icons.error,

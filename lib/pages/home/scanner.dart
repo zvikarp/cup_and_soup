@@ -21,15 +21,16 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   StreamSubscription _requestStream;
+  List<String> types = ['M', 'C'];
 
   void _waitForResponce(String barcode) {
     if (_requestStream != null) _requestStream.cancel();
     _requestStream =
-        cloudFirestoreService.subscribeToMoneyRequestsStream().listen((snap) {
+        cloudFirestoreService.subscribeToGeneralRequestsStream().listen((snap) {
       print(snap['barcode']);
       if (snap['barcode'] == barcode) {
         _requestStream.cancel();
-        cloudFirestoreService.deleteRequest("money");
+        cloudFirestoreService.deleteRequest(barcode);
         Navigator.of(context).push(
           TransparentRoute(
             builder: (BuildContext context) => MessageDialog(
@@ -48,10 +49,11 @@ class _ScannerPageState extends State<ScannerPage> {
     try {
       barcodeScanRes =
           await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", false);
+          String type = barcodeScanRes[0];
       if (barcodeScanRes == "")
         widget.goToShop();
-      else if (barcodeScanRes[0] == 'M') {
-        cloudFirestoreService.sendMoneyRequest(barcodeScanRes);
+      else if (types.contains(type)) {
+        cloudFirestoreService.sendRequest(barcodeScanRes);
         _waitForResponce(barcodeScanRes);
       }
     } on PlatformException {

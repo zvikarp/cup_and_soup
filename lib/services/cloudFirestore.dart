@@ -12,7 +12,7 @@ import 'package:cup_and_soup/models/item.dart';
 class CloudFirestoreService {
   final Firestore _db = Firestore.instance;
   final _buyRequestsStream = PublishSubject();
-  final _moneyRequestsStream = PublishSubject();
+  final _generalRequestsStream = PublishSubject();
   Map<String, dynamic> _userData;
   List<dynamic> _activityList = [];
 
@@ -56,6 +56,22 @@ class CloudFirestoreService {
     }
   }
 
+  Future<String> updateCreditBarcode(
+      double amount, DateTime dateTime) async {
+    String barcode = generateBarcode("C");
+    var data = await _db.collection('surpriseBox').document(barcode).get();
+    if (data.exists)
+      return updateCreditBarcode(amount, dateTime);
+    else {
+      await _db.collection('surpriseBox').document(barcode).setData({
+        'type': "credit",
+        'amount': amount,
+        'expiringDate': dateTime
+      });
+      return barcode;
+    }
+  }
+
   void getRequests() async {
     String uid = await authService.getUid();
     _db
@@ -88,7 +104,24 @@ class CloudFirestoreService {
             "barcode": snap.data['barcode'],
             "responseCode": snap.data['responseCode']
           };
-          _moneyRequestsStream.add(request);
+          _generalRequestsStream.add(request);
+        }
+      }
+    });
+    _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document('credit')
+        .snapshots()
+        .listen((snap) {
+        if (snap.exists) {
+      if (snap.data['client'] == "app") {
+          var request = {
+            "barcode": snap.data['barcode'],
+            "responseCode": snap.data['responseCode']
+          };
+          _generalRequestsStream.add(request);
         }
       }
     });
@@ -98,11 +131,16 @@ class CloudFirestoreService {
     return _buyRequestsStream.stream;
   }
 
-  Stream subscribeToMoneyRequestsStream() {
-    return _moneyRequestsStream.stream;
+  Stream subscribeToGeneralRequestsStream() {
+    return _generalRequestsStream.stream;
   }
 
-  Future<bool> deleteRequest(String type) async {
+  Future<bool> deleteRequest(String barcode) async {
+    String type = "";
+    if (barcode[0] == "M") type = "money";
+    else if (barcode[0] == "C") type = "credit";
+    else return false;
+
     String uid = await authService.getUid();
     if (uid == null) return false;
     await _db
@@ -210,14 +248,18 @@ class CloudFirestoreService {
     return true;
   }
 
-  Future<bool> sendMoneyRequest(String barcode) async {
+  Future<bool> sendRequest(String barcode) async {
+    String type = "";
+    if (barcode[0] == "M") type = "money";
+    else if (barcode[0] == "C") type = "credit";
+    else return false;
     String uid = await authService.getUid();
     if (uid == null) return false;
     var doc = await _db
         .collection('users')
         .document(uid)
         .collection('requests')
-        .document('money')
+        .document(type)
         .get();
     if (doc.exists) {
       DateTime expiringDate = doc.data['expiringDate'].toDate();
@@ -227,7 +269,7 @@ class CloudFirestoreService {
             .collection('users')
             .document(uid)
             .collection('requests')
-            .document('money')
+            .document(type)
             .delete();
       } else {
         return false;
@@ -237,7 +279,7 @@ class CloudFirestoreService {
         .collection('users')
         .document(uid)
         .collection('requests')
-        .document('money')
+        .document(type)
         .setData({
       'barcode': barcode,
       'client': 'server',

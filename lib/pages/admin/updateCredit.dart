@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
-import 'package:cup_and_soup/widgets/admin/trasferMoney/amountInput.dart';
+import 'package:cup_and_soup/widgets/admin/updateCredit/amountInput.dart';
 import 'package:cup_and_soup/widgets/admin/barcodeGenerator.dart';
 
-class TransferMoneyPage extends StatefulWidget {
+class UpdateCreditPage extends StatefulWidget {
   @override
-  _TransferMoneyPageState createState() => _TransferMoneyPageState();
+  _UpdateCreditPageState createState() => _UpdateCreditPageState();
 }
 
-class _TransferMoneyPageState extends State<TransferMoneyPage> {
+class _UpdateCreditPageState extends State<UpdateCreditPage> {
   int _step = 1;
   double _amount = 0.0;
   String _barcode = "";
 
-  void _amountSubmited(String amount, DateTime dateTime, bool userLimit, int scans) async {
-    String barcode = await cloudFirestoreService.uploadMoneyBarcode(double.parse(amount), dateTime, userLimit, scans);
+  void _amountSubmited(String amount, DateTime dateTime) async {
+    String barcode = await cloudFirestoreService.updateCreditBarcode(double.parse(amount), dateTime);
     setState(() {
       _step = 2;
       _amount = double.parse(amount);
@@ -34,7 +34,7 @@ class _TransferMoneyPageState extends State<TransferMoneyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageWidget(
-        title: "trasfer-money",
+        title: "update-credit",
         child: _step == 1
             ? AmountInputWidget(onAmountSubmit: _amountSubmited)
             : BarcodeGeneratorWidget(

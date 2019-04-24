@@ -65,7 +65,7 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
         if (doc['userLimit']) text += ", one per user";
       }
     }
-    if (doc['type'] == 'discount') {
+    else if (doc['type'] == 'discount') {
       if (doc['quantity'] == -1) {
         text = "one time code";
       } else {
@@ -74,6 +74,9 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       }
       if (doc['usageLimit'] != -1)
         text += ", and used " + doc['usageLimit'].toString() + " times";
+    }
+    else if (doc['type'] == 'credit') {
+      text = "---";
     }
     return Text(text);
   }

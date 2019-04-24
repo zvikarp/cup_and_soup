@@ -93,8 +93,6 @@ class MessageDialog extends StatelessWidget {
         case 'c-e0':
           return "The scanned code doesn't exist anymore.";
         case 'c-e1':
-          return "It looks like you have successfully used the code already. It can't be used twice.";
-        case 'c-e2':
           return "The barcode has expired.";
         default:
           return _textMessage("g");
