@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isAdmin = false;
+  String _role = "cashRegister";
 
   final List<Widget> pages = [
     AccountPage(),
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   void getRole() async {
     String role = await authService.getRole();
     setState(() {
+      _role = role;
       _isAdmin = role == 'admin';
       if (_isAdmin) {
         pages.add(AdminPage());
@@ -60,13 +62,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _role != "cashRegister" ? Scaffold(
       body: pages[_currentPage],
       bottomNavigationBar: NavigationBarWidget(
         index: _currentPage,
         tabTapped: _onTabTaped,
         isAdmin: _isAdmin,
       ),
+    ) : Scaffold(
+      body: StorePage(),
     );
   }
 }

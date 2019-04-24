@@ -8,6 +8,7 @@ import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -74,6 +75,27 @@ class _AdminPageState extends State<AdminPage> {
             ),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: GestureDetector(
+            onTap: () {
+              SnackbarWidget.errorBar(
+                  context, "This feature dosn't exist yet.");
+            },
+            child: CenterWidget(
+              child: Center(
+                child: Text(
+                  "Give Discount",
+                  style: TextStyle(
+                    fontFamily: "PrimaryFont",
+                    fontSize: 24,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         DividerWidget(),
         Text(
           "More Options",
@@ -122,6 +144,46 @@ class _AdminPageState extends State<AdminPage> {
                     MaterialPageRoute(
                         builder: (context) => CustomersDataPage()),
                   );
+                },
+                primary: false,
+                size: "small",
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Send customers a message",
+              ),
+              ButtonWidget(
+                text: "Send",
+                onPressed: () {
+                  SnackbarWidget.errorBar(
+                      context, "This feature dosn't exist yet.");
+                },
+                primary: false,
+                size: "small",
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Close store",
+              ),
+              ButtonWidget(
+                text: "Close",
+                onPressed: () {
+                  SnackbarWidget.errorBar(
+                      context, "This feature dosn't exist yet.");
                 },
                 primary: false,
                 size: "small",
