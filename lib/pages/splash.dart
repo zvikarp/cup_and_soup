@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-import 'package:cup_and_soup/services/auth.dart';
-import 'package:cup_and_soup/pages/home.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
+import 'package:cup_and_soup/dialogs/signin.dart';
+import 'package:cup_and_soup/widgets/core/button.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -12,55 +14,19 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  void _signInUser() async {
-    String uid = await authService.getUid();
-    if ((uid == null) || (uid == ""))
-      _signInUser();
-    else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    }
+
+  _openLogin() {
+    Navigator.of(context).push(
+      TransparentRoute(
+        builder: (BuildContext context) => SigninDialog(),
+      ),
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _signInUser();
-  }
-
-  Widget _loginSign() {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.circular(30)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "logging in with Google...",
-                style: TextStyle(
-                  fontFamily: "PrimaryFont",
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+   SchedulerBinding.instance.addPostFrameCallback((_) => _openLogin());
   }
 
   @override
@@ -80,7 +46,24 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
           ),
-          _loginSign(),
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black,
+                  offset: Offset(1.0, 6.0),
+                  blurRadius: 40.0,
+                ),
+              ],
+              ),
+              child: ButtonWidget(
+                text: "Login",
+                onPressed: _openLogin,
+                primary: false,
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -128,6 +128,11 @@ class CloudFirestoreService {
     return userData;
   }
 
+  bool resetUserData() {
+    _userData = null;
+    return true;
+  }
+
   Future<String> updateItem(Item item,
       [File image, String imageState, String oldBarcode = ""]) async {
     String uid = await authService.getUid();

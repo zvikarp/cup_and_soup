@@ -93,17 +93,20 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ],
           ),
         ),
-        // Padding(
-        //     padding: EdgeInsets.symmetric(horizontal: 24),
-        //     child: Center(
-        //       child: ButtonWidget(
-        //         text: "Sign Out",
-        //         onPressed: () {authService.signOut(); exit(0);
-        // },
-        //         primary: false,
-        //         size: "small",
-        //       ),
-            // )),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Center(
+              child: ButtonWidget(
+                text: "Sign Out",
+                onPressed: () {
+                  authService.signOut();
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SplashPage()));
+                },
+                primary: false,
+                size: "small",
+              ),
+            )),
       ],
     );
   }

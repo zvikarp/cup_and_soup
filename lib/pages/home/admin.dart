@@ -4,6 +4,8 @@ import 'package:cup_and_soup/pages/admin/transferMoney.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
+import 'package:cup_and_soup/widgets/core/button.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -50,12 +52,7 @@ class _AdminPageState extends State<AdminPage> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TransferMoneyPage()),
-              );
-            },
+            onTap: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
             child: CenterWidget(
               child: Center(
                 child: Text(
@@ -81,17 +78,41 @@ class _AdminPageState extends State<AdminPage> {
         ),
         
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: Text(
-            "Still working on this one.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              color: Colors.black54,
-              fontSize: 16,
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "View active barcodes",
+              ),
+              ButtonWidget(
+                text: "View",
+                onPressed: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
+                primary: false,
+                size: "small",
+              ),
+            ],
           ),
         ),
+        
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "View customers activity",
+              ),
+              ButtonWidget(
+                text: "View",
+                onPressed: () {SnackbarWidget.errorBar(context, "This feature dosn't exist yet.");},
+                primary: false,
+                size: "small",
+              ),
+            ],
+          ),
+        ),
+
         SizedBox(height: 42)
       ]),
     );

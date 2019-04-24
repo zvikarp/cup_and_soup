@@ -58,6 +58,7 @@ class NavigationBarWidget extends StatelessWidget {
           "assets/images/navBar.png",
           height: 70,
           width: double.infinity,
+          alignment: Alignment(0, -1),
           fit: BoxFit.cover,
         ),
         Container(
