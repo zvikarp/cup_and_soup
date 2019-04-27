@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 
 - Script is running on proper GH pages (so it'll no trying to render file icons on account settings page)
+ -->
+## [0.1.0] - 2019-04-28
 
-## [1.0.0] - 2017-10-03
-
-- Initial version -->
+- alpha version
