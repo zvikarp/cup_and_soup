@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cup_and_soup/models/item.dart';
+import 'package:cup_and_soup/pages/store/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -11,10 +13,10 @@ import 'package:cup_and_soup/dialogs/message.dart';
 class ScannerPage extends StatefulWidget {
   ScannerPage({
     Key key,
-    this.goToShop,
+    this.goToStore,
   }) : super(key: key);
 
-  final VoidCallback goToShop;
+  final VoidCallback goToStore;
 
   _ScannerPageState createState() => _ScannerPageState();
 }
@@ -38,10 +40,21 @@ class _ScannerPageState extends State<ScannerPage> {
                 ),
           ),
         );
-        widget.goToShop();
+        widget.goToStore();
         return;
       }
     });
+  }
+
+  void _barcodeNotFound() async {
+    await Navigator.of(context).push(
+          TransparentRoute(
+            builder: (BuildContext context) => MessageDialog(
+                  responseCode: 's-e2',
+                ),
+          ),
+        );
+      initPlatformState();
   }
 
   Future<void> initPlatformState() async {
@@ -49,15 +62,31 @@ class _ScannerPageState extends State<ScannerPage> {
     try {
       barcodeScanRes =
           await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", false);
-          String type = barcodeScanRes[0];
-      if (barcodeScanRes == "")
-        widget.goToShop();
-      else if (types.contains(type)) {
+      if (barcodeScanRes == "") {
+        widget.goToStore();
+      } else if (types.contains(barcodeScanRes[0])) {
         cloudFirestoreService.sendRequest(barcodeScanRes);
         _waitForResponce(barcodeScanRes);
+      } else if (int.tryParse(barcodeScanRes).toString() == barcodeScanRes) {
+        Item item = await cloudFirestoreService.getItem(barcodeScanRes);
+        if (item != null) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ItemPage(
+                      item: item,
+                    )),
+          );
+          widget.goToStore();
+        } else {
+        _barcodeNotFound();
+        }
+      } else { 
+        _barcodeNotFound();
       }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
+      widget.goToStore();
     }
   }
 

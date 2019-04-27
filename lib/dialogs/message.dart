@@ -105,6 +105,8 @@ class MessageDialog extends StatelessWidget {
           return "There is a problem recognising the barcode, please make your you are in a light place.";
         case 's-e1':
           return "Please enable camera permissions so you can use the scanner.";
+        case 's-e2':
+          return "Umm... It looks like this barcode dosn't exist.";
         default:
           return _textMessage("g");
       }

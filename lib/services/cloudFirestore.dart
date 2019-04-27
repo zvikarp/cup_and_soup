@@ -311,6 +311,27 @@ class CloudFirestoreService {
 
   }
 
+  Future<Item> getItem(String barcode) async {
+    String uid = await authService.getUid();
+    if (uid == null) return null;
+    var doc = await _db
+        .collection('store')
+        .document(barcode)
+        .get();
+    if (!doc.exists) return null;
+    return Item(
+      barcode: barcode,
+      name: doc.data['name'],
+      desc: doc.data['desc'],
+      hechsherim: doc.data['hechsherim'],
+      image: doc.data['image'],
+      price: doc.data['price'],
+      stock: doc.data['stock'],
+      tags: doc.data['tags'],
+    );
+
+  }
+
   Future<List<dynamic>> getActivities() async {
     String uid = await authService.getUid();
     _activityList = [];

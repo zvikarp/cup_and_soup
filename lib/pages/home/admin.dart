@@ -1,4 +1,4 @@
-import 'package:cup_and_soup/pages/admin/customersData.dart';
+import 'package:cup_and_soup/pages/admin/customersDetails.dart';
 import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:flutter/material.dart';
 
@@ -142,7 +142,7 @@ class _AdminPageState extends State<AdminPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CustomersDataPage()),
+                        builder: (context) => CustomersDetailsPage()),
                   );
                 },
                 primary: false,

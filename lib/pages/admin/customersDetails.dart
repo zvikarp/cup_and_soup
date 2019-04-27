@@ -1,3 +1,5 @@
+import 'package:cup_and_soup/dialogs/customersDetails.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -5,12 +7,12 @@ import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
-class CustomersDataPage extends StatefulWidget {
+class CustomersDetailsPage extends StatefulWidget {
   @override
-  _CustomersDataPageState createState() => _CustomersDataPageState();
+  _CustomersDetailsPageState createState() => _CustomersDetailsPageState();
 }
 
-class _CustomersDataPageState extends State<CustomersDataPage> {
+class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
   List<List<Widget>> _docsToItem(dynamic snapshot) {
     List<List<Widget>> items = [];
 
@@ -22,10 +24,30 @@ class _CustomersDataPageState extends State<CustomersDataPage> {
         ),
         Text(doc['name'].toString()),
         Text(doc['money'].toString()),
+        _more(doc.documentID.toString()),
       ]);
     });
 
     return items;
+  }
+
+
+  void _onMorePressed(String uid) {
+    Navigator.of(context).push(
+      TransparentRoute(
+        builder: (BuildContext context) => CustomersDetailsDialog(uid: uid),
+      ),
+    );
+  }
+
+  Widget _more(String uid) {
+    return GestureDetector(
+      onTap: () => _onMorePressed(uid),
+          child: Icon(
+        Icons.navigate_next,
+        size: 16,
+      ),
+    );
   }
  
   Widget _roleIcon(String role) {
@@ -71,9 +93,9 @@ class _CustomersDataPageState extends State<CustomersDataPage> {
                       );
                     }
                     return TableWidget(
-                      headings: [" ", " ", " "],
+                      headings: [" ", " ", " ", " "],
                       items: _docsToItem(snapshot.data.documents),
-                      flex: [1, 3, 2],
+                      flex: [1, 3, 2, 1],
                     );
                   }),
             ),

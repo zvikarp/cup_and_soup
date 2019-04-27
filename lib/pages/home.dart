@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addScanner() {
-    pages.add(ScannerPage(goToShop: () => _onTabTaped(1)));
+    pages.add(ScannerPage(
+      goToStore: () => _onTabTaped(1),
+    ));
   }
 
   @override
@@ -62,15 +64,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return _role != "cashRegister" ? Scaffold(
-      body: pages[_currentPage],
-      bottomNavigationBar: NavigationBarWidget(
-        index: _currentPage,
-        tabTapped: _onTabTaped,
-        isAdmin: _isAdmin,
-      ),
-    ) : Scaffold(
-      body: StorePage(),
-    );
+    return _role != "cashRegister"
+        ? Scaffold(
+            body: pages[_currentPage],
+            bottomNavigationBar: NavigationBarWidget(
+              index: _currentPage,
+              tabTapped: _onTabTaped,
+              isAdmin: _isAdmin,
+            ),
+          )
+        : Scaffold(
+            body: StorePage(),
+          );
   }
 }
