@@ -71,3 +71,7 @@
 
 # firebase api key
 **/google-services.json
+
+# keytool
+**/key.properties
+**/key.jks

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cup_and_soup">
+    package="com.zektec.cup_and_soup">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="cup_and_soup"
+        android:label="cup&amp;soup"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

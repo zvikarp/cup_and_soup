@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cup&Soup',
+      title: 'cup&soup',
       theme: themeUtil.getTheme(),
       home: SplashPage(),
     );

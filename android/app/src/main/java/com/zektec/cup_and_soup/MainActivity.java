@@ -1,4 +1,4 @@
-package com.example.cup_and_soup;
+package com.zektec.cup_and_soup;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
