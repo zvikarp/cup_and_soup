@@ -18,12 +18,13 @@ class CloudFirestoreService {
 
   Future<List<String>> getRoles() async {
     if (_userData != null) {
-      return _userData['roles'];
+      return _userData['roles'].cast<String>();
     } else {
       await loadUserData();
-      if (_userData != null)
-        return _userData['roles'];
-      else
+      if (_userData != null) {
+        print(_userData['roles'].cast<String>()[0]);
+        return _userData['roles'].cast<String>();
+      } else
         return null;
     }
   }
@@ -56,18 +57,14 @@ class CloudFirestoreService {
     }
   }
 
-  Future<String> updateCreditBarcode(
-      double amount, DateTime dateTime) async {
+  Future<String> updateCreditBarcode(double amount, DateTime dateTime) async {
     String barcode = generateBarcode("C");
     var data = await _db.collection('surpriseBox').document(barcode).get();
     if (data.exists)
       return updateCreditBarcode(amount, dateTime);
     else {
-      await _db.collection('surpriseBox').document(barcode).setData({
-        'type': "credit",
-        'amount': amount,
-        'expiringDate': dateTime
-      });
+      await _db.collection('surpriseBox').document(barcode).setData(
+          {'type': "credit", 'amount': amount, 'expiringDate': dateTime});
       return barcode;
     }
   }
@@ -81,8 +78,8 @@ class CloudFirestoreService {
         .document('buy')
         .snapshots()
         .listen((snap) {
-        if (snap.exists) {
-      if (snap.data['client'] == "app") {
+      if (snap.exists) {
+        if (snap.data['client'] == "app") {
           var request = {
             "barcode": snap.data['barcode'],
             "responseCode": snap.data['responseCode'],
@@ -98,8 +95,8 @@ class CloudFirestoreService {
         .document('money')
         .snapshots()
         .listen((snap) {
-        if (snap.exists) {
-      if (snap.data['client'] == "app") {
+      if (snap.exists) {
+        if (snap.data['client'] == "app") {
           var request = {
             "barcode": snap.data['barcode'],
             "responseCode": snap.data['responseCode']
@@ -115,8 +112,8 @@ class CloudFirestoreService {
         .document('credit')
         .snapshots()
         .listen((snap) {
-        if (snap.exists) {
-      if (snap.data['client'] == "app") {
+      if (snap.exists) {
+        if (snap.data['client'] == "app") {
           var request = {
             "barcode": snap.data['barcode'],
             "responseCode": snap.data['responseCode']
@@ -137,9 +134,12 @@ class CloudFirestoreService {
 
   Future<bool> deleteRequest(String barcode) async {
     String type = "";
-    if (barcode[0] == "M") type = "money";
-    else if (barcode[0] == "C") type = "credit";
-    else return false;
+    if (barcode[0] == "M")
+      type = "money";
+    else if (barcode[0] == "C")
+      type = "credit";
+    else
+      return false;
 
     String uid = await authService.getUid();
     if (uid == null) return false;
@@ -159,7 +159,7 @@ class CloudFirestoreService {
       "name": data["name"],
       "money": data["money"],
       "allowdCredit": data["allowedCredit"],
-      "roles": data["roles"],
+      "roles": data["roles"].map((role) => role.toString()).toList(),
       "email": data["email"],
     };
     _userData = userData;
@@ -250,9 +250,12 @@ class CloudFirestoreService {
 
   Future<bool> sendRequest(String barcode) async {
     String type = "";
-    if (barcode[0] == "M") type = "money";
-    else if (barcode[0] == "C") type = "credit";
-    else return false;
+    if (barcode[0] == "M")
+      type = "money";
+    else if (barcode[0] == "C")
+      type = "credit";
+    else
+      return false;
     String uid = await authService.getUid();
     if (uid == null) return false;
     var doc = await _db
@@ -303,21 +306,14 @@ class CloudFirestoreService {
   Future<bool> deleteBarcode(String barcode) async {
     String uid = await authService.getUid();
     if (uid == null) return false;
-    await _db
-        .collection('surpriseBox')
-        .document(barcode)
-        .delete();
+    await _db.collection('surpriseBox').document(barcode).delete();
     return true;
-
   }
 
   Future<Item> getItem(String barcode) async {
     String uid = await authService.getUid();
     if (uid == null) return null;
-    var doc = await _db
-        .collection('store')
-        .document(barcode)
-        .get();
+    var doc = await _db.collection('store').document(barcode).get();
     if (!doc.exists) return null;
     return Item(
       barcode: barcode,
@@ -329,7 +325,6 @@ class CloudFirestoreService {
       stock: doc.data['stock'],
       tags: doc.data['tags'],
     );
-
   }
 
   Future<List<dynamic>> getActivities() async {

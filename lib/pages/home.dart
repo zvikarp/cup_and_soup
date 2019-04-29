@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/pages/home/insider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/pages/home/store.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       'page': StorePage(),
     },
     'admin': {
-      'icon': Icons.star,
+      'icon': Icons.work,
       'page': AdminPage(),
     },
     'adminStore': {
@@ -40,6 +41,10 @@ class _HomePageState extends State<HomePage> {
       'icon': Icons.center_focus_strong,
       'page': ScannerPage(goToStore: () => null)
     },
+    'insider': {
+      'icon': Icons.star,
+      'page': InsiderPage(),
+    },
   };
 
   Map<String, Map<String, dynamic>> _pages = {};
@@ -50,19 +55,24 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _roles = roles;
     });
+    _updatePages();
     if (_roles.contains("admin")) cloudFirestoreService.clearSupriseBox();
   }
 
-  void updatePages(List<String> roles) {
+  void _updatePages() {
     Map<String, Map<String, dynamic>> pages = {};
-    if (roles.contains('customer')) {
+    if (_roles.contains('customer')) {
       pages.putIfAbsent('account', () => _allPages['account']);
       pages.putIfAbsent('store', () => _allPages['store']);
       pages.putIfAbsent('scanner', () => _allPages['scanner']);
     }
-    if (roles.contains('admin')) {
+    if (_roles.contains('admin')) {
       pages.putIfAbsent('admin', () => _allPages['admin']);
+      pages.remove('store');
       pages.putIfAbsent('adminStore', () => _allPages['adminStore']);
+    }
+    if (_roles.contains('insider')) {
+      pages.putIfAbsent('insider', () => _allPages['insider']);
     }
     setState(() {
       _pages = pages;
@@ -88,9 +98,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return _roles.contains("cashRegister")
+    return !_roles.contains("cashRegister")
         ? Scaffold(
-            body: _pages[_currentPage]['page'],
+            body: _pages[_currentPage] != null ?  _pages[_currentPage]['page'] : StorePage(),
             bottomNavigationBar: NavigationBarWidget(
               currentPage: _currentPage,
               tabTapped: _onTabTaped,
