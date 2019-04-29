@@ -18,13 +18,16 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   String _uid;
   Map<String, dynamic> _userData;
+  bool _upToDate = true;
 
   void _getData() async {
     String uid = await authService.getUid();
     Map<String, dynamic> userData = await cloudFirestoreService.loadUserData();
+    bool upToDate = await HomePage.newVersion();
     setState(() {
       _uid = uid;
       _userData = userData;
+      _upToDate = upToDate;
     });
   }
 
@@ -53,7 +56,7 @@ class _AccountPageState extends State<AccountPage> {
                 uid: _uid,
                 userData: _userData,
               ),
-              SizedBox(height: 42),
+              DividerWidget(),
               Text(
                 "cup&soup (c) 2019 Zvi Karp | version " + HomePage.getVersion(),
                 style: TextStyle(
@@ -62,7 +65,22 @@ class _AccountPageState extends State<AccountPage> {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 24),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 36),
+                child: Text(
+                  !_upToDate
+                      ? "There is a new version to download from the Play Store!"
+                      : "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "PrimaryFont",
+                      color: Colors.black87,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 36),
             ]
           : <Widget>[
               Text("loading..."),

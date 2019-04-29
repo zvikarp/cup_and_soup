@@ -1,6 +1,7 @@
-import 'package:cup_and_soup/pages/home/insider.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/pages/home/insider.dart';
 import 'package:cup_and_soup/pages/home/store.dart';
 import 'package:cup_and_soup/pages/home/account.dart';
 import 'package:cup_and_soup/pages/home/scanner.dart';
@@ -15,6 +16,10 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 
   static String getVersion() => "v0.1.0+1";
+  static Future<bool> newVersion() async {
+    String lastVersion = await cloudFirestoreService.getLastVersion();
+    return (getVersion() == lastVersion);
+  }
 }
 
 class _HomePageState extends State<HomePage> {
@@ -75,6 +80,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _checkForUpdates() async {
+    bool upToDate = await HomePage.newVersion();
+    if (!upToDate) {
+      SnackbarWidget.infoBar(context, "There is a new version to download from the Play Store!");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,12 +96,10 @@ class _HomePageState extends State<HomePage> {
     });
     getRoles();
     cloudFirestoreService.getRequests();
+    _checkForUpdates();
   }
 
   void _onTabTaped(String page) {
-    print(
-        "the page 88888888888888888888888888888888888888888888888888877777--------------------------------------------------------is " +
-            page);
     setState(() {
       _currentPage = page;
     });

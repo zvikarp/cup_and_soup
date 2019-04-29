@@ -20,7 +20,7 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
       items.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _userIcon(doc['roles']),
+          child: _userIcon(doc['roles'].cast<String>()),
         ),
         Text(doc['name'].toString()),
         Text(doc['money'].toString()),
@@ -43,10 +43,17 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
   Widget _more(String uid) {
     return GestureDetector(
       onTap: () => _onMorePressed(uid),
-          child: Icon(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Colors.black,
+            ),
+            child: Icon(
         Icons.navigate_next,
         size: 16,
+        color: Colors.grey[200],
       ),
+          ),
     );
   }
  

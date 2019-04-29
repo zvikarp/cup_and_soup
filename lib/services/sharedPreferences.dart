@@ -9,7 +9,6 @@ class SharedPreferencesService {
   Future<String> getLang() async {
     SharedPreferences prefs = await _getInstance();
     String lang = prefs.getString('lang');
-    print("---------------------------------------5555555555-------" + lang);
     return lang;
   }
   

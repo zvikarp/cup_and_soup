@@ -22,7 +22,6 @@ class CloudFirestoreService {
     } else {
       await loadUserData();
       if (_userData != null) {
-        print(_userData['roles'].cast<String>()[0]);
         return _userData['roles'].cast<String>();
       } else
         return null;
@@ -350,6 +349,13 @@ class CloudFirestoreService {
     });
     _activityList.sort((b, a) => a['timestamp'].compareTo(b['timestamp']));
     return _activityList;
+  }
+
+  Future<String> getLastVersion() async {
+    String uid = await authService.getUid();
+    if (uid == null) return null;
+    var doc = await _db.collection('general').document('lastUpdated').get();
+    return doc.data['appVersion'];
   }
 }
 
