@@ -15,12 +15,15 @@ class NavigationBarWidget extends StatelessWidget {
   List<Widget> appBarIcons(BuildContext context) {
     List<Widget> buttons = [];
     pages.values.forEach((page) {
-      String thisPage = pages.keys.toList()[pages.values.toList().indexOf(page)];
+      String thisPage =
+          pages.keys.toList()[pages.values.toList().indexOf(page)];
       buttons.add(
         IconButton(
           icon: Icon(
             page['icon'],
-            color: currentPage != thisPage ? Colors.white70 : Theme.of(context).primaryColor,
+            color: currentPage != thisPage
+                ? Colors.white70
+                : Theme.of(context).primaryColor,
           ),
           onPressed: () => tabTapped(thisPage),
         ),
@@ -33,22 +36,28 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset(
-          "assets/images/navBar.png",
-          height: 70,
-          width: double.infinity,
-          alignment: Alignment(0, -1),
-          fit: BoxFit.cover,
+        Transform.translate(
+          offset: Offset(0, -5),
+          child: Image.asset(
+            "assets/images/navBar.png",
+            height: 70,
+            width: double.infinity,
+            alignment: Alignment(0, -1),
+            fit: BoxFit.cover,
+          ),
         ),
         Container(
           alignment: Alignment.bottomCenter,
-          height: 63,
-          color: Colors.transparent,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: appBarIcons(context),
+          height: 70,
+          color: Colors.black,
+          child: Transform.translate(
+            offset: Offset(0, -5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: appBarIcons(context),
+            ),
           ),
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/pages/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
@@ -17,7 +18,6 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   String _uid;
   Map<String, dynamic> _userData;
-
 
   void _getData() async {
     String uid = await authService.getUid();
@@ -53,7 +53,16 @@ class _AccountPageState extends State<AccountPage> {
                 uid: _uid,
                 userData: _userData,
               ),
-              SizedBox(height: 42)
+              SizedBox(height: 42),
+              Text(
+                "cup&soup (c) 2019 Zvi Karp | version " + HomePage.getVersion(),
+                style: TextStyle(
+                  fontFamily: "PrimaryFont",
+                  color: Colors.black54,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 24),
             ]
           : <Widget>[
               Text("loading..."),

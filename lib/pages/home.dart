@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   _HomePageState createState() => _HomePageState();
+
+  static String getVersion() => "v0.1.0+1";
 }
 
 class _HomePageState extends State<HomePage> {
@@ -30,12 +32,6 @@ class _HomePageState extends State<HomePage> {
     'admin': {
       'icon': Icons.work,
       'page': AdminPage(),
-    },
-    'adminStore': {
-      'icon': Icons.shopping_cart,
-      'page': StorePage(
-        isAdmin: true,
-      )
     },
     'scanner': {
       'icon': Icons.center_focus_strong,
@@ -68,8 +64,8 @@ class _HomePageState extends State<HomePage> {
     }
     if (_roles.contains('admin')) {
       pages.putIfAbsent('admin', () => _allPages['admin']);
-      pages.remove('store');
-      pages.putIfAbsent('adminStore', () => _allPages['adminStore']);
+      pages.putIfAbsent('store', () => _allPages['store']);
+      _allPages['store']['page'] = StorePage(isAdmin: true);
     }
     if (_roles.contains('insider')) {
       pages.putIfAbsent('insider', () => _allPages['insider']);
@@ -91,6 +87,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onTabTaped(String page) {
+    print(
+        "the page 88888888888888888888888888888888888888888888888888877777--------------------------------------------------------is " +
+            page);
     setState(() {
       _currentPage = page;
     });
@@ -100,7 +99,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return !_roles.contains("cashRegister")
         ? Scaffold(
-            body: _pages[_currentPage] != null ?  _pages[_currentPage]['page'] : StorePage(),
+            body: _pages[_currentPage] != null
+                ? _pages[_currentPage]['page']
+                : StorePage(),
             bottomNavigationBar: NavigationBarWidget(
               currentPage: _currentPage,
               tabTapped: _onTabTaped,
