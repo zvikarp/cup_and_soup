@@ -63,6 +63,37 @@ class SnackbarWidget {
     f.show(context);
   }
 
+  static void infoBar(BuildContext context, String message) {
+    Flushbar f;
+    f = Flushbar(
+      isDismissible: true,
+      mainButton: FlatButton(
+        child: Text(
+          "Ok",
+          style: TextStyle(
+              fontFamily: "PrimaryFont", fontSize: 18, color: Colors.blue),
+        ),
+        onPressed: () {
+          f.dismiss();
+        },
+      ),
+      message: message,
+      messageText: Text(
+        message,
+        style: TextStyle(
+            fontFamily: "PrimaryFont", fontSize: 18, color: Colors.white),
+      ),
+      icon: Icon(
+        Icons.info,
+        size: 28.0,
+        color: Colors.blue,
+      ),
+      backgroundColor: Colors.black,
+      duration: Duration(seconds: 6),
+    );
+    f.show(context);
+  }
+
   static void show(
       BuildContext context, String title, String message, String type) {
     Flushbar(

@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,7 +44,7 @@ class _StorePageState extends State<StorePage> {
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      title: "store",
+      title: Language.of(context).translate("storePageName"),
       child: StreamBuilder(
           stream: Firestore.instance.collection('store').snapshots(),
           builder: (context, snapshot) {

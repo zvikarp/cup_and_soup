@@ -6,15 +6,16 @@ class SharedPreferencesService {
     return prefs;
   }
   
-  Future<String> getPhoneNumber() async {
+  Future<String> getLang() async {
     SharedPreferences prefs = await _getInstance();
-    String phoneNumber = prefs.getString('phoneNumber');
-    return phoneNumber;
+    String lang = prefs.getString('lang');
+    print("---------------------------------------5555555555-------" + lang);
+    return lang;
   }
   
-  Future<bool> setPhoneNumber(String phoneNumber) async {
+  Future<bool> setLang(String lang) async {
     SharedPreferences prefs = await _getInstance();
-    await prefs.setString('phoneNumber', phoneNumber);
+    await prefs.setString('lang', lang);
     return true;
   }
 
