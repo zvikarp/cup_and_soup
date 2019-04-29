@@ -15,62 +15,86 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isAdmin = false;
-  String _role = "cashRegister";
+  List<String> _roles = [];
 
-  final List<Widget> pages = [
-    AccountPage(),
-    StorePage(),
-  ];
-  int _currentPage = 1;
+  Map<String, Map<String, dynamic>> _allPages = {
+    'account': {
+      'icon': Icons.account_circle,
+      'page': AccountPage(),
+    },
+    'store': {
+      'icon': Icons.shopping_cart,
+      'page': StorePage(),
+    },
+    'admin': {
+      'icon': Icons.star,
+      'page': AdminPage(),
+    },
+    'adminStore': {
+      'icon': Icons.shopping_cart,
+      'page': StorePage(
+        isAdmin: true,
+      )
+    },
+    'scanner': {
+      'icon': Icons.center_focus_strong,
+      'page': ScannerPage(goToStore: () => null)
+    },
+  };
 
-  void getRole() async {
-    String role = await authService.getRole();
+  Map<String, Map<String, dynamic>> _pages = {};
+  String _currentPage = 'store';
+
+  void getRoles() async {
+    List<String> roles = await authService.getRoles();
     setState(() {
-      _role = role;
-      _isAdmin = role == 'admin';
-      if (_isAdmin) {
-        pages.add(AdminPage());
-        pages.removeAt(1);
-        pages.insert(
-            1,
-            StorePage(
-              isAdmin: true,
-            ));
-        cloudFirestoreService.clearSupriseBox();
-      }
+      _roles = roles;
     });
+    if (_roles.contains("admin")) cloudFirestoreService.clearSupriseBox();
   }
 
-  void addScanner() {
-    pages.add(ScannerPage(
-      goToStore: () => _onTabTaped(1),
-    ));
+  void updatePages(List<String> roles) {
+    Map<String, Map<String, dynamic>> pages = {};
+    if (roles.contains('customer')) {
+      pages.putIfAbsent('account', () => _allPages['account']);
+      pages.putIfAbsent('store', () => _allPages['store']);
+      pages.putIfAbsent('scanner', () => _allPages['scanner']);
+    }
+    if (roles.contains('admin')) {
+      pages.putIfAbsent('admin', () => _allPages['admin']);
+      pages.putIfAbsent('adminStore', () => _allPages['adminStore']);
+    }
+    setState(() {
+      _pages = pages;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    addScanner();
-    getRole();
+    setState(() {
+      _allPages['scanner']['page'] =
+          ScannerPage(goToStore: () => _onTabTaped('store'));
+    });
+    getRoles();
     cloudFirestoreService.getRequests();
   }
 
-  void _onTabTaped(int tab) {
+  void _onTabTaped(String page) {
     setState(() {
-      _currentPage = tab;
+      _currentPage = page;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _role != "cashRegister"
+    return _roles.contains("cashRegister")
         ? Scaffold(
-            body: pages[_currentPage],
+            body: _pages[_currentPage]['page'],
             bottomNavigationBar: NavigationBarWidget(
-              index: _currentPage,
+              currentPage: _currentPage,
               tabTapped: _onTabTaped,
-              isAdmin: _isAdmin,
+              pages: _pages,
             ),
           )
         : Scaffold(

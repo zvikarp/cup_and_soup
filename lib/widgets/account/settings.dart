@@ -124,17 +124,17 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 ),
                 Text(widget.userData["email"]),
               ],
-              widget.userData["role"] != "customer"
+              widget.userData["roles"].join() != "customer"
                   ? [
                       Text(
-                        "Role: ",
+                        "Roles: ",
                         style: TextStyle(
                           fontFamily: "PrimaryFont",
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(widget.userData["role"]),
+                      Text(widget.userData["roles"].join(", ")),
                     ]
                   : [Container()],
             ],

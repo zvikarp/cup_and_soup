@@ -1,5 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:cup_and_soup/pages/home.dart';
+import 'package:cup_and_soup/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -14,6 +17,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  bool _loging = false;
 
   _openLogin() {
     Navigator.of(context).push(
@@ -23,49 +27,64 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
+  _getUser() async {
+    FirebaseUser user = await authService.refreshUser();
+    if (user == null) {
+      setState(() {
+        _loging = true;
+      });
+      SchedulerBinding.instance.addPostFrameCallback((_) => _openLogin());
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-   SchedulerBinding.instance.addPostFrameCallback((_) => _openLogin());
+    _getUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Transform.translate(
-            offset: Offset(-250, 200),
-            child: Transform.rotate(
-              angle: -math.pi / 2.0,
-              child: Transform.scale(
-                scale: 2,
-                child: Image.asset(
-                  "assets/images/logo.png",
+      body: _loging
+          ? Stack(
+              children: <Widget>[
+                Transform.translate(
+                  offset: Offset(-250, 200),
+                  child: Transform.rotate(
+                    angle: -math.pi / 2.0,
+                    child: Transform.scale(
+                      scale: 2,
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.black,
-                  offset: Offset(1.0, 6.0),
-                  blurRadius: 40.0,
-                ),
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(1.0, 6.0),
+                          blurRadius: 40.0,
+                        ),
+                      ],
+                    ),
+                    child: ButtonWidget(
+                      text: "Login",
+                      onPressed: _openLogin,
+                      primary: false,
+                    ),
+                  ),
+                )
               ],
-              ),
-              child: ButtonWidget(
-                text: "Login",
-                onPressed: _openLogin,
-                primary: false,
-              ),
-            ),
-          )
-        ],
-      ),
+            )
+          : Container(),
     );
   }
 }

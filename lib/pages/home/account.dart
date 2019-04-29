@@ -5,7 +5,7 @@ import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/account/activity.dart';
-import 'package:cup_and_soup/widgets/account/balence.dart';
+import 'package:cup_and_soup/widgets/account/balance.dart';
 import 'package:cup_and_soup/widgets/account/settings.dart';
 
 class AccountPage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _AccountPageState extends State<AccountPage> {
       title: "account",
       children: _uid != null && _userData != null
           ? <Widget>[
-              BalenceWidget(
+              BalanceWidget(
                 uid: _uid,
                 userData: _userData,
               ),

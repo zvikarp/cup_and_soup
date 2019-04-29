@@ -3,51 +3,30 @@ import 'package:flutter/material.dart';
 class NavigationBarWidget extends StatelessWidget {
   NavigationBarWidget({
     Key key,
-    @required this.index,
+    @required this.currentPage,
     @required this.tabTapped,
-    @required this.isAdmin,
+    @required this.pages,
   }) : super(key: key);
 
-  final int index;
-  final void Function(int) tabTapped;
-  final bool isAdmin;
+  final String currentPage;
+  final void Function(String) tabTapped;
+  final Map<String, Map<String, dynamic>> pages;
 
   List<Widget> appBarIcons(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(
-          Icons.account_circle,
-          color: index != 0 ? Colors.white70 : Theme.of(context).primaryColor,
+    List<Widget> buttons = [];
+    pages.values.forEach((page) {
+      String thisPage = pages.keys.toList()[pages.values.toList().indexOf(page)];
+      buttons.add(
+        IconButton(
+          icon: Icon(
+            page['icon'],
+            color: currentPage != thisPage ? Colors.white70 : Theme.of(context).primaryColor,
+          ),
+          onPressed: () => tabTapped(thisPage),
         ),
-        onPressed: () => tabTapped(0),
-      ),
-      IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          color: index != 1 ? Colors.white70 : Theme.of(context).primaryColor,
-        ),
-        onPressed: () => tabTapped(1),
-      ),
-      IconButton(
-        icon: Icon(
-          Icons.center_focus_strong,
-          color: index != 2 ? Colors.white70 : Theme.of(context).primaryColor,
-        ),
-        onPressed: () => tabTapped(2),
-      ),
-    ];
-  }
-
-  List<Widget> adminAppBarWIcons(BuildContext context) {
-    List<Widget> list = appBarIcons(context);
-    list.add(IconButton(
-      icon: Icon(
-        Icons.star,
-        color: index != 3 ? Colors.white70 : Theme.of(context).primaryColor,
-      ),
-      onPressed: () => tabTapped(3),
-    ));
-    return list;
+      );
+    });
+    return buttons;
   }
 
   @override
@@ -69,8 +48,7 @@ class NavigationBarWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:
-                isAdmin ? adminAppBarWIcons(context) : appBarIcons(context),
+            children: appBarIcons(context),
           ),
         ),
       ],

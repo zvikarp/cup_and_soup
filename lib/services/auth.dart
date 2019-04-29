@@ -40,6 +40,9 @@ class AuthService {
     if (_user != null)
       return _user.uid;
     else {
+      await refreshUser();
+      if (_user != null) 
+        return _user.uid;
       await loginWithGoogle();
       if (_user != null)
         return _user.uid;
@@ -48,13 +51,13 @@ class AuthService {
     }
   }
 
-  Future<String> getRole() async {
+  Future<List<String>> getRoles() async {
     if (_user != null)
-      return await cloudFirestoreService.getRole();
+      return await cloudFirestoreService.getRoles();
     else {
       await loginWithGoogle();
       if (_user != null)
-        return await cloudFirestoreService.getRole();
+        return await cloudFirestoreService.getRoles();
       else
         return null;
     }
@@ -76,6 +79,12 @@ class AuthService {
       await cloudFirestoreService.loadUserData();
     }
     return res;
+  }
+
+  Future<FirebaseUser> refreshUser() async {
+    FirebaseUser user = await _auth.currentUser();
+    _user = user;
+    return user;
   }
 
 }

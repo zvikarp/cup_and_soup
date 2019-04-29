@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/widgets/core/center.dart';
 
-class BalenceWidget extends StatefulWidget {
-  BalenceWidget({
+class BalanceWidget extends StatefulWidget {
+  BalanceWidget({
     @required this.uid,
     @required this.userData,
   });
@@ -12,16 +12,16 @@ class BalenceWidget extends StatefulWidget {
   final Map<String, dynamic> userData;
 
   @override
-  _BalenceWidgetState createState() => _BalenceWidgetState();
+  _BalanceWidgetState createState() => _BalanceWidgetState();
 }
 
-class _BalenceWidgetState extends State<BalenceWidget> {
+class _BalanceWidgetState extends State<BalanceWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Text(
-          "Balence",
+          "Balance",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: "PrimaryFont",

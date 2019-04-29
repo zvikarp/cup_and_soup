@@ -20,7 +20,7 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
       items.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _roleIcon(doc['role']),
+          child: _userIcon(doc['roles']),
         ),
         Text(doc['name'].toString()),
         Text(doc['money'].toString()),
@@ -50,20 +50,15 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
     );
   }
  
-  Widget _roleIcon(String role) {
-    if (role == "customer") {
+  Widget _userIcon(List<String> roles) {
+    if (roles.contains("cashRegister")) {
       return Icon(
-        Icons.supervisor_account,
-        size: 16,
-      );
-    } else if (role == "admin") {
-      return Icon(
-        Icons.security,
+        Icons.store,
         size: 16,
       );
     } else {
       return Icon(
-        Icons.error,
+        Icons.account_circle,
         size: 16,
       );
     }

@@ -16,13 +16,13 @@ class CloudFirestoreService {
   Map<String, dynamic> _userData;
   List<dynamic> _activityList = [];
 
-  Future<String> getRole() async {
+  Future<List<String>> getRoles() async {
     if (_userData != null) {
-      return _userData['role'];
+      return _userData['roles'];
     } else {
       await loadUserData();
       if (_userData != null)
-        return _userData['role'];
+        return _userData['roles'];
       else
         return null;
     }
@@ -159,7 +159,7 @@ class CloudFirestoreService {
       "name": data["name"],
       "money": data["money"],
       "allowdCredit": data["allowedCredit"],
-      "role": data["role"],
+      "roles": data["roles"],
       "email": data["email"],
     };
     _userData = userData;
