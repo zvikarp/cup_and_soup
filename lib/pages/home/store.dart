@@ -106,7 +106,7 @@ class _StorePageState extends State<StorePage> {
         children: <Widget>[
           _discount == null ? Container() : _discountContainer(),
           StreamBuilder(
-              stream: Firestore.instance.collection('store').snapshots(),
+              stream: Firestore.instance.collection('store').orderBy('position').snapshots(),
               builder: (context, snapshot) {
                 int length = 0;
                 if (snapshot.hasData && snapshot.data.documents != null)
@@ -131,6 +131,7 @@ class _StorePageState extends State<StorePage> {
                       image: doc['image'],
                       price: doc['price'],
                       stock: doc['stock'],
+                      position: doc['position'],
                       tags: doc['tags'],
                       hechsherim: doc['hechsherim'],
                     );

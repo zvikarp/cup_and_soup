@@ -8,6 +8,7 @@ class Item {
     this.price,
     this.tags,
     this.stock,
+    this.position,
     this.hechsherim,
   });
 
@@ -18,6 +19,7 @@ class Item {
   double price;
   String tags;
   int stock;
+  int position;
   String hechsherim;
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
@@ -28,6 +30,7 @@ class Item {
         price: json["price"],
         tags: json["tags"],
         stock: json["stock"],
+        position: json["position"],
         hechsherim: json["hechsherim"],
       );
 
@@ -39,6 +42,7 @@ class Item {
         "price": price,
         "tags": tags,
         "stock": stock,
+        "position": position,
         "hechsherim": hechsherim,
       };
 }

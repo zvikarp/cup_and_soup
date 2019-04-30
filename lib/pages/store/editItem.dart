@@ -31,6 +31,7 @@ class _EditItemPageState extends State<EditItemPage> {
   TextEditingController descCtr = TextEditingController();
   TextEditingController priceCtr = TextEditingController();
   TextEditingController stockCtr = TextEditingController();
+  TextEditingController positionCtr = TextEditingController();
   TextEditingController hechsherimCtr = TextEditingController();
 
   File _imageFile;
@@ -76,6 +77,7 @@ class _EditItemPageState extends State<EditItemPage> {
       stock: int.parse(stockCtr.text.trim()),
       tags: _tags.join(","),
       hechsherim: hechsherimCtr.text.trim(),
+      position: int.tryParse(positionCtr.text) ?? 0,
     );
     String res = await cloudFirestoreService.updateItem(item, _imageFile,
         _imageChanged, !widget.newItem ? widget.item.barcode : "");
@@ -106,6 +108,7 @@ class _EditItemPageState extends State<EditItemPage> {
         priceCtr.text = widget.item.price.toString();
         _tags = widget.item.tags.split(",");
         stockCtr.text = widget.item.stock.toString();
+        positionCtr.text = widget.item.position.toString();
         barcodeCtr.text = widget.item.barcode;
         hechsherimCtr.text = widget.item.hechsherim;
       });
@@ -226,6 +229,24 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
+  _positionInput() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: TextFieldWrapperWidget(
+        prefix: Text("Position: "),
+        textField: TextFormField(
+          controller: positionCtr,
+          decoration: InputDecoration(border: InputBorder.none),
+          keyboardType: TextInputType.numberWithOptions(),
+          style: TextStyle(
+            fontFamily: "PrimaryFont",
+            fontSize: 18,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _tagsInput() {
     return InputTags(
       backgroundContainer: Theme.of(context).canvasColor,
@@ -264,6 +285,7 @@ class _EditItemPageState extends State<EditItemPage> {
               _priceInput(),
               _stockInput(),
               _barcodeInput(),
+              _positionInput(),
               _tagsInput(),
               SizedBox(height: 24),
               DoubleButtonWidget(

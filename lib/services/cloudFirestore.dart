@@ -250,6 +250,7 @@ class CloudFirestoreService {
       'image': imageUrl,
       'tags': item.tags,
       'stock': item.stock,
+      'position': item.position,
       'hechsherim': item.hechsherim
     });
     return "ok";
