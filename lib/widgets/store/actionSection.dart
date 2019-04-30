@@ -23,6 +23,30 @@ class ActionSectionWidget extends StatefulWidget {
 class _ActionSectionWidgetState extends State<ActionSectionWidget> {
   bool loading = false;
   StreamSubscription _requestStream;
+  Map<dynamic, dynamic> _discount;
+  String _price = "";
+
+  void _checkDiscount() async {
+    Map<dynamic, dynamic> discount = await cloudFirestoreService.getDiscount();
+    if (discount != null) {
+      print(discount);
+      if (discount["usageLimit"] > 0) {
+        setState(() {
+          _discount = discount;
+          _price = (widget.price - (widget.price * (discount['amount'] / 100))).toString();
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDiscount();
+    setState(() {
+     _price = widget.price.toString(); 
+    });
+  }
 
   void _waitForResponce() {
     if (_requestStream != null) _requestStream.cancel();
@@ -86,7 +110,7 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
                     ],
                   )
                 : ButtonWidget(
-                    text: "Buy Now for ${widget.price.toString()} NIS",
+                    text: "Buy Now for " + _price + " NIS",
                     onPressed: () {
                       setState(() {
                         loading = true;

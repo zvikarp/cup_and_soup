@@ -80,6 +80,25 @@ class MessageDialog extends StatelessWidget {
         default:
           return _textMessage("g");
       }
+    } else if (collection == 'd') {
+      switch (responseCode) {
+        case 'd-gs0':
+          return "The discount was successfully applied to your account!";
+        case 'd-ge0':
+        case 'd-ge1':
+        case 'd-ge2':
+        case 'd-ge3':
+        case 'd-ge4':
+          return _textMessage(code);
+        case 'd-e0':
+          return "The scanned code doesn't exist anymore.";
+        case 'd-e1':
+          return "It looks like you have successfully used the code already. It can't be used twice.";
+        case 'd-e2':
+          return "The barcode has expired.";
+        default:
+          return _textMessage("g");
+      }
     } else if (collection == 'c') {
       switch (responseCode) {
         case 'c-gs0':

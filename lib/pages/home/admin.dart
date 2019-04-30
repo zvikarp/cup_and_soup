@@ -1,13 +1,14 @@
-import 'package:cup_and_soup/pages/admin/customersDetails.dart';
-import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/pages/admin/customersDetails.dart';
+import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
+import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
+import 'package:cup_and_soup/pages/admin/giveDiscount.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class AdminPage extends StatefulWidget {
@@ -79,8 +80,10 @@ class _AdminPageState extends State<AdminPage> {
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: GestureDetector(
             onTap: () {
-              SnackbarWidget.errorBar(
-                  context, "This feature dosn't exist yet.");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GiveDiscountPage()),
+              );
             },
             child: CenterWidget(
               child: Center(

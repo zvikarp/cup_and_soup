@@ -23,7 +23,7 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   StreamSubscription _requestStream;
-  List<String> types = ['M', 'C'];
+  List<String> types = ['M', 'C', 'D'];
 
   void _waitForResponce(String barcode) {
     if (_requestStream != null) _requestStream.cancel();

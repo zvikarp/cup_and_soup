@@ -28,6 +28,18 @@ class CloudFirestoreService {
     }
   }
 
+  Future<Map<dynamic, dynamic>> getDiscount() async {
+    if (_userData != null) {
+      return _userData['discount'];
+    } else {
+      await loadUserData();
+      if (_userData != null) {
+        return _userData['discount'];
+      } else
+        return null;
+    }
+  }
+
   String generateBarcode(String prefix) {
     DateTime now = DateTime.now();
     String barcode = prefix +
@@ -49,6 +61,25 @@ class CloudFirestoreService {
         'type': "money",
         'amount': amount,
         'expiringDate': dateTime,
+        'userLimit': userLimit,
+        'quantity': quantity,
+      });
+      return barcode;
+    }
+  }
+
+  Future<String> uploadDiscountBarcode(
+      double amount, DateTime dateTime, int usageLimit, bool userLimit, int quantity) async {
+    String barcode = generateBarcode("D");
+    var data = await _db.collection('surpriseBox').document(barcode).get();
+    if (data.exists)
+      return uploadDiscountBarcode(amount, dateTime, usageLimit, userLimit, quantity);
+    else {
+      await _db.collection('surpriseBox').document(barcode).setData({
+        'type': "discount",
+        'amount': amount,
+        'expiringDate': dateTime,
+        'usageLimit': usageLimit,
         'userLimit': userLimit,
         'quantity': quantity,
       });
@@ -121,6 +152,23 @@ class CloudFirestoreService {
         }
       }
     });
+    _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document('discount')
+        .snapshots()
+        .listen((snap) {
+      if (snap.exists) {
+        if (snap.data['client'] == "app") {
+          var request = {
+            "barcode": snap.data['barcode'],
+            "responseCode": snap.data['responseCode']
+          };
+          _generalRequestsStream.add(request);
+        }
+      }
+    });
   }
 
   Stream subscribeToBuyRequestsStream() {
@@ -137,6 +185,8 @@ class CloudFirestoreService {
       type = "money";
     else if (barcode[0] == "C")
       type = "credit";
+    else if (barcode[0] == "D")
+      type = "discount";
     else
       return false;
 
@@ -160,6 +210,7 @@ class CloudFirestoreService {
       "allowdCredit": data["allowedCredit"],
       "roles": data["roles"].map((role) => role.toString()).toList(),
       "email": data["email"],
+      "discount": data["discount"],
     };
     _userData = userData;
     return userData;
@@ -251,6 +302,8 @@ class CloudFirestoreService {
     String type = "";
     if (barcode[0] == "M")
       type = "money";
+    else if (barcode[0] == "D")
+      type = "discount";
     else if (barcode[0] == "C")
       type = "credit";
     else
