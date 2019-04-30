@@ -11,6 +11,17 @@ class CloudFunctionsService {
     });
     return true;
   }
+
+  Future<bool> changeUserStatus(String uid, bool status) async {
+    await CloudFunctions.instance
+        .call(functionName: "changeUserStatus", parameters: {
+      "uid": uid,
+      "status": status,
+    }).catchError((err) {
+      return false;
+    });
+    return true;
+  }
 }
 
 final CloudFunctionsService cloudFunctionsService = CloudFunctionsService();

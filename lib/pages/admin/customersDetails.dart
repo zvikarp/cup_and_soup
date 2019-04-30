@@ -24,7 +24,7 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
         ),
         Text(doc['name'].toString()),
         Text(doc['money'].toString()),
-        _more(doc.documentID.toString()),
+        _more(doc),
       ]);
     });
 
@@ -32,18 +32,19 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
   }
 
 
-  void _onMorePressed(String uid) {
+  void _onMorePressed(dynamic userDoc) {
     Navigator.of(context).push(
       TransparentRoute(
-        builder: (BuildContext context) => CustomersDetailsDialog(uid: uid),
+        builder: (BuildContext context) => CustomersDetailsDialog(userDoc: userDoc),
       ),
     );
   }
 
-  Widget _more(String uid) {
+  Widget _more(dynamic userDoc) {
     return GestureDetector(
-      onTap: () => _onMorePressed(uid),
+      onTap: () => _onMorePressed(userDoc),
           child: Container(
+            padding: EdgeInsets.symmetric(vertical: 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: Colors.black,

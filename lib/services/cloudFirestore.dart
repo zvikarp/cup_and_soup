@@ -40,6 +40,18 @@ class CloudFirestoreService {
     }
   }
 
+  Future<Map> getUserData() async {
+    if (_userData != null) {
+      return _userData;
+    } else {
+      await loadUserData();
+      if (_userData != null) {
+        return _userData;
+      } else
+        return null;
+    }
+  }
+
   String generateBarcode(String prefix) {
     DateTime now = DateTime.now();
     String barcode = prefix +
@@ -211,6 +223,7 @@ class CloudFirestoreService {
       "roles": data["roles"].map((role) => role.toString()).toList(),
       "email": data["email"],
       "discount": data["discount"],
+      "disabled": data["disabled"],
     };
     _userData = userData;
     return userData;
