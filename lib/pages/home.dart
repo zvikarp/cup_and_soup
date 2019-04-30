@@ -1,3 +1,5 @@
+import 'package:cup_and_soup/dialogs/block.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:flutter/material.dart';
 
@@ -51,13 +53,20 @@ class _HomePageState extends State<HomePage> {
   Map<String, Map<String, dynamic>> _pages = {};
   String _currentPage = 'store';
 
-  void getRoles() async {
-    List<String> roles = await authService.getRoles();
+  void _getUserData() async {
+    Map userData = await cloudFirestoreService.getUserData();
     setState(() {
-      _roles = roles;
+      _roles = userData['roles'].cast<String>();
     });
     _updatePages();
     if (_roles.contains("admin")) cloudFirestoreService.clearSupriseBox();
+    if (userData['disabled']) {
+      Navigator.of(context).push(
+        TransparentRoute(
+          builder: (BuildContext context) => BlockDialog(type: "disabled",),
+        ),
+      );
+    }
   }
 
   void _updatePages() {
@@ -83,7 +92,8 @@ class _HomePageState extends State<HomePage> {
   void _checkForUpdates() async {
     bool upToDate = await HomePage.newVersion();
     if (!upToDate) {
-      SnackbarWidget.infoBar(context, "There is a new version to download from the Play Store!");
+      SnackbarWidget.infoBar(
+          context, "There is a new version to download from the Play Store!");
     }
   }
 
@@ -94,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       _allPages['scanner']['page'] =
           ScannerPage(goToStore: () => _onTabTaped('store'));
     });
-    getRoles();
+    _getUserData();
     cloudFirestoreService.getRequests();
     _checkForUpdates();
   }
