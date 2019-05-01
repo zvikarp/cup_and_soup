@@ -36,11 +36,11 @@ class _StorePageState extends State<StorePage> {
           );
         },
         child: Center(
-          child: Image.asset(
-            "assets/images/add.png",
-            height: 50,
-          ),
-        ),
+              child: Image.asset(
+                "assets/images/add.png",
+                height: 50,
+              ),
+            ),
       ),
     );
   }
