@@ -2,21 +2,32 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cup_and_soup/widgets/core/dialog.dart';
+import 'package:cup_and_soup/utils/dateTime.dart';
 
 class BlockDialog extends StatelessWidget {
   BlockDialog({
     this.type = "disabled",
+    this.storeStatus,
   });
 
   final String type;
+  final dynamic storeStatus;
+  
 
   Widget _child() {
-    if (type == "disabled") {
+
+    if (type == "closed") {
       return Text(
-        "Your account is temporarily blocked. please contact a admin to unlock your account.",
+        "the app is closed until" + dateTimeUtil.date(storeStatus["openingDate"]) + " " + dateTimeUtil.time(storeStatus["openingDate"]),
         textAlign: TextAlign.center,
-      );
-    } else {
+      );}
+      else 
+      if (type == "disabled") {
+      return Text(
+        "Your account is temporarily blocked. please contact a admin to unlock your account.", //do me
+        textAlign: TextAlign.center,
+      );}
+     else {
       return Text(
         "Unknown error.",
         textAlign: TextAlign.center,

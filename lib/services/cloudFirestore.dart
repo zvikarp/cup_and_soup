@@ -191,6 +191,15 @@ class CloudFirestoreService {
     return _generalRequestsStream.stream;
   }
 
+  void updateStoreStatus(DateTime open, DateTime close ) async{
+    String uid = await authService.getUid();
+    if (uid == null) return;
+   await _db.collection('general').document('storeStatus').setData({
+     'openingDate' : open,
+     'closingDate' : close,
+   });
+  }
+
   Future<bool> deleteRequest(String barcode) async {
     String type = "";
     if (barcode[0] == "M")
@@ -227,6 +236,16 @@ class CloudFirestoreService {
     };
     _userData = userData;
     return userData;
+  }
+
+  Future loadStoreStatus() async {
+    String uid = await authService.getUid();
+    var data = await _db.collection('general').document('storeStatus').get();
+    var status = {
+      "openingDate": data["openingDate"],
+      "closeingDate": data["closeingDate"],
+    };
+    return status;
   }
 
   bool resetUserData() {
