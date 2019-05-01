@@ -96,7 +96,7 @@ class ItemPage extends StatelessWidget {
                   textStyle: Theme.of(context).textTheme.body1,
                   tags: (item.tags.split(",")).map((tag) {
                     return Tag(
-                      title: tag,
+                      title: tag.split(':').last,
                       active: false,
                     );
                   }).toList(),
