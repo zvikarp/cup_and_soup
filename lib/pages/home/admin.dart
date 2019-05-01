@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/dialogs/closeStore.dart';
-import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/pages/admin/customersDetails.dart';
 import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
@@ -187,11 +185,8 @@ class _AdminPageState extends State<AdminPage> {
               ButtonWidget(
                 text: "Close",
                 onPressed: () {
-                  Navigator.of(context).push(
-                    TransparentRoute(
-                      builder: (BuildContext context) => CloseStoreDialog(),
-                    ),
-                  );
+                  SnackbarWidget.errorBar(
+                      context, "This feature dosn't exist yet.");
                 },
                 primary: false,
                 size: "small",
