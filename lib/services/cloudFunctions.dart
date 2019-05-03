@@ -22,6 +22,18 @@ class CloudFunctionsService {
     });
     return true;
   }
+  Future<bool> sendMessage(String title, String msg, DateTime dateTime, String sendTo) async {
+    await CloudFunctions.instance
+        .call(functionName: "sendMessage", parameters: {
+      "title": title,
+      "msg": msg,
+      "dateTime": dateTime,
+      "sendTo": sendTo
+    }).catchError((err) {
+      return false;
+    });
+    return true;
+  }
 }
 
 final CloudFunctionsService cloudFunctionsService = CloudFunctionsService();

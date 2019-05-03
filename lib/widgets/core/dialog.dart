@@ -22,6 +22,7 @@ class DialogWidget extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: blurColor,
       body: SafeArea(
         child: BackdropFilter(
@@ -54,7 +55,7 @@ class DialogWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child,
+                Expanded(child:SingleChildScrollView(child: child)),
                 Image.asset(
                   "assets/images/navBar.png",
                   height: 30,

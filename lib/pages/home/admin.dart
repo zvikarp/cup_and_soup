@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/dialogs/composeMessage.dart';
 import 'package:cup_and_soup/dialogs/closeStore.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/pages/admin/customersDetails.dart';
@@ -11,7 +12,6 @@ import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -162,13 +162,16 @@ class _AdminPageState extends State<AdminPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Send customers a message",
+                "Push messages",
               ),
               ButtonWidget(
-                text: "Send",
+                text: "compose",
                 onPressed: () {
-                  SnackbarWidget.errorBar(
-                      context, "This feature dosn't exist yet.");
+                  Navigator.of(context).push(
+                    TransparentRoute(
+                      builder: (BuildContext context) => ComposeMessageDialog(),
+                    ),
+                  );
                 },
                 primary: false,
                 size: "small",
