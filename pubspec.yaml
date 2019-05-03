@@ -55,7 +55,7 @@ flutter:
    - assets/images/navBar.png
    - assets/images/center.png
    - assets/images/divider.png
-   - assets/images/dialog.png
+   - assets/images/dialogBackground.png
    - assets/images/add.png
 
    - resources/lang/en.json

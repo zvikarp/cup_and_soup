@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cup_and_soup/services/cloudFunctions.dart';
 import 'package:cup_and_soup/widgets/core/dateTimePicker.dart';
 import 'package:cup_and_soup/widgets/core/dialog.dart';
-import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
 class ComposeMessageDialog extends StatefulWidget {
@@ -126,27 +125,26 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+      heading: Padding(
+            padding: EdgeInsets.all(16),
             child: Text(
-              "More Options",
+              "Compose Message",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.title,
             ),
           ),
+      child: Column(
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: _content(context),
           ),
-          DividerWidget(),
-          Padding(
+        ],
+      ),
+      actionSection: Padding(
             padding: const EdgeInsets.all(16),
             child: _actionSection(context),
           ),
-        ],
-      ),
     );
   }
 }

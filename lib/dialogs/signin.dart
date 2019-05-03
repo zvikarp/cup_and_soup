@@ -29,7 +29,9 @@ class _SigninDialogState extends State<SigninDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
-      child: Center(
+      heading: Container(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 70, horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,6 +53,7 @@ class _SigninDialogState extends State<SigninDialog> {
           ],
         ),
       ),
+      actionSection: Container(),
     );
   }
 }

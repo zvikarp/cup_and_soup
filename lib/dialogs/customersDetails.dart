@@ -125,17 +125,25 @@ class CustomersDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
+      heading: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Customers Details",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.title,
+        ),
+      ),
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: _content(context),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: _actionSection(context),
-          ),
         ],
+      ),
+      actionSection: Padding(
+        padding: const EdgeInsets.all(16),
+        child: _actionSection(context),
       ),
     );
   }

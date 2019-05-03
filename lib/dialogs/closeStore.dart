@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/dateTimePicker.dart';
 import 'package:cup_and_soup/widgets/core/dialog.dart';
-import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
 class CloseStoreDialog extends StatefulWidget {
@@ -16,23 +15,26 @@ class _CloseStoreDialogState extends State<CloseStoreDialog> {
   DateTime _closeDateTime = DateTime.now();
 
   Widget _actionSection(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        ButtonWidget(
-          text: "NO",
-          onPressed: () => Navigator.pop(context, false),
-          primary: false,
-        ),
-        ButtonWidget(
-          text: "YES",
-          onPressed: () {
-            cloudFirestoreService.updateStoreStatus(
-                _openDateTime, _closeDateTime);
-            Navigator.pop(context, true);
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          ButtonWidget(
+            text: "NO",
+            onPressed: () => Navigator.pop(context, false),
+            primary: false,
+          ),
+          ButtonWidget(
+            text: "YES",
+            onPressed: () {
+              cloudFirestoreService.updateStoreStatus(
+                  _openDateTime, _closeDateTime);
+              Navigator.pop(context, true);
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -75,26 +77,29 @@ class _CloseStoreDialogState extends State<CloseStoreDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: <Widget>[
-          Icon(Icons.warning),
-          Table(
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: {
-              0: FractionColumnWidth(.4),
-              1: FractionColumnWidth(.6),
-            },
-            children: <TableRow>[
-              _closeFromRow(context),
-              _openFromRow(context),
-            ],
-          ),
-          DividerWidget(),
-          _actionSection(context),
-        ],
+      heading: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Close Store",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.title,
+        ),
       ),
-    ));
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: {
+            0: FractionColumnWidth(.4),
+            1: FractionColumnWidth(.6),
+          },
+          children: <TableRow>[
+            _closeFromRow(context),
+            _openFromRow(context),
+          ],
+        ),
+      ),
+      actionSection: _actionSection(context),
+    );
   }
 }
