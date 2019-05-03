@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/dateTimePicker.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
@@ -36,84 +36,20 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
     });
   }
 
-  void _dateSelector() async {
-    DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _dateTime,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 600)),
-    );
-    if (picked != null) {
-      setState(() {
-        _dateTime = DateTime(
-          picked.year,
-          picked.month,
-          picked.day,
-          _dateTime.hour,
-          _dateTime.minute,
-        );
-      });
-    }
-  }
-
-  void _timeSelector() async {
-    TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: _dateTime.hour, minute: _dateTime.minute),
-    );
-    if (picked != null) {
-      setState(() {
-        _dateTime = DateTime(
-          _dateTime.year,
-          _dateTime.month,
-          _dateTime.day,
-          picked.hour,
-          picked.minute,
-        );
-      });
-    }
-  }
-
   List<Widget> _dateTimeInput() {
     return [
       Text(
         "Expiring date: ",
         style: Theme.of(context).textTheme.body2,
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          GestureDetector(
-            onTap: _dateSelector,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.black54, width: 1))),
-              child: Text(dateTimeUtil.date(_dateTime)),
-            ),
-          ),
-          GestureDetector(
-            onTap: _timeSelector,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.black54, width: 1))),
-              child: Text(dateTimeUtil.time(_dateTime)),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _dateTime = DateTime.now().add(Duration(minutes: 5));
-              });
-            },
-            child: Icon(
-              Icons.refresh,
-              size: 20,
-            ),
-          )
-        ],
-      )
+      DateTimePicker(
+        initDateTime: _dateTime,
+        onDateTimeChange: (DateTime dateTime) {
+          setState(() {
+            _dateTime = dateTime;
+          });
+        },
+      ),
     ];
   }
 

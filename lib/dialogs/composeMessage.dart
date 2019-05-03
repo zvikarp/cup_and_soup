@@ -59,7 +59,7 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
         style: Theme.of(context).textTheme.body1,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
-          hintText: "Your awesome name",
+          hintText: "Title",
         ),
       ),
     ]);
@@ -77,7 +77,7 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
         style: Theme.of(context).textTheme.body1,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
-          hintText: "Your awesome name",
+          hintText: "Message",
         ),
       ),
     ]);
