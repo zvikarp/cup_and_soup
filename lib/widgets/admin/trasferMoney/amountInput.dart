@@ -36,9 +36,12 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
 
   List<Widget> _dateTimeInput() {
     return [
-      Text(
-        "Expiring date: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Expiring date: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       DateTimePicker(
         initDateTime: _dateTime,
@@ -53,9 +56,12 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
 
   List<Widget> _userLimitInput() {
     return [
-      Text(
-        "User limit: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "User limit: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       Container(
         child: Row(
@@ -83,9 +89,12 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
 
   List<Widget> _scansInput() {
     return [
-      Text(
-        "Number of scans: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Number of scans: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       Container(
         child: TextField(
@@ -177,7 +186,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: TableWidget(
             headings: [" ", " "],
-            flex: [3, 5],
+            flex: [.3, .7],
             items: [
               _dateTimeInput(),
               _userLimitInput(),

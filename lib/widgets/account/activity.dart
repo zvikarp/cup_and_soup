@@ -37,7 +37,10 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       activities.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _typeIcon(doc['type']),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: _typeIcon(doc['type']),
+          ),
         ),
         Text(doc['desc'].toString()),
         Text(doc['money'].toString()),
@@ -135,9 +138,9 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                 )
               : TableWidget(
                   length: _length,
-                  headings: [" ", " ", " ", " "],
+                  headings: ["", "Name", "Amount", "Date"],
                   items: _activitiesOnPage,
-                  flex: [1, 5, 2, 2],
+                  flex: [.2, .4, .2, .2],
                   page: _page,
                   onPageChange: _onPageChanged,
                 ),

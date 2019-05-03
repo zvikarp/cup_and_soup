@@ -65,9 +65,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _nameRow() {
     return [
-      Text(
-        "Name: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Name: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       Row(
         children: <Widget>[
@@ -104,9 +107,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _emailRow() {
     return [
-      Text(
-        "Email: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Email: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       Text(widget.userData["email"]),
     ];
@@ -115,9 +121,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   List<Widget> _rolesRow() {
     return widget.userData["roles"].join() != "customer"
         ? [
-            Text(
-              "Roles: ",
-              style: Theme.of(context).textTheme.body2,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                "Roles: ",
+                style: Theme.of(context).textTheme.body2,
+              ),
             ),
             Text(widget.userData["roles"].join(", ")),
           ]
@@ -159,9 +168,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _langRow() {
     return [
-      Text(
-        "Language: ",
-        style: Theme.of(context).textTheme.body2,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Language: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       Row(
         children: _langs.keys
@@ -188,7 +200,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: TableWidget(
             headings: [" ", " "],
-            flex: [1, 2],
+            flex: [.3, .7],
             items: [
               _nameRow(),
               _emailRow(),

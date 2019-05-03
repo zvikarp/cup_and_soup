@@ -22,7 +22,10 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       items.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _typeIcon(doc['type']),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: _typeIcon(doc['type']),
+          ),
         ),
         Text(doc['amount'].toString()),
         _content(doc),
@@ -146,7 +149,7 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
                     return TableWidget(
                       headings: [" ", " ", " ", " ", " "],
                       items: _docsToItem(snapshot.data.documents),
-                      flex: [1, 2, 5, 3, 1],
+                      flex: [.2, .1, .3, .3, .1],
                     );
                   }),
             ),
