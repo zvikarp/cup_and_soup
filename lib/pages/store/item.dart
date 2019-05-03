@@ -66,20 +66,13 @@ class ItemPage extends StatelessWidget {
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "BrandFont",
-                    fontSize: 65,
-                  ),
+                  style: Theme.of(context).textTheme.headline,
                 ),
                 Text(
                   "Hechsher: " +
                       (item.hechsherim.toString() ?? "Not kosher..") +
                       ".",
-                  style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    color: Colors.black54,
-                    fontSize: 16,
-                  ),
+                  style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(
                   alignment: Alignment(-1, 0),

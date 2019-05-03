@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
+
 import 'package:cup_and_soup/widgets/core/dialog.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
@@ -7,11 +7,9 @@ import 'package:cup_and_soup/widgets/core/button.dart';
 class MessageDialog extends StatelessWidget {
   MessageDialog({
     @required this.responseCode,
-    this.flareActor,
   });
 
   final String responseCode;
-  final FlareActor flareActor;
 
   Widget _icon(String type) {
     if (type == 's')
@@ -136,15 +134,12 @@ class MessageDialog extends StatelessWidget {
   }
 
   Widget _actionSection(BuildContext context, String type) {
-    String buttonText = "back";
-    if (type == 's') buttonText = "Ok";
+    String buttonText = "BACK";
+    if (type == 's') buttonText = "OK";
     return ButtonWidget(
       text: buttonText,
-      onPressed: () {
-        Navigator.pop(context);
-      },
+      onPressed: () => Navigator.pop(context),
       primary: false,
-      size: "small",
     );
   }
 

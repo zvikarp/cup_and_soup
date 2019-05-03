@@ -45,11 +45,7 @@ class _SigninDialogState extends State<SigninDialog> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 "logging in with Google...",
-                style: TextStyle(
-                  fontFamily: "PrimaryFont",
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.title,
               ),
             ),
           ],

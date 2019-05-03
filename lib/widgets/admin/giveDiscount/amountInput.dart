@@ -1,11 +1,11 @@
-import 'package:cup_and_soup/widgets/core/divider.dart';
-import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/utils/dateTime.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
-import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/divider.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
 
 class AmountInputWidget extends StatefulWidget {
   AmountInputWidget({
@@ -78,11 +78,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
     return [
       Text(
         "Expiring date: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,11 +121,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
     return [
       Text(
         "User limit: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Container(
         child: Row(
@@ -137,11 +129,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
             Expanded(
               child: Text(
                 "Every user can scan the barcode only once.",
-                style: TextStyle(
-                  fontFamily: "PrimaryFont",
-                  color: Colors.black54,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.subtitle,
               ),
             ),
             Switch(
@@ -163,18 +151,11 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
     return [
       Text(
         "Number of scans: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Container(
         child: TextField(
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
           controller: _scansCtr,
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(
@@ -187,20 +168,10 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
 
   List<Widget> _usageLimitInput() {
     return [
-      Text(
-        "Uses per user: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      Text("Uses per user: ", style: Theme.of(context).textTheme.body2),
       Container(
         child: TextField(
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
           controller: _usageLimitCtr,
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(
@@ -230,7 +201,8 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
       return;
     } else {
       if (scans == 1) scans = -1;
-      widget.onAmountSubmit(_amountInputCtr.text, _dateTime, usageLimit, _userLimit, scans);
+      widget.onAmountSubmit(
+          _amountInputCtr.text, _dateTime, usageLimit, _userLimit, scans);
     }
   }
 
@@ -240,14 +212,9 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.all(24.0),
-          child: Text(
-            "Please enter the persentage discount you want to give:",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 24,
-            ),
-          ),
+          child: Text("Please enter the persentage discount you want to give:",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.title),
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -261,11 +228,9 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
                   controller: _amountInputCtr,
                   textAlign: TextAlign.center,
                   onFieldSubmitted: (s) => _onCreateBarcodePressed(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "PrimaryFont",
-                    fontSize: 30,
-                  ),
+                  style: Theme.of(context).textTheme.display1.merge(
+                        TextStyle(color: Colors.white),
+                      ),
                   keyboardType: TextInputType.numberWithOptions(),
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -281,19 +246,16 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
           alignment: Alignment.center,
           child: DoubleButtonWidget(
             rightOnPressed: () => _onCreateBarcodePressed(),
-            rightText: "Create Barcode",
+            rightText: "CREATE BARCODE",
             leftOnPressed: () => Navigator.pop(context),
-            leftText: "Cancel",
+            leftText: "CANCEL",
           ),
         ),
         DividerWidget(),
         Text(
           "Advanced Settings",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),

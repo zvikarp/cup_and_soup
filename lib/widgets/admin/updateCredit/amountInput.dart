@@ -1,11 +1,11 @@
-import 'package:cup_and_soup/widgets/core/divider.dart';
-import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/utils/dateTime.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
-import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/divider.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
 
 class AmountInputWidget extends StatefulWidget {
   AmountInputWidget({
@@ -72,11 +72,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
     return [
       Text(
         "Expiring date: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,10 +136,7 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
           child: Text(
             "Please enter the new credit:",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.title,
           ),
         ),
         Padding(
@@ -158,11 +151,9 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
                   controller: _amountInputCtr,
                   textAlign: TextAlign.center,
                   onFieldSubmitted: (s) => _onCreateBarcodePressed(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "PrimaryFont",
-                    fontSize: 30,
-                  ),
+                  style: Theme.of(context).textTheme.display1.merge(
+                        TextStyle(color: Colors.white),
+                      ),
                   keyboardType: TextInputType.numberWithOptions(),
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -178,19 +169,16 @@ class _AmountInputWidgetState extends State<AmountInputWidget> {
           alignment: Alignment.center,
           child: DoubleButtonWidget(
             rightOnPressed: () => _onCreateBarcodePressed(),
-            rightText: "Create Barcode",
+            rightText: "CREATE BARCODE",
             leftOnPressed: () => Navigator.pop(context),
-            leftText: "Cancel",
+            leftText: "CANCEL",
           ),
         ),
         DividerWidget(),
         Text(
           "Advanced Settings",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),

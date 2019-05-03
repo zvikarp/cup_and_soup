@@ -98,21 +98,17 @@ class _CloseStoreDialogState extends State<CloseStoreDialog> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         ButtonWidget(
-          text: "No",
-          onPressed: () {
-            Navigator.pop(context, false);
-          },
+          text: "NO",
+          onPressed: () => Navigator.pop(context, false),
           primary: false,
-          size: "small",
         ),
         ButtonWidget(
-          text: "Yes",
+          text: "YES",
           onPressed: () {
             cloudFirestoreService.updateStoreStatus(
                 _openDateTime, _closeDateTime);
             Navigator.pop(context, true);
           },
-          size: "small",
         ),
       ],
     );
@@ -123,11 +119,7 @@ class _CloseStoreDialogState extends State<CloseStoreDialog> {
       children: <Widget>[
         Text(
           "opening date: ",
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.body2
         ),
         GestureDetector(
           onTap: () => _openDateSelector(context),
@@ -159,11 +151,7 @@ class _CloseStoreDialogState extends State<CloseStoreDialog> {
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Text(
             "closing date: ",
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.body2
           ),
         ),
         GestureDetector(

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:cup_and_soup/dialogs/block.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/dialogs/block.dart';
 import 'package:cup_and_soup/pages/home/insider.dart';
 import 'package:cup_and_soup/pages/home/store.dart';
 import 'package:cup_and_soup/pages/home/account.dart';
 import 'package:cup_and_soup/pages/home/scanner.dart';
 import 'package:cup_and_soup/pages/home/admin.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/home/navigationBar.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);

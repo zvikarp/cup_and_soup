@@ -7,7 +7,6 @@ import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
 class ComposeMessageDialog extends StatefulWidget {
-
   @override
   _ComposeMessageDialogState createState() => _ComposeMessageDialogState();
 }
@@ -19,9 +18,14 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
 
   void onSend() {
     String errorMsg = "no error";
-    if (_titleCtr.text == "")       errorMsg = "the title can't be empty";
+    if (_titleCtr.text == "")
+      errorMsg = "the title can't be empty";
     else if (_msgCtr.text == "") errorMsg = "the message can't be empty";
-    cloudFunctionsService.sendMessage(_titleCtr.text, _msgCtr.text, _dateTime, "all users");
+    cloudFunctionsService.sendMessage(
+        _titleCtr.text, _msgCtr.text, _dateTime, "all users");
+    if (errorMsg != "no error") {
+      print("error: " + errorMsg);
+    }
   }
 
   Widget _actionSection(BuildContext context) {
@@ -29,19 +33,13 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         ButtonWidget(
-          text: "cancel",
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          text: "CANCEL",
+          onPressed: () => Navigator.pop(context),
           primary: false,
-          size: "small",
         ),
         ButtonWidget(
-          text: "send",
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          size: "small",
+          text: "SEND",
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );
@@ -51,14 +49,14 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Title:"),
+        child: Text(
+          "Title:",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       TextField(
         controller: _titleCtr,
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-        ),
+        style: Theme.of(context).textTheme.body1,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
           hintText: "Your awesome name",
@@ -71,14 +69,12 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Message:"),
+        child: Text("Message:",
+        style: Theme.of(context).textTheme.body2,),
       ),
       TextField(
         controller: _msgCtr,
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-        ),
+        style: Theme.of(context).textTheme.body1,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
           hintText: "Your awesome name",
@@ -91,7 +87,8 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Send At:"),
+        child: Text("Send At:",
+        style: Theme.of(context).textTheme.body2,),
       ),
       DateTimePicker(
         initDateTime: DateTime.now(),
@@ -106,7 +103,8 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Send To:"),
+        child: Text("Send To:",
+        style: Theme.of(context).textTheme.body2,),
       ),
       Text("All users"),
     ]);
@@ -135,10 +133,7 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
             child: Text(
               "More Options",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 24,
-              ),
+              style: Theme.of(context).textTheme.title,
             ),
           ),
           Padding(

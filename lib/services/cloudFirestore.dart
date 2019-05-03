@@ -225,6 +225,7 @@ class CloudFirestoreService {
 
   Future loadUserData() async {
     String uid = await authService.getUid();
+    if (uid == null) return false;
     var data = await _db.collection('users').document(uid).get();
     var userData = {
       "name": data["name"],
@@ -241,6 +242,7 @@ class CloudFirestoreService {
 
   Future loadStoreStatus() async {
     String uid = await authService.getUid();
+    if (uid == null) return false;
     var data = await _db.collection('general').document('storeStatus').get();
     var status = {
       "openingDate": data["openingDate"],

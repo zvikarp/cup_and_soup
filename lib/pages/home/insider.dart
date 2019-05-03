@@ -1,8 +1,8 @@
-import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:cup_and_soup/widgets/core/button.dart';
+import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 
 class InsiderPage extends StatefulWidget {
@@ -21,11 +21,7 @@ class _InsiderPageState extends State<InsiderPage> {
           children: <Widget>[
             Text(
               "How to send bug reports?",
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.title,
             ),
             SizedBox(
               height: 24,
@@ -35,11 +31,7 @@ class _InsiderPageState extends State<InsiderPage> {
             DividerWidget(),
             Text(
               "How to help translating the app?",
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.title,
             ),
             SizedBox(
               height: 24,
@@ -51,9 +43,8 @@ class _InsiderPageState extends State<InsiderPage> {
                 launch(
                     "https://docs.google.com/spreadsheets/d/1eUU-AomW1PsNhwZ1acI154ePHIPQuXvd5fylNgXtbrA/edit?usp=sharing");
               },
-              text: "Translation Table",
+              text: "TRANSLATION TABLE",
               primary: false,
-              size: "small",
             ),
           ],
         ),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
+
 import 'package:cup_and_soup/widgets/core/dialog.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
 class ActionDialog extends StatelessWidget {
-
   ActionDialog({
     @required this.type,
   });
@@ -17,20 +16,13 @@ class ActionDialog extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         ButtonWidget(
-          text: "No",
-          onPressed: () {
-            Navigator.pop(context, false);
-          },
+          text: "NO",
+          onPressed: () => Navigator.pop(context, false),
           primary: false,
-          size: "small",
         ),
         ButtonWidget(
-          text: "Yes",
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-          // primary: false,
-          size: "small",
+          text: "YES",
+          onPressed: () => Navigator.pop(context, true),
         ),
       ],
     );
@@ -38,8 +30,9 @@ class ActionDialog extends StatelessWidget {
 
   String _text() {
     if (type == "delete")
-    return "Are you sure you want to delete this?";
-    else return "unknown error";
+      return "Are you sure you want to delete this?";
+    else
+      return "unknown error";
   }
 
   @override

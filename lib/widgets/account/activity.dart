@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
   ActivityWidget({
@@ -57,7 +57,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     setState(() {
       _page = newPage;
       _activitiesOnPage = _activities.sublist(((newPage * _itemsPerPage)),
-        (min(((newPage + 1) * _itemsPerPage), _length)));
+          (min(((newPage + 1) * _itemsPerPage), _length)));
     });
   }
 
@@ -92,19 +92,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       children: <Widget>[
         Text(
           dateTimeUtil.date(date),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
         Text(
           dateTimeUtil.time(date),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
       ],
     );
@@ -117,36 +109,31 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Text(
           "Activity",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
           child: Text(
             "This list contains every successful activity that occurred in your account.",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              color: Colors.black54,
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.subtitle,
           ),
         ),
         IconButton(
-          icon: Icon(Icons.refresh, color: Colors.black54,),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.black54,
+          ),
           onPressed: _getActivities,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child:
-                _length == 0 ?
-                  Text(
-                    "Hey! it looks like there is nothing to see here.",
-                    textAlign: TextAlign.center,
-                  ) :
-                TableWidget(
+          child: _length == 0
+              ? Text(
+                  "Hey! it looks like there is nothing to see here.",
+                  textAlign: TextAlign.center,
+                )
+              : TableWidget(
                   length: _length,
                   headings: [" ", " ", " ", " "],
                   items: _activitiesOnPage,

@@ -1,13 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:cup_and_soup/services/sharedPreferences.dart';
 
+import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
-import 'package:cup_and_soup/pages/splash.dart';
 
 class SettingsWidget extends StatefulWidget {
   SettingsWidget({
@@ -34,7 +32,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   void _getLang() async {
     String lang = await sharedPreferencesService.getLang();
     setState(() {
-     _selectedLang = lang ?? _langs.keys.toList().first; 
+      _selectedLang = lang ?? _langs.keys.toList().first;
     });
   }
 
@@ -69,21 +67,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     return [
       Text(
         "Name: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Row(
         children: <Widget>[
           Expanded(
             child: TextField(
               controller: nameCtr,
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 18,
-              ),
+              style: Theme.of(context).textTheme.body1,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(0),
                 hintText: "Your awesome name",
@@ -115,11 +106,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     return [
       Text(
         "Email: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Text(widget.userData["email"]),
     ];
@@ -130,11 +117,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ? [
             Text(
               "Roles: ",
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.body2,
             ),
             Text(widget.userData["roles"].join(", ")),
           ]
@@ -164,11 +147,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
         child: Text(
           _langs[lang],
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-            color: selected ? Colors.grey[200] : Colors.black,
-          ),
+          style: Theme.of(context).textTheme.body1.merge(
+                TextStyle(
+                  color: selected ? Colors.grey[200] : Colors.black,
+                ),
+              ),
         ),
       ),
     );
@@ -178,14 +161,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     return [
       Text(
         "Language: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.body2,
       ),
       Row(
-        children: _langs.keys.toList()
+        children: _langs.keys
+            .toList()
             .map((lang) => _langButton(lang, lang == _selectedLang))
             .toList(),
       ),
@@ -201,10 +181,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           child: Text(
             "Settings",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.title,
           ),
         ),
         Padding(
@@ -224,14 +201,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: Center(
               child: ButtonWidget(
-                text: "Sign Out",
+                text: "SIGN OUT",
                 onPressed: () {
                   authService.signOut();
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => SplashPage()));
                 },
                 primary: false,
-                size: "small",
               ),
             )),
       ],

@@ -23,10 +23,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
         Text(
           "Balance",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -34,10 +31,9 @@ class _BalanceWidgetState extends State<BalanceWidget> {
             child: Center(
               child: Text(
                 widget.userData["money"].toString() ?? "...",
-                style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    fontSize: 42,
-                    color: Theme.of(context).primaryColor),
+                style: Theme.of(context).textTheme.display1.merge(
+                      TextStyle(color: Theme.of(context).primaryColor),
+                    ),
               ),
             ),
           ),
@@ -45,13 +41,11 @@ class _BalanceWidgetState extends State<BalanceWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64),
           child: Text(
-            "You have up to " + widget.userData["allowdCredit"].toString() + " NIS in credit, ask a admin to give you more.",
+            "You have up to " +
+                widget.userData["allowdCredit"].toString() +
+                " NIS in credit, ask a admin to give you more.",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              color: Colors.black54,
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.subtitle,
           ),
         ),
       ],

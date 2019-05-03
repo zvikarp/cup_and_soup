@@ -1,7 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+class FirebaseDatabaseService {}
 
-class FirebaseDatabaseService {
-
-}
-
-final FirebaseDatabaseService firebaseDatabaseService = FirebaseDatabaseService();
+final FirebaseDatabaseService firebaseDatabaseService =
+    FirebaseDatabaseService();

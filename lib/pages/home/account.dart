@@ -59,11 +59,7 @@ class _AccountPageState extends State<AccountPage> {
               DividerWidget(),
               Text(
                 "cup&soup (c) 2019 Zvi Karp | version " + HomePage.getVersion(),
-                style: TextStyle(
-                  fontFamily: "PrimaryFont",
-                  color: Colors.black54,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.subtitle,
               ),
               Padding(
                 padding:
@@ -73,11 +69,7 @@ class _AccountPageState extends State<AccountPage> {
                       ? "There is a new version to download from the Play Store!"
                       : "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: "PrimaryFont",
-                      color: Colors.black87,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.body2,
                 ),
               ),
               SizedBox(height: 36),

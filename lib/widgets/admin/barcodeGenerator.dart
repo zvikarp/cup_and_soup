@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:barcode_flutter/barcode_flutter.dart';
 
@@ -15,7 +13,6 @@ class BarcodeGeneratorWidget extends StatelessWidget {
   final double amount;
   final String barcode;
   final Function() backPressed;
-  final TextEditingController _amountInputCtr = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +25,13 @@ class BarcodeGeneratorWidget extends StatelessWidget {
           child: Text(
             amount.toString(),
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.title,
           ),
         ),
         Padding(
           padding: EdgeInsets.all(42),
           child: RotatedBox(
-  quarterTurns: 1,
-
+            quarterTurns: 1,
             child: BarCodeImage(
               data: barcode,
               codeType: BarCodeType.Code39,
@@ -55,7 +48,7 @@ class BarcodeGeneratorWidget extends StatelessWidget {
           alignment: Alignment.center,
           child: ButtonWidget(
             onPressed: backPressed,
-            text: "Back",
+            text: "BACK",
             primary: false,
           ),
         ),
