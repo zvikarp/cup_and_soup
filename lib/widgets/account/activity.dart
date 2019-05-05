@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
@@ -44,7 +45,8 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         ),
         Text(doc['desc'].toString()),
         Text(doc['money'].toString()),
-        _date(doc['timestamp'].toString()),
+        Center(child: _date(doc['timestamp'].toString())),
+        _more(),
       ]);
     });
     setState(() {
@@ -52,6 +54,31 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       _length = _activities.length;
     });
     _onPageChanged(0);
+  }
+
+  Widget _more() {
+    return GestureDetector(
+      onTap: () {
+        SnackbarWidget.infoBar(
+        context, "This feature is still under develepment.");
+      },
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 42,
+          padding: EdgeInsets.symmetric(vertical: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.black,
+          ),
+          child: Icon(
+            Icons.keyboard_arrow_down,
+            size: 16,
+            color: Colors.grey[200],
+          ),
+        ),
+      ),
+    );
   }
 
   void _onPageChanged(newPage) async {
@@ -91,7 +118,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   Widget _date(String stringDate) {
     DateTime date = dateTimeUtil.stringToDate(stringDate);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
           dateTimeUtil.date(date),
@@ -138,9 +165,9 @@ class _ActivityWidgetState extends State<ActivityWidget> {
                 )
               : TableWidget(
                   length: _length,
-                  headings: ["", "Name", "Amount", "Date"],
+                  headings: ["", "Name", "Amo.", "Date", " "],
                   items: _activitiesOnPage,
-                  flex: [.2, .4, .2, .2],
+                  flex: [.2, .3, .1, .2, .2],
                   page: _page,
                   onPageChange: _onPageChanged,
                 ),

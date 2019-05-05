@@ -27,7 +27,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   bool _loading = false;
 
   Map<String, String> _langs = {'en': 'English', 'he': 'עברית'};
+  Map<String, String> _modes = {'light': 'Light', 'dark': 'Dark'};
   String _selectedLang = "";
+  String _selectedMode = "light";
 
   void _getLang() async {
     String lang = await sharedPreferencesService.getLang();
@@ -96,7 +98,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 : _newName != _name
                     ? GestureDetector(
                         onTap: _nameChangeRequest,
-                        child: Icon(Icons.refresh),
+                        child: Icon(Icons.save),
                       )
                     : Container(),
           ),
@@ -118,6 +120,48 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     ];
   }
 
+  List<Widget> _notificationsRow() {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Notifications: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              "Change when you recive notifications",
+              style: Theme.of(context).textTheme.subtitle,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              SnackbarWidget.infoBar(
+                  context, "This feature is still under develepment.");
+            },
+            child: Container(
+              width: 42,
+              margin: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(vertical: 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.black,
+              ),
+              child: Icon(
+                Icons.navigate_next,
+                size: 16,
+                color: Colors.grey[200],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
   List<Widget> _rolesRow() {
     return widget.userData["roles"].join() != "customer"
         ? [
@@ -134,12 +178,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   void _setLang(String lang) async {
-    await sharedPreferencesService.setLang(lang);
+    // await sharedPreferencesService.setLang(lang);
     setState(() {
       _selectedLang = lang;
     });
-    SnackbarWidget.infoBar(
-        context, "Please reload the app for your settings to take effect.");
+    // SnackbarWidget.infoBar(
+    //     context, "Please reload the app for your settings to take effect.");
+    SnackbarWidget.infoBar(context, "This feature is still under develepment.");
   }
 
   Widget _langButton(lang, selected) {
@@ -156,6 +201,36 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
         child: Text(
           _langs[lang],
+          style: Theme.of(context).textTheme.body1.merge(
+                TextStyle(
+                  color: selected ? Colors.grey[200] : Colors.black,
+                ),
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _modeButton(mode, selected) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedMode = mode;
+        });
+        SnackbarWidget.infoBar(
+            context, "This feature is still under develepment.");
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 16),
+        padding: selected
+            ? EdgeInsets.only(left: 8, right: 8, bottom: 2)
+            : EdgeInsets.only(bottom: 2),
+        decoration: BoxDecoration(
+          color: selected ? Colors.black : Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Text(
+          _modes[mode],
           style: Theme.of(context).textTheme.body1.merge(
                 TextStyle(
                   color: selected ? Colors.grey[200] : Colors.black,
@@ -184,6 +259,24 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     ];
   }
 
+  List<Widget> _viewModeRow() {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "View Mode: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Row(
+        children: _modes.keys
+            .toList()
+            .map((mode) => _modeButton(mode, mode == _selectedMode))
+            .toList(),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -200,27 +293,43 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: TableWidget(
             headings: [" ", " "],
-            flex: [.3, .7],
+            flex: [.4, .6],
             items: [
               _nameRow(),
               _emailRow(),
+              _notificationsRow(),
               _rolesRow(),
               _langRow(),
+              _viewModeRow(),
             ],
           ),
         ),
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Center(
-              child: ButtonWidget(
-                text: "SIGN OUT",
-                onPressed: () {
-                  authService.signOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SplashPage()));
-                },
-                primary: false,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ButtonWidget(
+                  text: "SIGN OUT",
+                  onPressed: () {
+                    authService.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => SplashPage()));
+                  },
+                  primary: false,
+                ),
+                Opacity(
+                  opacity: 0.3,
+                  child: ButtonWidget(
+                    text: "DELETE ACCOUNT",
+                    onPressed: () {
+                      SnackbarWidget.infoBar(
+                          context, "This feature is still under develepment.");
+                    },
+                    primary: false,
+                  ),
+                ),
+              ],
             )),
       ],
     );

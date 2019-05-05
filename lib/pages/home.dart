@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/firebaseMessaging.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/dialogs/block.dart';
 import 'package:cup_and_soup/pages/home/insider.dart';
@@ -115,30 +115,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  void firebaseCloudMessagingListeners() {
-    _firebaseMessaging.getToken().then((token) {
-      print(token);
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    firebaseCloudMessagingListeners();
+    firebaseMessagingService.firebaseCloudMessagingListeners(context);
     setState(() {
       _allPages['scanner']['page'] =
           ScannerPage(goToStore: () => _onTabTaped('store'));

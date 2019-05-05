@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/utils/theme.dart';
@@ -8,6 +9,12 @@ import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
 
 void main() {
+  Crashlytics.instance.enableInDevMode = true;
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Crashlytics.instance.onError(details);
+  };
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(App());
@@ -35,7 +42,6 @@ class _AppState extends State<App> {
         this.localeLoaded = true;
         this._locale = locale;
       });
-      
     });
   }
 

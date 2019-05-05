@@ -54,7 +54,7 @@ class ItemPage extends StatelessWidget {
                               : Colors.grey,
                         ),
                         child: Text(
-                          item.stock > 0 ? "In Stcok" : "Out of stock",
+                          item.stock > 0 ? "In Stock" : "Out of stock",
                           style: TextStyle(
                             color: Colors.black,
                           ),
