@@ -12,9 +12,12 @@ class ItemPage extends StatelessWidget {
   final Item item;
 
   List<Tag> _getTags() {
-    if (item.tags == "") 
-    return [];
-    else return (item.tags.split(",")).map((tag) {
+    List<String> tags = [];
+    for (String t in item.tags) {
+      if (t.split(':').first != "setting")
+      tags.add(t);
+    }
+    return (tags).map((tag) {
       return Tag(
         title: tag.split(':').last,
         active: false,

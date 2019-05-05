@@ -30,11 +30,10 @@ class GridItemWidget extends StatelessWidget {
   }
 
   Widget _badgeFinder(context) {
-    List tags = item.tags.split(',');
+    List tags = item.tags;
     for (var tag in tags) {
       var t = tag.split(':');
       if (t.length > 1) {
-        print(t.first);
         if (t.first == "disc") {
           return _badge("disc", t.last, context);
         } else if (t.first == "sale") {
@@ -45,8 +44,16 @@ class GridItemWidget extends StatelessWidget {
     return Container();
   }
 
+  String _visible() {
+    List tags = item.tags;
+    if (tags.contains("setting:visible")) {
+      return "";
+    }
+    return "🙈";
+  }
+
   String _hot() {
-    List tags = item.tags.split(',');
+    List tags = item.tags;
     if (tags.contains("hot")) {
       return "🔥";
     }
@@ -90,7 +97,7 @@ class GridItemWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      _hot() + " ${item.price.toString()} NIS",
+                      _visible() + _hot() + " ${item.price.toString()} NIS",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.title.merge(TextStyle(
                           color: item.stock < 1
