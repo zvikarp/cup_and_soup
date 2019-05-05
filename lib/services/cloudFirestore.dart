@@ -268,6 +268,9 @@ class CloudFirestoreService {
       if (doc.exists) {
         return "This barcode already exists, the barcode needs to be unique.";
       }
+      if (oldBarcode != "") {
+        await _db.collection('store').document(oldBarcode).delete();
+      }
     }
     if (imageState == "deleted") {
       await firebaseStorageService.deleteImage(imageUrl);

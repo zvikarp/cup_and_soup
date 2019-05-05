@@ -17,7 +17,8 @@ class FirebaseStorageService {
 
   Future<bool> deleteImage(String image) async {
     StorageReference reference = await _storage.getReferenceFromUrl(image);
-    await reference.delete();
+    try {await reference.delete();}
+    catch (e) {}
     return true;
   }
 

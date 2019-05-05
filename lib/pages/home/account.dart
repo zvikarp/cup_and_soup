@@ -24,6 +24,7 @@ class _AccountPageState extends State<AccountPage> {
     String uid = await authService.getUid();
     Map<String, dynamic> userData = await cloudFirestoreService.loadUserData();
     bool upToDate = await HomePage.newVersion();
+    if (!mounted) return;
     setState(() {
       _uid = uid;
       _userData = userData;

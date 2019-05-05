@@ -145,14 +145,22 @@ class MessageDialog extends StatelessWidget {
     );
   }
 
+  String _title(String title) {
+    if (title == "e") return "Error Message";
+    else if (title == "s") return "Success message";
+    else return "Unknown Message";
+  }
+
   @override
   Widget build(BuildContext context) {
     String type = responseCode.split("-").last.replaceFirst('g', '')[0];
+    String title = responseCode.replaceAll(RegExp(r'([0-9])'), "");
+    title = title[title.length-1];
     return DialogWidget(
       heading: Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              "Message",
+              _title(title),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.title,
             ),

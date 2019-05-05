@@ -107,6 +107,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Icons.atm,
         size: 16,
       );
+    } else if (type == "discount") {
+      return Icon(
+        Icons.attach_money,
+        size: 16,
+      );
     } else {
       return Icon(
         Icons.error,
