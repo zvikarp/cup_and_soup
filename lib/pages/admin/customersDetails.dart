@@ -20,7 +20,10 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
       items.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _userIcon(doc['roles'].cast<String>()),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: _userIcon(doc['roles'].cast<String>()),
+          ),
         ),
         Text(doc['name'].toString()),
         Text(doc['money'].toString()),
@@ -31,11 +34,11 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
     return items;
   }
 
-
   void _onMorePressed(dynamic userDoc) {
     Navigator.of(context).push(
       TransparentRoute(
-        builder: (BuildContext context) => CustomersDetailsDialog(userDoc: userDoc),
+        builder: (BuildContext context) =>
+            CustomersDetailsDialog(userDoc: userDoc),
       ),
     );
   }
@@ -43,21 +46,25 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
   Widget _more(dynamic userDoc) {
     return GestureDetector(
       onTap: () => _onMorePressed(userDoc),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Colors.black,
-            ),
-            child: Icon(
-        Icons.navigate_next,
-        size: 16,
-        color: Colors.grey[200],
-      ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 42,
+          padding: EdgeInsets.symmetric(vertical: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.black,
           ),
+          child: Icon(
+            Icons.navigate_next,
+            size: 16,
+            color: Colors.grey[200],
+          ),
+        ),
+      ),
     );
   }
- 
+
   Widget _userIcon(List<String> roles) {
     if (roles.contains("cashRegister")) {
       return Icon(
@@ -82,8 +89,7 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: StreamBuilder(
-                  stream:
-                      Firestore.instance.collection('users').snapshots(),
+                  stream: Firestore.instance.collection('users').snapshots(),
                   builder: (context, snapshot) {
                     int length = 0;
                     if (!snapshot.hasData || snapshot.data.documents == null)
@@ -96,19 +102,16 @@ class _CustomersDetailsPageState extends State<CustomersDetailsPage> {
                       );
                     }
                     return TableWidget(
-                      headings: [" ", " ", " ", " "],
+                      headings: [" ", "Name", "Money", "More"],
                       items: _docsToItem(snapshot.data.documents),
-                      flex: [1, 3, 2, 1],
+                      flex: [.2, .4, .2, .2],
                     );
                   }),
             ),
             ButtonWidget(
-              text: "back",
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              text: "BACK",
+              onPressed: () => Navigator.pop(context),
               primary: false,
-              size: "small",
             ),
           ],
         ),

@@ -1,13 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:cup_and_soup/services/sharedPreferences.dart';
 
+import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
-import 'package:cup_and_soup/pages/splash.dart';
 
 class SettingsWidget extends StatefulWidget {
   SettingsWidget({
@@ -29,12 +27,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   bool _loading = false;
 
   Map<String, String> _langs = {'en': 'English', 'he': 'עברית'};
+  Map<String, String> _modes = {'light': 'Light', 'dark': 'Dark'};
   String _selectedLang = "";
+  String _selectedMode = "light";
 
   void _getLang() async {
     String lang = await sharedPreferencesService.getLang();
     setState(() {
-     _selectedLang = lang ?? _langs.keys.toList().first; 
+      _selectedLang = lang ?? _langs.keys.toList().first;
     });
   }
 
@@ -67,12 +67,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _nameRow() {
     return [
-      Text(
-        "Name: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Name: ",
+          style: Theme.of(context).textTheme.body2,
         ),
       ),
       Row(
@@ -80,10 +79,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           Expanded(
             child: TextField(
               controller: nameCtr,
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 18,
-              ),
+              style: Theme.of(context).textTheme.body1,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(0),
                 hintText: "Your awesome name",
@@ -102,7 +98,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 : _newName != _name
                     ? GestureDetector(
                         onTap: _nameChangeRequest,
-                        child: Icon(Icons.refresh),
+                        child: Icon(Icons.save),
                       )
                     : Container(),
           ),
@@ -113,27 +109,67 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _emailRow() {
     return [
-      Text(
-        "Email: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Email: ",
+          style: Theme.of(context).textTheme.body2,
         ),
       ),
       Text(widget.userData["email"]),
     ];
   }
 
+  List<Widget> _notificationsRow() {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Notifications: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              "Change when you recive notifications",
+              style: Theme.of(context).textTheme.subtitle,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              SnackbarWidget.infoBar(
+                  context, "This feature is still under develepment.");
+            },
+            child: Container(
+              width: 42,
+              margin: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(vertical: 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.black,
+              ),
+              child: Icon(
+                Icons.navigate_next,
+                size: 16,
+                color: Colors.grey[200],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
   List<Widget> _rolesRow() {
     return widget.userData["roles"].join() != "customer"
         ? [
-            Text(
-              "Roles: ",
-              style: TextStyle(
-                fontFamily: "PrimaryFont",
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                "Roles: ",
+                style: Theme.of(context).textTheme.body2,
               ),
             ),
             Text(widget.userData["roles"].join(", ")),
@@ -142,12 +178,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   void _setLang(String lang) async {
-    await sharedPreferencesService.setLang(lang);
+    // await sharedPreferencesService.setLang(lang);
     setState(() {
       _selectedLang = lang;
     });
-    SnackbarWidget.infoBar(
-        context, "Please reload the app for your settings to take effect.");
+    // SnackbarWidget.infoBar(
+    //     context, "Please reload the app for your settings to take effect.");
+    SnackbarWidget.infoBar(context, "This feature is still under develepment.");
   }
 
   Widget _langButton(lang, selected) {
@@ -164,11 +201,41 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
         child: Text(
           _langs[lang],
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-            color: selected ? Colors.grey[200] : Colors.black,
-          ),
+          style: Theme.of(context).textTheme.body1.merge(
+                TextStyle(
+                  color: selected ? Colors.grey[200] : Colors.black,
+                ),
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _modeButton(mode, selected) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedMode = mode;
+        });
+        SnackbarWidget.infoBar(
+            context, "This feature is still under develepment.");
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 16),
+        padding: selected
+            ? EdgeInsets.only(left: 8, right: 8, bottom: 2)
+            : EdgeInsets.only(bottom: 2),
+        decoration: BoxDecoration(
+          color: selected ? Colors.black : Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Text(
+          _modes[mode],
+          style: Theme.of(context).textTheme.body1.merge(
+                TextStyle(
+                  color: selected ? Colors.grey[200] : Colors.black,
+                ),
+              ),
         ),
       ),
     );
@@ -176,17 +243,35 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   List<Widget> _langRow() {
     return [
-      Text(
-        "Language: ",
-        style: TextStyle(
-          fontFamily: "PrimaryFont",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "Language: ",
+          style: Theme.of(context).textTheme.body2,
         ),
       ),
       Row(
-        children: _langs.keys.toList()
+        children: _langs.keys
+            .toList()
             .map((lang) => _langButton(lang, lang == _selectedLang))
+            .toList(),
+      ),
+    ];
+  }
+
+  List<Widget> _viewModeRow() {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          "View Mode: ",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Row(
+        children: _modes.keys
+            .toList()
+            .map((mode) => _modeButton(mode, mode == _selectedMode))
             .toList(),
       ),
     ];
@@ -201,38 +286,50 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           child: Text(
             "Settings",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.title,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: TableWidget(
             headings: [" ", " "],
-            flex: [1, 2],
+            flex: [.4, .6],
             items: [
               _nameRow(),
               _emailRow(),
+              _notificationsRow(),
               _rolesRow(),
               _langRow(),
+              _viewModeRow(),
             ],
           ),
         ),
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Center(
-              child: ButtonWidget(
-                text: "Sign Out",
-                onPressed: () {
-                  authService.signOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SplashPage()));
-                },
-                primary: false,
-                size: "small",
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ButtonWidget(
+                  text: "SIGN OUT",
+                  onPressed: () {
+                    authService.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => SplashPage()));
+                  },
+                  primary: false,
+                ),
+                Opacity(
+                  opacity: 0.3,
+                  child: ButtonWidget(
+                    text: "DELETE ACCOUNT",
+                    onPressed: () {
+                      SnackbarWidget.infoBar(
+                          context, "This feature is still under develepment.");
+                    },
+                    primary: false,
+                  ),
+                ),
+              ],
             )),
       ],
     );

@@ -94,30 +94,31 @@ class SnackbarWidget {
     f.show(context);
   }
 
-  static void show(
-      BuildContext context, String title, String message, String type) {
-    Flushbar(
-      title: "Hey Ninja",
-      message: message,
-      duration: Duration(seconds: 5),
-    )..show(context);
-    // key.currentState.showSnackBar(SnackBar(
-    //   // content: Text(text),
-    //   content: Image.asset(
-    //       "assets/images/navBar.png",
-    //       height: 70,
-    //       width: double.infinity,
-    //       fit: BoxFit.cover,
-    //     ),
+  static void messsageBar(BuildContext context, String title, String message) {
+    Flushbar f;
+    f = Flushbar(
 
-    //   backgroundColor: Colors.transparent,
-    //   action: SnackBarAction(
-    //     label: 'Ok',
-    //     textColor: Color(0xffd8d738),
-    //     onPressed: () {
-    //       key.currentState.hideCurrentSnackBar();
-    //     },
-    //   ),
-    // ));
+      isDismissible: true,
+      title: title,
+      titleText: Text(
+        message,
+        style: Theme.of(context).textTheme.body2.merge(TextStyle(color: Colors.white)),
+      ),
+      message: message,
+      messageText: Text(
+        message,
+        style: Theme.of(context).textTheme.body1.merge(TextStyle(color: Colors.white)),
+      ),
+      icon: Icon(
+        Icons.message,
+        size: 28.0,
+        color: Colors.green,
+      ),
+      flushbarPosition: FlushbarPosition.TOP,
+      backgroundColor: Colors.black,
+      duration: Duration(days: 30),
+    );
+    f.show(context);
   }
+
 }

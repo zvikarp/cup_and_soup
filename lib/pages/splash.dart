@@ -76,7 +76,7 @@ class _SplashPageState extends State<SplashPage> {
                       ],
                     ),
                     child: ButtonWidget(
-                      text: "Login",
+                      text: "SIGN IN",
                       onPressed: _openLogin,
                       primary: false,
                     ),

@@ -54,7 +54,7 @@ class ItemPage extends StatelessWidget {
                               : Colors.grey,
                         ),
                         child: Text(
-                          item.stock > 0 ? "In Stcok" : "Out of stock",
+                          item.stock > 0 ? "In Stock" : "Out of stock",
                           style: TextStyle(
                             color: Colors.black,
                           ),
@@ -66,20 +66,13 @@ class ItemPage extends StatelessWidget {
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "BrandFont",
-                    fontSize: 65,
-                  ),
+                  style: Theme.of(context).textTheme.headline,
                 ),
                 Text(
                   "Hechsher: " +
                       (item.hechsherim.toString() ?? "Not kosher..") +
                       ".",
-                  style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    color: Colors.black54,
-                    fontSize: 16,
-                  ),
+                  style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(
                   alignment: Alignment(-1, 0),
@@ -96,7 +89,7 @@ class ItemPage extends StatelessWidget {
                   textStyle: Theme.of(context).textTheme.body1,
                   tags: (item.tags.split(",")).map((tag) {
                     return Tag(
-                      title: tag,
+                      title: tag.split(':').last,
                       active: false,
                     );
                   }).toList(),

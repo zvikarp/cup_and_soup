@@ -29,7 +29,9 @@ class _SigninDialogState extends State<SigninDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
-      child: Center(
+      heading: Container(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 70, horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,16 +47,13 @@ class _SigninDialogState extends State<SigninDialog> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 "logging in with Google...",
-                style: TextStyle(
-                  fontFamily: "PrimaryFont",
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.title,
               ),
             ),
           ],
         ),
       ),
+      actionSection: Container(),
     );
   }
 }

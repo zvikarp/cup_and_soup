@@ -108,6 +108,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4"
+  firebase_crashlytics:
+    dependency: "direct main"
+    description:
+      name: firebase_crashlytics
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4+3"
   firebase_database:
     dependency: "direct main"
     description:
@@ -115,6 +122,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0+4"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -242,6 +256,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   quiver:
     dependency: transitive
     description:

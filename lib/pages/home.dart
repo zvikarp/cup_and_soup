@@ -1,23 +1,23 @@
-import 'package:cup_and_soup/dialogs/block.dart';
-import 'package:cup_and_soup/utils/transparentRoute.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/firebaseMessaging.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
+import 'package:cup_and_soup/dialogs/block.dart';
 import 'package:cup_and_soup/pages/home/insider.dart';
 import 'package:cup_and_soup/pages/home/store.dart';
 import 'package:cup_and_soup/pages/home/account.dart';
 import 'package:cup_and_soup/pages/home/scanner.dart';
 import 'package:cup_and_soup/pages/home/admin.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/home/navigationBar.dart';
-import 'package:cup_and_soup/services/auth.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   _HomePageState createState() => _HomePageState();
 
-  static String getVersion() => "v0.1.1";
+  static String getVersion() => "v0.2.0";
   static Future<bool> newVersion() async {
     String lastVersion = await cloudFirestoreService.getLastVersion();
     return (getVersion() == lastVersion);
@@ -63,9 +63,27 @@ class _HomePageState extends State<HomePage> {
     if (userData['disabled']) {
       Navigator.of(context).push(
         TransparentRoute(
-          builder: (BuildContext context) => BlockDialog(type: "disabled",),
+          builder: (BuildContext context) => BlockDialog(
+                type: "disabled",
+              ),
         ),
       );
+    }
+    var storeStatus = await cloudFirestoreService.loadStoreStatus();
+    print(DateTime.now());
+    print(storeStatus['closeingDate'].toDate());
+    if (DateTime.now().isAfter(storeStatus['closeingDate'].toDate()) &&
+        DateTime.now().isBefore(storeStatus['openingDate'].toDate())) {
+      if (_roles.contains("admin")) {
+        SnackbarWidget.infoBar(context, "The store is closed!");
+      } else {
+        Navigator.of(context).push(
+          TransparentRoute(
+            builder: (BuildContext context) =>
+                BlockDialog(type: "closed", storeStatus: storeStatus),
+          ),
+        );
+      }
     }
   }
 
@@ -100,6 +118,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    firebaseMessagingService.firebaseCloudMessagingListeners(context);
     setState(() {
       _allPages['scanner']['page'] =
           ScannerPage(goToStore: () => _onTabTaped('store'));

@@ -12,16 +12,13 @@ class PageWidget extends StatelessWidget {
   final Widget child;
   final List<Widget> children;
 
-  Widget _titleWidget() {
+  Widget _titleWidget(BuildContext context) {
     return Center(
       child: Padding(
           padding: const EdgeInsets.only(top: 60, bottom: 40),
           child: Text(
             title,
-            style: TextStyle(
-              fontFamily: "BrandFont",
-              fontSize: 65,
-            ),
+            style: Theme.of(context).textTheme.headline,
           )),
     );
   }
@@ -34,7 +31,7 @@ class PageWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
-            children: List.from([_titleWidget()])
+            children: List.from([_titleWidget(context)])
               ..addAll(child == null ? children : [child]),
           ),
         ),

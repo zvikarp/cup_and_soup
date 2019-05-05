@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/widgets/core/tableItem.dart';
-
 class TableWidget extends StatelessWidget {
   TableWidget({
     @required this.items,
@@ -18,48 +16,51 @@ class TableWidget extends StatelessWidget {
 
   final List<List<Widget>> items;
   final List<String> headings;
-  final List<int> flex;
+  final List<double> flex;
   final int length;
   final int itemsPerPage;
   final Function(int) onPageChange;
   final int page;
   final String itemType;
 
-  Widget _topBar() {
-    return Container(
-      margin: EdgeInsets.all(0),
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+  Widget _title(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Center(
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+    );
+  }
+
+  TableRow _topBar(BuildContext context) {
+    return TableRow(
+      children: headings.map((heading) => _title(context, heading)).toList(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         color: Colors.grey[200],
       ),
-      child: headings == []
-          ? Container()
-          : Row(
-              children: headings
-                  .map((heading) => Expanded(
-                        child: Text(heading),
-                        flex: flex[headings.indexOf(heading)],
-                      ))
-                  .toList()),
     );
   }
 
-  Widget _content() {
-    return ListView.builder(
-      padding: EdgeInsets.all(0),
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: length == -1
-          ? items.length
-          : min(itemsPerPage, ((length) - (itemsPerPage * page))),
-      itemBuilder: (BuildContext context, int index) {
-        if (items[index].toString() == "[Container]")
-          return Container();
-        else
-          return TableItemWidget(columns: items[index], flex: flex);
-      },
-    );
+  List<TableRow> _content() {
+    List<TableRow> tableRows = [];
+    int rows = length == -1
+        ? items.length
+        : min(itemsPerPage, ((length) - (itemsPerPage * page)));
+    for (int i = 0; i < rows; i++) {
+      if (items[i].toString() == "[Container]") continue;
+      else
+        tableRows.add(
+          TableRow(
+            children: items[i],
+            decoration: BoxDecoration(color: Colors.grey[200]),
+          ),
+        );
+    }
+    return tableRows;
   }
 
   Widget _bottomBar() {
@@ -100,13 +101,35 @@ class TableWidget extends StatelessWidget {
     );
   }
 
+  List<TableRow> _children(BuildContext context) {
+    List<TableRow> children = _content();
+    children.insert(0, _topBar(context));
+    return children;
+  }
+
+  Map<int, FractionColumnWidth> _widths() {
+    Map<int, FractionColumnWidth> widths = {};
+    for(int i = 0; i < flex.length; i++) {
+      widths.putIfAbsent(i, () => FractionColumnWidth(flex[i])
+      );
+    }
+    return widths;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        _topBar(),
-        _content(),
+        Table(
+          children: _children(context),
+          columnWidths: _widths(),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          border: TableBorder(
+              horizontalInside: BorderSide(
+            width: 4,
+            color: Theme.of(context).canvasColor,
+          )),
+        ),
         _bottomBar(),
       ],
     );

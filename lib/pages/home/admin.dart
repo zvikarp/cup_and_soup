@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/dialogs/composeMessage.dart';
+import 'package:cup_and_soup/dialogs/closeStore.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/pages/admin/customersDetails.dart';
 import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
@@ -9,7 +12,6 @@ import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -25,10 +27,7 @@ class _AdminPageState extends State<AdminPage> {
         Text(
           "Quick Actions",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -43,11 +42,11 @@ class _AdminPageState extends State<AdminPage> {
               child: Center(
                 child: Text(
                   "Transfer Money",
-                  style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    fontSize: 24,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: Theme.of(context).textTheme.title.merge(
+                        TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                 ),
               ),
             ),
@@ -66,11 +65,11 @@ class _AdminPageState extends State<AdminPage> {
               child: Center(
                 child: Text(
                   "Update User Credit",
-                  style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context).textTheme.title.merge(
+                        TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                 ),
               ),
             ),
@@ -89,11 +88,11 @@ class _AdminPageState extends State<AdminPage> {
               child: Center(
                 child: Text(
                   "Give Discount",
-                  style: TextStyle(
-                    fontFamily: "PrimaryFont",
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context).textTheme.title.merge(
+                        TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                 ),
               ),
             ),
@@ -103,10 +102,7 @@ class _AdminPageState extends State<AdminPage> {
         Text(
           "More Options",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -117,7 +113,7 @@ class _AdminPageState extends State<AdminPage> {
                 "View active barcodes",
               ),
               ButtonWidget(
-                text: "View",
+                text: "VIEW",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -126,7 +122,6 @@ class _AdminPageState extends State<AdminPage> {
                   );
                 },
                 primary: false,
-                size: "small",
               ),
             ],
           ),
@@ -140,7 +135,7 @@ class _AdminPageState extends State<AdminPage> {
                 "View customers details",
               ),
               ButtonWidget(
-                text: "View",
+                text: "VIEW",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -149,7 +144,6 @@ class _AdminPageState extends State<AdminPage> {
                   );
                 },
                 primary: false,
-                size: "small",
               ),
             ],
           ),
@@ -160,16 +154,18 @@ class _AdminPageState extends State<AdminPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Send customers a message",
+                "Push messages",
               ),
               ButtonWidget(
-                text: "Send",
+                text: "COMPOSE",
                 onPressed: () {
-                  SnackbarWidget.errorBar(
-                      context, "This feature dosn't exist yet.");
+                  Navigator.of(context).push(
+                    TransparentRoute(
+                      builder: (BuildContext context) => ComposeMessageDialog(),
+                    ),
+                  );
                 },
                 primary: false,
-                size: "small",
               ),
             ],
           ),
@@ -183,13 +179,15 @@ class _AdminPageState extends State<AdminPage> {
                 "Close store",
               ),
               ButtonWidget(
-                text: "Close",
+                text: "CLOSE",
                 onPressed: () {
-                  SnackbarWidget.errorBar(
-                      context, "This feature dosn't exist yet.");
+                  Navigator.of(context).push(
+                    TransparentRoute(
+                      builder: (BuildContext context) => CloseStoreDialog(),
+                    ),
+                  );
                 },
                 primary: false,
-                size: "small",
               ),
             ],
           ),

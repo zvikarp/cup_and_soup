@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
   ActivityWidget({
@@ -37,11 +38,15 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       activities.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _typeIcon(doc['type']),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: _typeIcon(doc['type']),
+          ),
         ),
         Text(doc['desc'].toString()),
         Text(doc['money'].toString()),
-        _date(doc['timestamp'].toString()),
+        Center(child: _date(doc['timestamp'].toString())),
+        _more(),
       ]);
     });
     setState(() {
@@ -51,13 +56,38 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     _onPageChanged(0);
   }
 
+  Widget _more() {
+    return GestureDetector(
+      onTap: () {
+        SnackbarWidget.infoBar(
+        context, "This feature is still under develepment.");
+      },
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 42,
+          padding: EdgeInsets.symmetric(vertical: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.black,
+          ),
+          child: Icon(
+            Icons.keyboard_arrow_down,
+            size: 16,
+            color: Colors.grey[200],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _onPageChanged(newPage) async {
     if (newPage == -1) return;
     if ((newPage * _itemsPerPage) >= _length) return;
     setState(() {
       _page = newPage;
       _activitiesOnPage = _activities.sublist(((newPage * _itemsPerPage)),
-        (min(((newPage + 1) * _itemsPerPage), _length)));
+          (min(((newPage + 1) * _itemsPerPage), _length)));
     });
   }
 
@@ -88,23 +118,15 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   Widget _date(String stringDate) {
     DateTime date = dateTimeUtil.stringToDate(stringDate);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
           dateTimeUtil.date(date),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
         Text(
           dateTimeUtil.time(date),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
       ],
     );
@@ -117,40 +139,35 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Text(
           "Activity",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
           child: Text(
             "This list contains every successful activity that occurred in your account.",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "PrimaryFont",
-              color: Colors.black54,
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.subtitle,
           ),
         ),
         IconButton(
-          icon: Icon(Icons.refresh, color: Colors.black54,),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.black54,
+          ),
           onPressed: _getActivities,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child:
-                _length == 0 ?
-                  Text(
-                    "Hey! it looks like there is nothing to see here.",
-                    textAlign: TextAlign.center,
-                  ) :
-                TableWidget(
+          child: _length == 0
+              ? Text(
+                  "Hey! it looks like there is nothing to see here.",
+                  textAlign: TextAlign.center,
+                )
+              : TableWidget(
                   length: _length,
-                  headings: [" ", " ", " ", " "],
+                  headings: ["", "Name", "Amo.", "Date", " "],
                   items: _activitiesOnPage,
-                  flex: [1, 5, 2, 2],
+                  flex: [.2, .3, .1, .2, .2],
                   page: _page,
                   onPageChange: _onPageChanged,
                 ),
