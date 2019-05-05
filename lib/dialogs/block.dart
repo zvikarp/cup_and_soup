@@ -53,6 +53,7 @@ class BlockDialog extends StatelessWidget {
           exit(0);
         },
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(24),

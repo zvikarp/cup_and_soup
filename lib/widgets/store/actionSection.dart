@@ -51,7 +51,6 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
     if (_requestStream != null) _requestStream.cancel();
     _requestStream =
         cloudFirestoreService.subscribeToBuyRequestsStream().listen((snap) {
-      print(snap['barcode']);
       if (snap['barcode'] == widget.barcode) {
         _requestStream.cancel();
         cloudFirestoreService.deleteRequest("buy");

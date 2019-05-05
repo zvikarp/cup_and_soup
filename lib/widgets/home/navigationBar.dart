@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class NavigationBarWidget extends StatelessWidget {
   NavigationBarWidget({
     Key key,
     @required this.currentPage,
+    @required this.lastPage,
     @required this.tabTapped,
     @required this.pages,
   }) : super(key: key);
 
   final String currentPage;
+  final String lastPage;
   final void Function(String) tabTapped;
   final Map<String, Map<String, dynamic>> pages;
 
@@ -18,14 +21,24 @@ class NavigationBarWidget extends StatelessWidget {
       String thisPage =
           pages.keys.toList()[pages.values.toList().indexOf(page)];
       buttons.add(
-        IconButton(
-          icon: Icon(
-            page['icon'],
-            color: currentPage != thisPage
-                ? Colors.white70
-                : Theme.of(context).primaryColor,
+        Center(
+          child: GestureDetector(
+            onTap: () => tabTapped(thisPage),
+            child: Container(
+              height: 36,
+              width: 36,
+              child: FlareActor(page['icon'],
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                  animation: (currentPage == thisPage) ? "onClick" : 
+                  (lastPage == thisPage) ? "onLeave" : "idle",
+                  //   color: currentPage != thisPage
+                  //       ? Colors.white70
+                  //       : Theme.of(context).primaryColor,
+                  // ),
+                  ),
+            ),
           ),
-          onPressed: () => tabTapped(thisPage),
         ),
       );
     });
@@ -50,14 +63,11 @@ class NavigationBarWidget extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           height: 70,
           color: Colors.black,
-          child: Transform.translate(
-            offset: Offset(0, -5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: appBarIcons(context),
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: appBarIcons(context),
           ),
         ),
       ],
