@@ -22,6 +22,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   int _page = 0;
   int _itemsPerPage = 10;
   int _length = 0;
+  bool _refreshed = true;
   List<List<Widget>> _activities = [];
   List<List<Widget>> _activitiesOnPage = [];
 
@@ -32,6 +33,9 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   }
 
   void _getActivities() async {
+    setState(() {
+      _refreshed = false;
+    });
     List<dynamic> list = await cloudFirestoreService.getActivities();
     List<List<Widget>> activities = [];
     list.forEach((doc) {
@@ -52,6 +56,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     setState(() {
       _activities = activities;
       _length = _activities.length;
+      _refreshed = true;
     });
     _onPageChanged(0);
   }
@@ -60,7 +65,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     return GestureDetector(
       onTap: () {
         SnackbarWidget.infoBar(
-        context, "This feature is still under develepment.");
+            context, "This feature is still under develepment.");
       },
       child: Align(
         alignment: Alignment.center,
@@ -154,13 +159,18 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             style: Theme.of(context).textTheme.subtitle,
           ),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.refresh,
-            color: Colors.black54,
-          ),
-          onPressed: _getActivities,
-        ),
+        _refreshed
+            ? IconButton(
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.black54,
+                ),
+                onPressed: _getActivities,
+              )
+            : Padding(
+                padding: EdgeInsets.all(15),
+                child: Text("Refreshing..."),
+              ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: _length == 0
