@@ -195,10 +195,14 @@ class CloudFirestoreService {
   void updateStoreStatus(DateTime open, DateTime close) async {
     String uid = await authService.getUid();
     if (uid == null) return;
-    await _db.collection('general').document('storeStatus').setData({
+    Map<String, DateTime> storeData = {
       'openingDate': open,
       'closeingDate': close,
-    });
+    };
+    await _db
+        .collection('general')
+        .document('updates')
+        .updateData({"store": storeData});
   }
 
   Future<bool> deleteRequest(String barcode) async {
@@ -243,10 +247,10 @@ class CloudFirestoreService {
   Future loadStoreStatus() async {
     String uid = await authService.getUid();
     if (uid == null) return false;
-    var data = await _db.collection('general').document('storeStatus').get();
+    var data = await _db.collection('general').document('updates').get();
     var status = {
-      "openingDate": data["openingDate"],
-      "closeingDate": data["closeingDate"],
+      "openingDate": data["store"]["openingDate"],
+      "closeingDate": data["store"]["closeingDate"],
     };
     return status;
   }
@@ -267,6 +271,9 @@ class CloudFirestoreService {
           await _db.collection('store').document(item.barcode.toString()).get();
       if (doc.exists) {
         return "This barcode already exists, the barcode needs to be unique.";
+      }
+      if (oldBarcode != "") {
+        await _db.collection('store').document(oldBarcode).delete();
       }
     }
     if (imageState == "deleted") {
@@ -443,7 +450,7 @@ class CloudFirestoreService {
   Future<String> getLastVersion() async {
     String uid = await authService.getUid();
     if (uid == null) return null;
-    var doc = await _db.collection('general').document('lastUpdated').get();
+    var doc = await _db.collection('general').document('updates').get();
     return doc.data['appVersion'];
   }
 }

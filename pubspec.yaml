@@ -2,7 +2,7 @@ name: cup_and_soup
 description: The official restaurant of the kingdom.
 
 author: Zvi Karp <zvi@zektec.com>
-version: 0.2.0
+version: 0.2.1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -59,6 +59,12 @@ flutter:
    - assets/images/divider.png
    - assets/images/dialogBackground.png
    - assets/images/add.png
+
+   - assets/flare/basket.flr
+   - assets/flare/barcode.flr
+   - assets/flare/user.flr
+   - assets/flare/lock.flr
+   - assets/flare/star.flr
 
    - resources/lang/en.json
    - resources/lang/he.json

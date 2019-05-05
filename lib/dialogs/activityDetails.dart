@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/services/cloudFunctions.dart';
 import 'package:cup_and_soup/widgets/core/dialog.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
-class CustomersDetailsDialog extends StatelessWidget {
-  CustomersDetailsDialog({
-    @required this.userDoc,
+class ActivityDetailsDialog extends StatelessWidget {
+  ActivityDetailsDialog({
+    @required this.type,
+    @required this.name,
+    @required this.amount,
+    @required this.timestamp,
   });
 
-  final dynamic userDoc;
+  final String type;
+  final String name;
+  final double amount;
+  final DateTime timestamp;
 
   Widget _actionSection(BuildContext context) {
     return ButtonWidget(
@@ -17,6 +22,19 @@ class CustomersDetailsDialog extends StatelessWidget {
       onPressed: () => Navigator.pop(context),
       primary: false,
     );
+  }
+
+  TableRow _typeRow(BuildContext context) {
+    return TableRow(children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          "Type:",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Text(type),
+    ]);
   }
 
   TableRow _nameRow(BuildContext context) {
@@ -28,82 +46,46 @@ class CustomersDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(userDoc['name']),
+      Text(name),
     ]);
   }
 
-  TableRow _emailRow(BuildContext context) {
+  TableRow _amountRow(BuildContext context) {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Email:",
+          "Amount:",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(userDoc['email']),
+      Text(amount.toString()),
     ]);
   }
 
-  TableRow _moneyRow(BuildContext context) {
+  TableRow _timestampRow(BuildContext context) {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Money:",
+          "Timestamp:",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(userDoc['money'].toString()),
+      Text(timestamp.toString()),
     ]);
   }
 
-  TableRow _creditRow(BuildContext context) {
+  TableRow _statusRow(BuildContext context) {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Allowed Credit:",
+          "Status:",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(userDoc['allowedCredit'].toString()),
-    ]);
-  }
-
-  TableRow _rolesRow(BuildContext context) {
-    return TableRow(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(
-          "Roles:",
-          style: Theme.of(context).textTheme.body2,
-        ),
-      ),
-      Text(userDoc['roles'].cast<String>().join(", ")),
-    ]);
-  }
-
-  TableRow _disabledRow(context) {
-    return TableRow(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(
-          "Disabled:",
-          style: Theme.of(context).textTheme.body2,
-        ),
-      ),
-      Switch(
-        value: userDoc['disabled'] ?? false,
-        onChanged: (v) async {
-          print(userDoc.documentID.toString());
-          print(v);
-          await cloudFunctionsService.changeUserStatus(
-              userDoc.documentID.toString(), v);
-          Navigator.pop(context);
-        },
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
+      Text("success"),
     ]);
   }
 
@@ -112,12 +94,11 @@ class CustomersDetailsDialog extends StatelessWidget {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       columnWidths: {0: FractionColumnWidth(.3)},
       children: <TableRow>[
+        _typeRow(context),
         _nameRow(context),
-        _emailRow(context),
-        _moneyRow(context),
-        _creditRow(context),
-        _rolesRow(context),
-        _disabledRow(context),
+        _amountRow(context),
+        _timestampRow(context),
+        _statusRow(context),
       ],
     );
   }
@@ -129,7 +110,7 @@ class CustomersDetailsDialog extends StatelessWidget {
       heading: Padding(
         padding: EdgeInsets.all(16),
         child: Text(
-          "Customers Details",
+          "Activity Details",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),

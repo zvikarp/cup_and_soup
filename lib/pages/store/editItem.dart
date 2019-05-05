@@ -36,7 +36,7 @@ class _EditItemPageState extends State<EditItemPage> {
 
   File _imageFile;
   String _imageChanged = "no image";
-  List<String> _tags = [];
+  List<String> _tags = ["setting:visible"];
   bool _loading = false;
 
   void _saveChanges() async {
@@ -75,7 +75,7 @@ class _EditItemPageState extends State<EditItemPage> {
       image: widget.newItem ? "no image" : widget.item.image,
       price: double.parse(priceCtr.text.trim()),
       stock: int.parse(stockCtr.text.trim()),
-      tags: _tags.join(","),
+      tags: _tags,
       hechsherim: hechsherimCtr.text.trim(),
       position: int.tryParse(positionCtr.text) ?? 0,
     );
@@ -106,7 +106,7 @@ class _EditItemPageState extends State<EditItemPage> {
         nameCtr.text = widget.item.name;
         descCtr.text = widget.item.desc;
         priceCtr.text = widget.item.price.toString();
-        _tags = widget.item.tags.split(",");
+        _tags = widget.item.tags;
         stockCtr.text = widget.item.stock.toString();
         positionCtr.text = widget.item.position.toString();
         barcodeCtr.text = widget.item.barcode;
@@ -227,7 +227,7 @@ class _EditItemPageState extends State<EditItemPage> {
     return InputTags(
       backgroundContainer: Theme.of(context).canvasColor,
       color: Colors.black,
-      textStyle: Theme.of(context).textTheme.body1,
+      textStyle: Theme.of(context).textTheme.body1.merge(TextStyle(color: Colors.white)),
       tags: _tags,
       columns: 3,
       onDelete: (tag) => print(tag),

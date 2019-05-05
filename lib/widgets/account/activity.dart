@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/dialogs/activityDetails.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
@@ -22,6 +23,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   int _page = 0;
   int _itemsPerPage = 10;
   int _length = 0;
+  bool _refreshed = true;
   List<List<Widget>> _activities = [];
   List<List<Widget>> _activitiesOnPage = [];
 
@@ -31,7 +33,23 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     _getActivities();
   }
 
+  void _onMorePressed(var doc) {
+    Navigator.of(context).push(
+      TransparentRoute(
+        builder: (BuildContext context) => ActivityDetailsDialog(
+              type: doc['type'],
+              name: doc['desc'],
+              amount: doc['money'].toDouble(),
+              timestamp: dateTimeUtil.stringToDate(doc['timestamp'].toString()),
+            ),
+      ),
+    );
+  }
+
   void _getActivities() async {
+    setState(() {
+      _refreshed = false;
+    });
     List<dynamic> list = await cloudFirestoreService.getActivities();
     List<List<Widget>> activities = [];
     list.forEach((doc) {
@@ -46,21 +64,21 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Text(doc['desc'].toString()),
         Text(doc['money'].toString()),
         Center(child: _date(doc['timestamp'].toString())),
-        _more(),
+        _more(doc),
       ]);
     });
     setState(() {
       _activities = activities;
       _length = _activities.length;
+      _refreshed = true;
     });
     _onPageChanged(0);
   }
 
-  Widget _more() {
+  Widget _more(var doc) {
     return GestureDetector(
       onTap: () {
-        SnackbarWidget.infoBar(
-        context, "This feature is still under develepment.");
+        _onMorePressed(doc);
       },
       child: Align(
         alignment: Alignment.center,
@@ -72,7 +90,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             color: Colors.black,
           ),
           child: Icon(
-            Icons.keyboard_arrow_down,
+            Icons.navigate_next,
             size: 16,
             color: Colors.grey[200],
           ),
@@ -105,6 +123,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     } else if (type == "credit") {
       return Icon(
         Icons.atm,
+        size: 16,
+      );
+    } else if (type == "discount") {
+      return Icon(
+        Icons.attach_money,
         size: 16,
       );
     } else {
@@ -149,13 +172,18 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             style: Theme.of(context).textTheme.subtitle,
           ),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.refresh,
-            color: Colors.black54,
-          ),
-          onPressed: _getActivities,
-        ),
+        _refreshed
+            ? IconButton(
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.black54,
+                ),
+                onPressed: _getActivities,
+              )
+            : Padding(
+                padding: EdgeInsets.all(15),
+                child: Text("Refreshing..."),
+              ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: _length == 0

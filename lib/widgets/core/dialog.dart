@@ -7,6 +7,7 @@ class DialogWidget extends StatelessWidget {
     @required this.child,
     @required this.actionSection,
     @required this.heading,
+    this.scrollable = false,
     this.padding = const EdgeInsets.all(0.0),
     this.margin = const EdgeInsets.all(16.0),
     this.blurColor = const Color(0x10ffffff),
@@ -16,6 +17,7 @@ class DialogWidget extends StatelessWidget {
   final Widget child;
   final Widget heading;
   final Widget actionSection;
+  final bool scrollable;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
   final Color shadowColor;
@@ -53,7 +55,10 @@ class DialogWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   heading,
-                  Expanded(child: SingleChildScrollView(child: child)),
+                  Expanded(child: scrollable ?
+                  SingleChildScrollView(child: child) :
+                  Center(child:child),
+                  ),
                   actionSection,
                 ],
               ),

@@ -36,11 +36,11 @@ class _StorePageState extends State<StorePage> {
           );
         },
         child: Center(
-              child: Image.asset(
-                "assets/images/add.png",
-                height: 50,
-              ),
-            ),
+          child: Image.asset(
+            "assets/images/add.png",
+            height: 50,
+          ),
+        ),
       ),
     );
   }
@@ -83,8 +83,8 @@ class _StorePageState extends State<StorePage> {
                   _discount['usageLimit'].toString() +
                   " more times, until " +
                   dateTimeUtil.date(_discount['expiringDate'].toDate()) +
-                  " " + 
-                  dateTimeUtil.time(_discount['expiringDate'].toDate()) + 
+                  " " +
+                  dateTimeUtil.time(_discount['expiringDate'].toDate()) +
                   ", enjoy!")),
         ],
       ),
@@ -106,7 +106,16 @@ class _StorePageState extends State<StorePage> {
         children: <Widget>[
           _discount == null ? Container() : _discountContainer(),
           StreamBuilder(
-              stream: Firestore.instance.collection('store').orderBy('position').snapshots(),
+              stream: widget.isAdmin
+                  ? Firestore.instance
+                      .collection('store')
+                      .orderBy('position')
+                      .snapshots()
+                  : Firestore.instance
+                      .collection('store')
+                      .orderBy('position')
+                      .where("tags", arrayContains: "setting:visible")
+                      .snapshots(),
               builder: (context, snapshot) {
                 int length = 0;
                 if (snapshot.hasData && snapshot.data.documents != null)
@@ -132,7 +141,7 @@ class _StorePageState extends State<StorePage> {
                       price: doc['price'],
                       stock: doc['stock'],
                       position: doc['position'],
-                      tags: doc['tags'],
+                      tags: (doc['tags'] ?? []).cast<String>().toList(),
                       hechsherim: doc['hechsherim'],
                     );
 

@@ -31,7 +31,7 @@ class _SigninDialogState extends State<SigninDialog> {
     return DialogWidget(
       heading: Container(),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 70, horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

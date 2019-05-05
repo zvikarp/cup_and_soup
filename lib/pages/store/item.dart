@@ -11,6 +11,20 @@ class ItemPage extends StatelessWidget {
 
   final Item item;
 
+  List<Tag> _getTags() {
+    List<String> tags = [];
+    for (String t in item.tags) {
+      if (t.split(':').first != "setting")
+      tags.add(t);
+    }
+    return (tags).map((tag) {
+      return Tag(
+        title: tag.split(':').last,
+        active: false,
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +44,15 @@ class ItemPage extends StatelessWidget {
                         child: Hero(
                           tag: item.barcode,
                           child: item.image != "no image"
-                      ? FadeInImage.assetNetwork(
-                          placeholder: 'assets/images/loading.png',
-                          image: item.image,
-                          fit: BoxFit.contain,
-                        )
-                      : Image.asset(
-                          'assets/images/loading.png',
-                          fit: BoxFit.contain,
-                        ),
+                              ? FadeInImage.assetNetwork(
+                                  placeholder: 'assets/images/loading.png',
+                                  image: item.image,
+                                  fit: BoxFit.contain,
+                                )
+                              : Image.asset(
+                                  'assets/images/loading.png',
+                                  fit: BoxFit.contain,
+                                ),
                         ),
                       ),
                     ),
@@ -46,7 +60,8 @@ class ItemPage extends StatelessWidget {
                       right: 60.0,
                       top: 40.0,
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 6, horizontal: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: item.stock > 0
@@ -70,8 +85,7 @@ class ItemPage extends StatelessWidget {
                 ),
                 Text(
                   "Hechsher: " +
-                      (item.hechsherim.toString() ?? "Not kosher..") +
-                      ".",
+                      (item.hechsherim.toString() ?? "Not kosher.."),
                   style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(
@@ -87,12 +101,7 @@ class ItemPage extends StatelessWidget {
                   textActiveColor: Theme.of(context).primaryColor,
                   textColor: Theme.of(context).primaryColor,
                   textStyle: Theme.of(context).textTheme.body1,
-                  tags: (item.tags.split(",")).map((tag) {
-                    return Tag(
-                      title: tag.split(':').last,
-                      active: false,
-                    );
-                  }).toList(),
+                  tags: _getTags(),
                   columns: 3,
                   onPressed: (tag) => print(tag),
                 ),

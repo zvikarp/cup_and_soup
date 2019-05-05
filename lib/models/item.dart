@@ -17,7 +17,7 @@ class Item {
   String desc;
   String image;
   double price;
-  String tags;
+  List<String> tags;
   int stock;
   int position;
   String hechsherim;

@@ -97,6 +97,7 @@ class _FeadbackFormDialogState extends State<FeadbackFormDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogWidget(
+      scrollable: true,
       heading: Padding(
         padding: EdgeInsets.all(16),
         child: Text(
