@@ -60,6 +60,12 @@ flutter:
    - assets/images/dialogBackground.png
    - assets/images/add.png
 
+   - assets/flare/basket.flr
+   - assets/flare/barcode.flr
+   - assets/flare/user.flr
+   - assets/flare/lock.flr
+   - assets/flare/star.flr
+
    - resources/lang/en.json
    - resources/lang/he.json
 

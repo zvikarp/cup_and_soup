@@ -29,29 +29,30 @@ class _HomePageState extends State<HomePage> {
 
   Map<String, Map<String, dynamic>> _allPages = {
     'account': {
-      'icon': Icons.account_circle,
+      'icon': "assets/flare/user.flr",
       'page': AccountPage(),
     },
     'store': {
-      'icon': Icons.shopping_cart,
+      'icon': "assets/flare/basket.flr",
       'page': StorePage(),
     },
     'admin': {
-      'icon': Icons.work,
+      'icon': "assets/flare/lock.flr",
       'page': AdminPage(),
     },
     'scanner': {
-      'icon': Icons.center_focus_strong,
+      'icon': "assets/flare/barcode.flr",
       'page': ScannerPage(goToStore: () => null)
     },
     'insider': {
-      'icon': Icons.star,
+      'icon': "assets/flare/star.flr",
       'page': InsiderPage(),
     },
   };
 
   Map<String, Map<String, dynamic>> _pages = {};
   String _currentPage = 'store';
+  String _lastPage = "";
 
   void _getUserData() async {
     Map userData = await cloudFirestoreService.getUserData();
@@ -130,6 +131,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onTabTaped(String page) {
     setState(() {
+      _lastPage = _currentPage;
       _currentPage = page;
     });
   }
@@ -143,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                 : StorePage(),
             bottomNavigationBar: NavigationBarWidget(
               currentPage: _currentPage,
+              lastPage: _lastPage,
               tabTapped: _onTabTaped,
               pages: _pages,
             ),
