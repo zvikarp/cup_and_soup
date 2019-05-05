@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:cup_and_soup/dialogs/block.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/firebaseMessaging.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/dialogs/block.dart';
 import 'package:cup_and_soup/pages/home/insider.dart';
 import 'package:cup_and_soup/pages/home/store.dart';
 import 'package:cup_and_soup/pages/home/account.dart';
 import 'package:cup_and_soup/pages/home/scanner.dart';
 import 'package:cup_and_soup/pages/home/admin.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/home/navigationBar.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   _HomePageState createState() => _HomePageState();
 
-  static String getVersion() => "v0.1.1";
+  static String getVersion() => "v0.2.0";
   static Future<bool> newVersion() async {
     String lastVersion = await cloudFirestoreService.getLastVersion();
     return (getVersion() == lastVersion);
@@ -115,30 +115,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  void firebaseCloudMessagingListeners() {
-    _firebaseMessaging.getToken().then((token) {
-      print(token);
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    firebaseCloudMessagingListeners();
+    firebaseMessagingService.firebaseCloudMessagingListeners(context);
     setState(() {
       _allPages['scanner']['page'] =
           ScannerPage(goToStore: () => _onTabTaped('store'));

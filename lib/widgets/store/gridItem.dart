@@ -86,10 +86,7 @@ class GridItemWidget extends StatelessWidget {
                     Text(
                       _hot() + " ${item.price.toString()} NIS",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "PrimaryFont",
-                        fontSize: 28,
-                      ),
+                      style: Theme.of(context).textTheme.title,
                     ),
                   ],
                 ),

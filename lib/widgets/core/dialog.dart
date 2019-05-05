@@ -1,12 +1,12 @@
 import 'dart:ui' as ui;
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 class DialogWidget extends StatelessWidget {
   DialogWidget({
     @required this.child,
-    this.backgroundColor = const Color(0xffffffff),
+    @required this.actionSection,
+    @required this.heading,
     this.padding = const EdgeInsets.all(0.0),
     this.margin = const EdgeInsets.all(16.0),
     this.blurColor = const Color(0x10ffffff),
@@ -14,25 +14,30 @@ class DialogWidget extends StatelessWidget {
   });
 
   final Widget child;
-  final Color backgroundColor;
+  final Widget heading;
+  final Widget actionSection;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry margin;
   final Color shadowColor;
   final Color blurColor;
 
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: blurColor,
-      body: SafeArea(
-        child: BackdropFilter(
-          filter: ui.ImageFilter.blur(
-            sigmaX: 6.0,
-            sigmaY: 6.0,
-          ),
+      body: BackdropFilter(
+        filter: ui.ImageFilter.blur(
+          sigmaX: 6.0,
+          sigmaY: 6.0,
+        ),
+        child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: backgroundColor,
+              image: new DecorationImage(
+                image: new AssetImage("assets/images/dialogBackground.png"),
+                fit: BoxFit.contain,
+              ),
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 new BoxShadow(
@@ -41,29 +46,17 @@ class DialogWidget extends StatelessWidget {
                 )
               ],
             ),
-            margin: EdgeInsets.symmetric(horizontal: 42.0, vertical: 120.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Transform.rotate(
-                  angle: -math.pi / 1.0,
-                  child: Image.asset(
-                    "assets/images/navBar.png",
-                    height: 30,
-                    alignment: Alignment(0, -1),
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(child:SingleChildScrollView(child: child)),
-                Image.asset(
-                  "assets/images/navBar.png",
-                  height: 30,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: Alignment(0, -1),
-                ),
-              ],
+            margin: EdgeInsets.symmetric(horizontal: 42.0, vertical: 80.0),
+            child: AspectRatio(
+              aspectRatio: 753 / 1183,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  heading,
+                  Expanded(child: SingleChildScrollView(child: child)),
+                  actionSection,
+                ],
+              ),
             ),
           ),
         ),

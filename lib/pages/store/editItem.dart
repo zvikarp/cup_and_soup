@@ -1,13 +1,13 @@
 import 'dart:io';
-import 'package:cup_and_soup/dialogs/action.dart';
-import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/models/item.dart';
+import 'package:cup_and_soup/dialogs/action.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/store/editItem/imagePicker.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/core/textFieldWrapper.dart';
@@ -121,19 +121,13 @@ class _EditItemPageState extends State<EditItemPage> {
       child: TextFieldWrapperWidget(
         prefix: Text(
           "Name: ",
-          style: TextStyle(
-            fontFamily: "BrandFont",
-            fontSize: 65,
-          ),
+          style: Theme.of(context).textTheme.headline,
         ),
         textField: TextFormField(
           controller: nameCtr,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.words,
-          style: TextStyle(
-            fontFamily: "BrandFont",
-            fontSize: 65,
-          ),
+          style: Theme.of(context).textTheme.headline,
         ),
       ),
     );
@@ -148,10 +142,7 @@ class _EditItemPageState extends State<EditItemPage> {
           controller: hechsherimCtr,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.sentences,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -167,10 +158,7 @@ class _EditItemPageState extends State<EditItemPage> {
           maxLines: 7,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.sentences,
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -185,10 +173,7 @@ class _EditItemPageState extends State<EditItemPage> {
           controller: priceCtr,
           decoration: InputDecoration(border: InputBorder.none),
           keyboardType: TextInputType.numberWithOptions(),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -203,10 +188,7 @@ class _EditItemPageState extends State<EditItemPage> {
           controller: stockCtr,
           decoration: InputDecoration(border: InputBorder.none),
           keyboardType: TextInputType.numberWithOptions(),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -220,10 +202,7 @@ class _EditItemPageState extends State<EditItemPage> {
         textField: TextFormField(
           controller: barcodeCtr,
           decoration: InputDecoration(border: InputBorder.none),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -238,10 +217,7 @@ class _EditItemPageState extends State<EditItemPage> {
           controller: positionCtr,
           decoration: InputDecoration(border: InputBorder.none),
           keyboardType: TextInputType.numberWithOptions(),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.body1,
         ),
       ),
     );
@@ -251,11 +227,7 @@ class _EditItemPageState extends State<EditItemPage> {
     return InputTags(
       backgroundContainer: Theme.of(context).canvasColor,
       color: Colors.black,
-      textStyle: TextStyle(
-        fontFamily: "PrimaryFont",
-        fontSize: 18,
-        color: Colors.white,
-      ),
+      textStyle: Theme.of(context).textTheme.body1,
       tags: _tags,
       columns: 3,
       onDelete: (tag) => print(tag),
@@ -289,18 +261,15 @@ class _EditItemPageState extends State<EditItemPage> {
               _tagsInput(),
               SizedBox(height: 24),
               DoubleButtonWidget(
-                leftText: "Cancel",
-                leftOnPressed: () {
-                  Navigator.pop(context);
-                },
-                rightText: _loading ? "Saving..." : "Save",
+                leftText: "CANCEL",
+                leftOnPressed: () => Navigator.pop(context),
+                rightText: _loading ? "SAVING..." : "SAVE",
                 rightOnPressed: _saveChanges,
               ),
               !widget.newItem
                   ? ButtonWidget(
                       primary: false,
-                      size: "small",
-                      text: "Delete Item",
+                      text: "DELETE ITEM",
                       onPressed: () async {
                         bool res = await Navigator.of(context).push(
                           TransparentRoute(

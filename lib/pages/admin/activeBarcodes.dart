@@ -1,13 +1,13 @@
-import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
-import 'package:cup_and_soup/widgets/core/page.dart';
-import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/dialogs/action.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/widgets/core/page.dart';
+import 'package:cup_and_soup/widgets/core/table.dart';
+import 'package:cup_and_soup/widgets/core/button.dart';
 
 class ActiveBarcodesPage extends StatefulWidget {
   @override
@@ -22,7 +22,10 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       items.add([
         Container(
           alignment: Alignment(-1, 0),
-          child: _typeIcon(doc['type']),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: _typeIcon(doc['type']),
+          ),
         ),
         Text(doc['amount'].toString()),
         _content(doc),
@@ -44,11 +47,11 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       cloudFirestoreService.deleteBarcode(barcode);
     }
   }
- 
+
   Widget _delete(String barcode) {
     return GestureDetector(
       onTap: () => _onDeletePressed(barcode),
-          child: Icon(
+      child: Icon(
         Icons.delete,
         size: 16,
       ),
@@ -64,8 +67,7 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
         text = "can be scanned " + doc['quantity'].toString() + " more times";
         if (doc['userLimit']) text += ", one per user";
       }
-    }
-    else if (doc['type'] == 'discount') {
+    } else if (doc['type'] == 'discount') {
       if (doc['quantity'] == -1) {
         text = "one time code";
       } else {
@@ -74,8 +76,7 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       }
       if (doc['usageLimit'] != -1)
         text += ", and used " + doc['usageLimit'].toString() + " times";
-    }
-    else if (doc['type'] == 'credit') {
+    } else if (doc['type'] == 'credit') {
       text = "---";
     }
     return Text(text);
@@ -112,19 +113,11 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
       children: <Widget>[
         Text(
           "expiring at:",
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
         Text(
           dateTimeUtil.date(date) + " " + dateTimeUtil.time(date),
-          style: TextStyle(
-            fontFamily: "PrimaryFont",
-            color: Colors.black54,
-            fontSize: 12,
-          ),
+          style: Theme.of(context).textTheme.caption,
         ),
       ],
     );
@@ -156,17 +149,14 @@ class _ActiveBarcodesPageState extends State<ActiveBarcodesPage> {
                     return TableWidget(
                       headings: [" ", " ", " ", " ", " "],
                       items: _docsToItem(snapshot.data.documents),
-                      flex: [1, 2, 5, 3, 1],
+                      flex: [.2, .1, .3, .3, .1],
                     );
                   }),
             ),
             ButtonWidget(
-              text: "back",
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              text: "BACK",
+              onPressed: () => Navigator.pop(context),
               primary: false,
-              size: "small",
             ),
           ],
         ),

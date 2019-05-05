@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
+
 import 'package:cup_and_soup/widgets/core/dialog.dart';
-import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
 class MessageDialog extends StatelessWidget {
   MessageDialog({
     @required this.responseCode,
-    this.flareActor,
   });
 
   final String responseCode;
-  final FlareActor flareActor;
 
   Widget _icon(String type) {
     if (type == 's')
@@ -136,15 +133,15 @@ class MessageDialog extends StatelessWidget {
   }
 
   Widget _actionSection(BuildContext context, String type) {
-    String buttonText = "back";
-    if (type == 's') buttonText = "Ok";
-    return ButtonWidget(
-      text: buttonText,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      primary: false,
-      size: "small",
+    String buttonText = "BACK";
+    if (type == 's') buttonText = "OK";
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: ButtonWidget(
+        text: buttonText,
+        onPressed: () => Navigator.pop(context),
+        primary: false,
+      ),
     );
   }
 
@@ -152,9 +149,20 @@ class MessageDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     String type = responseCode.split("-").last.replaceFirst('g', '')[0];
     return DialogWidget(
+      heading: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "Message",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.title,
+            ),
+          ),
         child: Column(
       children: <Widget>[
-        _icon(type),
+        Padding(
+          padding: const EdgeInsets.all(24),
+          child: _icon(type),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
           child: Text(
@@ -162,9 +170,9 @@ class MessageDialog extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        DividerWidget(),
-        _actionSection(context, type),
       ],
-    ));
+    ),
+    actionSection: _actionSection(context, type),
+    );
   }
 }
