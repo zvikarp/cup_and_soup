@@ -2,7 +2,7 @@ name: cup_and_soup
 description: The official restaurant of the kingdom.
 
 author: Zvi Karp <zvi@zektec.com>
-version: 0.2.0
+version: 0.2.1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
