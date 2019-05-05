@@ -106,7 +106,7 @@ class _EditItemPageState extends State<EditItemPage> {
         nameCtr.text = widget.item.name;
         descCtr.text = widget.item.desc;
         priceCtr.text = widget.item.price.toString();
-        _tags = widget.item.tags.split(",");
+        _tags = widget.item.tags == "" ? [] : widget.item.tags.split(",");
         stockCtr.text = widget.item.stock.toString();
         positionCtr.text = widget.item.position.toString();
         barcodeCtr.text = widget.item.barcode;
