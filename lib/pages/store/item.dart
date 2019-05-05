@@ -82,8 +82,7 @@ class ItemPage extends StatelessWidget {
                 ),
                 Text(
                   "Hechsher: " +
-                      (item.hechsherim.toString() ?? "Not kosher..") +
-                      ".",
+                      (item.hechsherim.toString() ?? "Not kosher.."),
                   style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(

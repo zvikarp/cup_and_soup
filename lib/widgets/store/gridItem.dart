@@ -60,6 +60,12 @@ class GridItemWidget extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Container(
+          foregroundDecoration: item.stock < 1
+              ? BoxDecoration(
+                  color: Colors.grey,
+                  backgroundBlendMode: BlendMode.saturation,
+                )
+              : BoxDecoration(),
           margin: EdgeInsets.all(16),
           child: Stack(
             children: <Widget>[
@@ -86,7 +92,10 @@ class GridItemWidget extends StatelessWidget {
                     Text(
                       _hot() + " ${item.price.toString()} NIS",
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme.of(context).textTheme.title.merge(TextStyle(
+                          color: item.stock < 1
+                              ? Colors.grey[300]
+                              : Colors.black)),
                     ),
                   ],
                 ),
