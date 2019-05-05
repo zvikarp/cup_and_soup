@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
-import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/dialogs/activityDetails.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
@@ -32,6 +33,19 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     _getActivities();
   }
 
+  void _onMorePressed(var doc) {
+    Navigator.of(context).push(
+      TransparentRoute(
+        builder: (BuildContext context) => ActivityDetailsDialog(
+              type: doc['type'],
+              name: doc['desc'],
+              amount: doc['money'].toDouble(),
+              timestamp: dateTimeUtil.stringToDate(doc['timestamp'].toString()),
+            ),
+      ),
+    );
+  }
+
   void _getActivities() async {
     setState(() {
       _refreshed = false;
@@ -50,7 +64,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         Text(doc['desc'].toString()),
         Text(doc['money'].toString()),
         Center(child: _date(doc['timestamp'].toString())),
-        _more(),
+        _more(doc),
       ]);
     });
     setState(() {
@@ -61,11 +75,10 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     _onPageChanged(0);
   }
 
-  Widget _more() {
+  Widget _more(var doc) {
     return GestureDetector(
       onTap: () {
-        SnackbarWidget.infoBar(
-            context, "This feature is still under develepment.");
+        _onMorePressed(doc);
       },
       child: Align(
         alignment: Alignment.center,
@@ -77,7 +90,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             color: Colors.black,
           ),
           child: Icon(
-            Icons.keyboard_arrow_down,
+            Icons.navigate_next,
             size: 16,
             color: Colors.grey[200],
           ),
