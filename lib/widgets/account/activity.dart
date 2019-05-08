@@ -40,7 +40,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
               type: doc['type'],
               name: doc['desc'],
               amount: doc['money'].toDouble(),
-              timestamp: dateTimeUtil.stringToDate(doc['timestamp'].toString()),
+              timestamp: dateTimeUtil.timestampStringToDate(doc['timestamp'].toString()),
             ),
       ),
     );
@@ -67,11 +67,13 @@ class _ActivityWidgetState extends State<ActivityWidget> {
         _more(doc),
       ]);
     });
+    if (mounted) {
     setState(() {
       _activities = activities;
       _length = _activities.length;
       _refreshed = true;
     });
+    }
     _onPageChanged(0);
   }
 
@@ -139,7 +141,7 @@ class _ActivityWidgetState extends State<ActivityWidget> {
   }
 
   Widget _date(String stringDate) {
-    DateTime date = dateTimeUtil.stringToDate(stringDate);
+    DateTime date = dateTimeUtil.timestampStringToDate(stringDate);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

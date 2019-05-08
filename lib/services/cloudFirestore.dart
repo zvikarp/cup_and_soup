@@ -16,6 +16,17 @@ class CloudFirestoreService {
   Map<String, dynamic> _userData;
   List<dynamic> _activityList = [];
 
+/* ITEMS >>> */
+
+  Future<List<Item>> getUpdatedItems(DateTime lastUpdatedDateTime, String role) async {
+    QuerySnapshot snapshot = await _db.collection('store').where("lastUpdated", isGreaterThan: lastUpdatedDateTime).getDocuments();
+    if (snapshot.documents.isNotEmpty)
+      return snapshot.documents.map((item) => Item.fromFirestore(item.documentID, item.data)).toList();
+    else return [];
+  }
+
+/* <<< ITEMS */
+
   Future<List<String>> getRoles() async {
     if (_userData != null) {
       return _userData['roles'].cast<String>();

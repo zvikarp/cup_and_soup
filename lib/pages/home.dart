@@ -71,8 +71,6 @@ class _HomePageState extends State<HomePage> {
       );
     }
     var storeStatus = await cloudFirestoreService.loadStoreStatus();
-    print(DateTime.now());
-    print(storeStatus['closeingDate'].toDate());
     if (DateTime.now().isAfter(storeStatus['closeingDate'].toDate()) &&
         DateTime.now().isBefore(storeStatus['openingDate'].toDate())) {
       if (_roles.contains("admin")) {

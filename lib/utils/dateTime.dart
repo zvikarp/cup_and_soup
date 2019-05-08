@@ -1,7 +1,11 @@
 import 'package:intl/intl.dart';
 
 class DateTimeUtil {
-  DateTime stringToDate(String string) {
+  DateTime dateStringToDate(String string) {
+    return DateTime.parse(string);
+  }
+
+  DateTime timestampStringToDate(String string) {
     DateTime date = new DateTime.fromMillisecondsSinceEpoch(int.parse(string));
     return date;
   }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:cup_and_soup/widgets/core/page.dart';
+import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/sqflite.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/utils/dateTime.dart';
 import 'package:cup_and_soup/pages/store/item.dart';
 import 'package:cup_and_soup/pages/store/editItem.dart';
 import 'package:cup_and_soup/widgets/store/gridItem.dart';
-import 'package:cup_and_soup/models/item.dart';
-import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/widgets/core/page.dart';
 
 class StorePage extends StatefulWidget {
   StorePage({
@@ -91,10 +90,21 @@ class _StorePageState extends State<StorePage> {
     );
   }
 
+  void _dataStream() {
+    sqfliteService.loadItems("customer");
+  }
+
   @override
   void initState() {
     _checkDiscount();
+    _dataStream();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // dataBridgeUtil.cancelItemStream();
   }
 
   @override
@@ -106,20 +116,21 @@ class _StorePageState extends State<StorePage> {
         children: <Widget>[
           _discount == null ? Container() : _discountContainer(),
           StreamBuilder(
-              stream: widget.isAdmin
-                  ? Firestore.instance
-                      .collection('store')
-                      .orderBy('position')
-                      .snapshots()
-                  : Firestore.instance
-                      .collection('store')
-                      .orderBy('position')
-                      .where("tags", arrayContains: "setting:visible")
-                      .snapshots(),
+              // stream: widget.isAdmin
+              //     ? Firestore.instance
+              //         .collection('store')
+              //         .orderBy('position')
+              //         .snapshots()
+              //     : Firestore.instance
+              //         .collection('store')
+              //         .orderBy('position')
+              //         .where("tags", arrayContains: "setting:visible")
+              //         .snapshots(),
+              stream: sqfliteService.streamItems(),
               builder: (context, snapshot) {
                 int length = 0;
-                if (snapshot.hasData && snapshot.data.documents != null)
-                  length += (snapshot.data.documents.length ?? 0);
+                if (snapshot.data != null)
+                  length += (snapshot.data.length ?? 0);
                 return GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -132,18 +143,18 @@ class _StorePageState extends State<StorePage> {
                     if (index == length) {
                       return _addItemButton();
                     }
-                    var doc = snapshot.data.documents[index];
-                    Item item = Item(
-                      barcode: doc.documentID,
-                      name: doc['name'],
-                      desc: doc['desc'],
-                      image: doc['image'],
-                      price: doc['price'],
-                      stock: doc['stock'],
-                      position: doc['position'],
-                      tags: (doc['tags'] ?? []).cast<String>().toList(),
-                      hechsherim: doc['hechsherim'],
-                    );
+                    var item = snapshot.data[index];
+                    // Item item = Item(
+                    //   barcode: doc.bar,
+                    //   name: doc['name'],
+                    //   desc: doc['desc'],
+                    //   image: doc['image'],
+                    //   price: doc['price'],
+                    //   stock: doc['stock'],
+                    //   position: doc['position'],
+                    //   tagsList: (doc['tags'] ?? []).cast<String>().toList(),
+                    //   hechsherim: doc['hechsherim'],
+                    // );
 
                     return GridItemWidget(
                         item: item,
