@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cup_and_soup/services/firebaseStorage.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:cup_and_soup/services/cloudFunctions.dart';
+import 'package:cup_and_soup/services/firebaseStorage.dart';
 import 'package:cup_and_soup/services/auth.dart';
 import 'package:cup_and_soup/models/item.dart';
 
@@ -276,7 +277,7 @@ class CloudFirestoreService {
     String uid = await authService.getUid();
     if (uid == null)
       return "Can't connect to your account, try restarting the app.";
-    String imageUrl = item.image;
+    String imageUrl = item.remoteImage;
     if (oldBarcode != item.barcode) {
       var doc =
           await _db.collection('store').document(item.barcode.toString()).get();
@@ -296,7 +297,8 @@ class CloudFirestoreService {
       await firebaseStorageService.deleteImage(imageUrl);
       imageUrl = await firebaseStorageService.uploadImage(image, item.barcode);
     }
-    await _db.collection('store').document(item.barcode.toString()).setData({
+    await cloudFunctionsService.updateItemStock(item.barcode, item.stock);
+    await _db.collection('store').document(item.barcode.toString()).updateData({
       'name': item.name,
       'desc': item.desc,
       'price': item.price,
@@ -304,7 +306,8 @@ class CloudFirestoreService {
       'tags': item.tags,
       'stock': item.stock,
       'position': item.position,
-      'hechsherim': item.hechsherim
+      'hechsherim': item.hechsherim,
+      'lastUpdated': item.lastUpdated
     });
     return "ok";
   }
@@ -426,7 +429,8 @@ class CloudFirestoreService {
       name: doc.data['name'],
       desc: doc.data['desc'],
       hechsherim: doc.data['hechsherim'],
-      image: doc.data['image'],
+      remoteImage: doc.data['image'],
+      localImage: "",
       price: doc.data['price'],
       stock: doc.data['stock'],
       tags: doc.data['tags'],

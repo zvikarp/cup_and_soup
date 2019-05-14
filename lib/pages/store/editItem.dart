@@ -8,9 +8,9 @@ import 'package:cup_and_soup/models/item.dart';
 import 'package:cup_and_soup/dialogs/action.dart';
 import 'package:cup_and_soup/widgets/core/doubleButton.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
-import 'package:cup_and_soup/widgets/store/editItem/imagePicker.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:cup_and_soup/widgets/core/textFieldWrapper.dart';
+import 'package:cup_and_soup/widgets/store/editItem/imagePicker.dart';
 
 class EditItemPage extends StatefulWidget {
   EditItemPage({
@@ -69,15 +69,16 @@ class _EditItemPageState extends State<EditItemPage> {
       return;
     }
     Item item = Item(
-      barcode: barcodeCtr.text.trim(),
+      barcode: widget.newItem ? barcodeCtr.text.trim() : widget.item.barcode,
       name: nameCtr.text.trim(),
       desc: descCtr.text,
-      image: widget.newItem ? "no image" : widget.item.image,
+      remoteImage: _imagePath(),
       price: double.parse(priceCtr.text.trim()),
       stock: int.parse(stockCtr.text.trim()),
       tags: _tags,
       hechsherim: hechsherimCtr.text.trim(),
       position: int.tryParse(positionCtr.text) ?? 0,
+      lastUpdated: DateTime.now(),
     );
     String res = await cloudFirestoreService.updateItem(item, _imageFile,
         _imageChanged, !widget.newItem ? widget.item.barcode : "");
@@ -201,6 +202,7 @@ class _EditItemPageState extends State<EditItemPage> {
         prefix: Text("Barcode: "),
         textField: TextFormField(
           controller: barcodeCtr,
+          enabled: widget.newItem,
           decoration: InputDecoration(border: InputBorder.none),
           style: Theme.of(context).textTheme.body1,
         ),
@@ -235,6 +237,15 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
+  String _imagePath() {
+    if (widget.newItem)
+      return "no image";
+    else if ((widget.item.remoteImage != null) && (widget.item.remoteImage != ""))
+      return widget.item.remoteImage;
+    else
+      return "no image";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,8 +258,7 @@ class _EditItemPageState extends State<EditItemPage> {
               Hero(
                   tag: !widget.newItem ? widget.item.barcode : "new",
                   child: ImagePickerWidget(
-                    currantImage:
-                        !widget.newItem ? widget.item.image : "no image",
+                    currantImage: widget.newItem ? "no image" : (widget.item.remoteImage != null) && (widget.item.remoteImage != "") && (widget.item.remoteImage != "no image") ? widget.item.remoteImage : "no image",
                     onImageChanged: _onImageChanged,
                   )),
               _nameInput(),

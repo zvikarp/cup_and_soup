@@ -5,6 +5,7 @@ import 'package:rxdart/subjects.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' show get;
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
@@ -37,7 +38,8 @@ class SqfliteService {
         "barcode TEXT PRIMARY KEY,"
         "name TEXT,"
         "price REAL,"
-        "image TEXT,"
+        "remoteImage TEXT,"
+        "localImage TEXT,"
         "desc TEXT,"
         "tags TEXT,"
         "hechsherim TEXT,"
@@ -53,6 +55,22 @@ class SqfliteService {
   /* <<< SETUP */
 
   /* SETTINGS >>> */
+
+  Map<String, BehaviorSubject<String>> _settingsStreamMap = {};
+
+  Stream streamSetting(String setting) {
+    if (!_settingsStreamMap.containsKey(setting)) {
+      _settingsStreamMap.putIfAbsent(setting, () => BehaviorSubject());
+      getSetting(setting).then((value) {
+        _settingsStreamMap[setting].add(value);
+      });
+    }
+    return _settingsStreamMap[setting].stream;
+  }
+
+  void updateStreamSetting(String key, String value) {
+    if (_settingsStreamMap.containsKey(key)) _settingsStreamMap[key].add(value);
+  }
 
   Future<String> getSetting(String key, [String initValue]) async {
     final db = await database;
@@ -89,6 +107,7 @@ class SqfliteService {
   List<Item> _items = [];
 
   Stream streamItems() => _itemsStream.stream;
+
   void updateItems(List<Item> items) {
     print(items);
     _items = items;
@@ -98,25 +117,15 @@ class SqfliteService {
   void loadItems(String role) async {
     List<Item> localItems = await getLocalItems(role);
     updateItems(localItems.toList());
-    print("1 > " + localItems.toString());
     String lastUpdatedAsString =
         await getSetting("lastUpdatedStore", DateTime(1970).toString());
-        print("l1" + localItems.toString());
     DateTime lastUpdated = dateTimeUtil.dateStringToDate(lastUpdatedAsString);
-    print("2 > " + lastUpdated.toString());
-    print("l2" + localItems.toString());
     List<Item> newItems =
         await cloudFirestoreService.getUpdatedItems(lastUpdated, role);
-        print("3 > " + newItems.toString());
-        print("l3" + localItems.toString());
     List<Item> updatedItems = mergeUpdatedItems(_items, newItems);
-    print("4 > " + updatedItems.toString());
-    print("l4" + localItems.toString());
     updateItems(updatedItems);
-    print("l5" + localItems.toString());
     updateLocalItems(localItems, newItems);
     DateTime lastItemUpdated = getLastItemUpdated(newItems);
-    print("5 > " + lastItemUpdated.toString());
     if (lastItemUpdated != null)
       await updateSetting("lastUpdatedStore", lastItemUpdated.toString());
   }
@@ -133,15 +142,12 @@ class SqfliteService {
   List<Item> mergeUpdatedItems(List<Item> initalItems, List<Item> newItems) {
     for (Item item in newItems) {
       String barcode = item.barcode;
-      print("6.5 > " + barcode);
       int index =
           initalItems.indexWhere((Item item) => item.barcode == barcode);
-      if (index < 0) {
-      print("6 > " + item.toString());
+      if (index < 0)
         initalItems.add(item);
-       } else{
+      else
         initalItems[index] = item;
-        print("7 > " + item.toString());}
     }
     return initalItems;
   }
@@ -149,17 +155,13 @@ class SqfliteService {
   void updateLocalItems(List<Item> initalItems, List<Item> newItems) {
     for (Item item in newItems) {
       String barcode = item.barcode;
-      print("10 > " + barcode);
       int index =
           initalItems.indexWhere((Item item) => item.barcode == barcode);
-      print("7.4 > " + initalItems.toString());
-      if (index > 0) {
-        print("7.5 > " + index.toString());
-        print("8 > " + item.toString());
-        updateLocalItem(item);}
-      else {
+      if (index >= 0)
+        updateLocalItem(item);
+      else
         setLocalItem(item);
-        print("9 > " + item.toString());}
+      updateImage(item);
     }
   }
 
@@ -174,6 +176,17 @@ class SqfliteService {
     await db.insert("Items", item.toSqlMap());
   }
 
+  void updateImage(Item item) async {
+    if ((item.remoteImage == "no image") || (item.remoteImage == "")) return;
+    var image = await get(item.remoteImage);
+    Directory dir = await getApplicationDocumentsDirectory();
+    String path = join(dir.path, item.barcode + '.png');
+    File file = File(path);
+    file.writeAsBytesSync(image.bodyBytes);
+    item.localImage = path;
+    updateLocalItem(item);
+  }
+
   Future<List<Item>> getLocalItems(String role) async {
     final db = await database;
     var itemsList = await db.query("Items", orderBy: "position");
@@ -181,6 +194,17 @@ class SqfliteService {
         ? itemsList.map((i) => Item.fromSqflite(i)).toList()
         : [];
     return list;
+  }
+
+  Future<Item> getLocalItem(String barcode) async {
+    final db = await database;
+    var res =
+        await db.query("Items", where: "barcode = ?", whereArgs: [barcode]);
+    if (res.isNotEmpty) {
+      return Item.fromSqflite(res.first);
+    } else {
+      return null;
+    }
   }
 
   /* <<< ITEMS */

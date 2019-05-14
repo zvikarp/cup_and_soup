@@ -17,6 +17,30 @@ class SharedPreferencesService {
     await prefs.setString('lang', lang);
     return true;
   }
+  
+  Future<String> getTheme() async {
+    SharedPreferences prefs = await _getInstance();
+    String theme = prefs.getString('theme');
+    return theme;
+  }
+  
+  Future<bool> setTheme(String theme) async {
+    SharedPreferences prefs = await _getInstance();
+    await prefs.setString('theme', theme);
+    return true;
+  }
+  
+  Future<List<String>> getRoles() async {
+    SharedPreferences prefs = await _getInstance();
+    List<String> roles = prefs.getStringList('roles');
+    return roles;
+  }
+  
+  Future<bool> setRoles(List<String> roles) async {
+    SharedPreferences prefs = await _getInstance();
+    await prefs.setStringList('roles', roles);
+    return true;
+  }
 
 }
 

@@ -1,6 +1,8 @@
+import 'package:cup_and_soup/models/item.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/firebaseDatabase.dart';
 import 'package:cup_and_soup/services/sqflite.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';
@@ -98,13 +100,13 @@ class _StorePageState extends State<StorePage> {
   void initState() {
     _checkDiscount();
     _dataStream();
+    firebaseDatabaseService.streamItemsStock();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // dataBridgeUtil.cancelItemStream();
   }
 
   @override
@@ -116,16 +118,6 @@ class _StorePageState extends State<StorePage> {
         children: <Widget>[
           _discount == null ? Container() : _discountContainer(),
           StreamBuilder(
-              // stream: widget.isAdmin
-              //     ? Firestore.instance
-              //         .collection('store')
-              //         .orderBy('position')
-              //         .snapshots()
-              //     : Firestore.instance
-              //         .collection('store')
-              //         .orderBy('position')
-              //         .where("tags", arrayContains: "setting:visible")
-              //         .snapshots(),
               stream: sqfliteService.streamItems(),
               builder: (context, snapshot) {
                 int length = 0;
@@ -143,19 +135,7 @@ class _StorePageState extends State<StorePage> {
                     if (index == length) {
                       return _addItemButton();
                     }
-                    var item = snapshot.data[index];
-                    // Item item = Item(
-                    //   barcode: doc.bar,
-                    //   name: doc['name'],
-                    //   desc: doc['desc'],
-                    //   image: doc['image'],
-                    //   price: doc['price'],
-                    //   stock: doc['stock'],
-                    //   position: doc['position'],
-                    //   tagsList: (doc['tags'] ?? []).cast<String>().toList(),
-                    //   hechsherim: doc['hechsherim'],
-                    // );
-
+                    Item item = snapshot.data[index];
                     return GridItemWidget(
                         item: item,
                         onTap: () {

@@ -1,7 +1,9 @@
+import 'package:cup_and_soup/utils/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
@@ -31,17 +33,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   String _selectedLang = "";
   String _selectedMode = "light";
 
-  void _getLang() async {
-    String lang = await sharedPreferencesService.getLang();
+  void _getSetting() async {
+    String lang = localizationsUtil.localeToCode(await localizationsUtil.getLocale());
+    String mode = themeUtil.themeToCode(await themeUtil.getTheme());
     setState(() {
       _selectedLang = lang ?? _langs.keys.toList().first;
+      _selectedMode = mode ?? _modes.keys.toList().first;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _getLang();
+    _getSetting();
     setState(() {
       nameCtr.text = widget.userData["name"];
       _name = widget.userData["name"];
@@ -178,13 +182,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   void _setLang(String lang) async {
-    // await sharedPreferencesService.setLang(lang);
+    localizationsUtil.setLocal(localizationsUtil.codeToLocale(lang));
     setState(() {
       _selectedLang = lang;
     });
-    // SnackbarWidget.infoBar(
-    //     context, "Please reload the app for your settings to take effect.");
-    SnackbarWidget.infoBar(context, "This feature is still under develepment.");
   }
 
   Widget _langButton(lang, selected) {
@@ -211,15 +212,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     );
   }
 
+  void _setTheme(String theme) async {
+    themeUtil.setTheme(themeUtil.codeToTheme(theme));
+    setState(() {
+      _selectedMode = theme;
+    });
+  }
+
   Widget _modeButton(mode, selected) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedMode = mode;
-        });
-        SnackbarWidget.infoBar(
-            context, "This feature is still under develepment.");
-      },
+      onTap: () => _setTheme(mode),
       child: Container(
         margin: EdgeInsets.only(right: 16),
         padding: selected

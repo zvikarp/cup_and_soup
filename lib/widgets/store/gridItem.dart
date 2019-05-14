@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/models/item.dart';
+import 'package:cup_and_soup/widgets/store/displayImage.dart';
 
 class GridItemWidget extends StatelessWidget {
   GridItemWidget({
@@ -80,20 +81,15 @@ class GridItemWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      child: Hero(
-                        tag: item.barcode,
-                        child: item.image != "no image"
-                            ? FadeInImage.assetNetwork(
-                                placeholder: 'assets/images/loading.png',
-                                image: item.image,
-                                fit: BoxFit.contain,
-                              )
-                            : Image.asset(
-                                'assets/images/loading.png',
-                                fit: BoxFit.contain,
-                              ),
+                    Expanded(
+                      child: Container(
+                        child: Hero(
+                          tag: item.barcode,
+                          child: DisplayImageWidget(
+                            localImage: item.localImage,
+                            remoteImage: item.remoteImage,
+                          ),
+                        ),
                       ),
                     ),
                     Text(

@@ -55,6 +55,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   void _getImage() async {
     var newImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print("sfdsfsdfsdfsdf" + newImage.toString());
     if (newImage == null) return;
     if (widget.currantImage != "no image")
       _status = "changed";

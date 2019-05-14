@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/selectable_tags.dart';
 
 import 'package:cup_and_soup/widgets/store/actionSection.dart';
+import 'package:cup_and_soup/widgets/store/displayImage.dart';
 import 'package:cup_and_soup/models/item.dart';
 
 class ItemPage extends StatelessWidget {
@@ -43,16 +44,10 @@ class ItemPage extends StatelessWidget {
                         height: 230,
                         child: Hero(
                           tag: item.barcode,
-                          child: item.image != "no image"
-                              ? FadeInImage.assetNetwork(
-                                  placeholder: 'assets/images/loading.png',
-                                  image: item.image,
-                                  fit: BoxFit.contain,
-                                )
-                              : Image.asset(
-                                  'assets/images/loading.png',
-                                  fit: BoxFit.contain,
-                                ),
+                          child: DisplayImageWidget(
+                            localImage: item.localImage,
+                            remoteImage: item.remoteImage,
+                          )
                         ),
                       ),
                     ),

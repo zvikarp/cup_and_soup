@@ -4,7 +4,8 @@ class Item {
     this.barcode,
     this.name,
     this.desc,
-    this.image,
+    this.remoteImage,
+    this.localImage,
     this.price,
     this.tags,
     this.stock,
@@ -16,7 +17,8 @@ class Item {
   String barcode;
   String name;
   String desc;
-  String image;
+  String remoteImage;
+  String localImage;
   double price;
   List<String> tags;
   int stock;
@@ -28,7 +30,8 @@ class Item {
         barcode: json["barcode"],
         name: json["name"],
         desc: json["desc"],
-        image: json["image"],
+        remoteImage: json["remoteImage"],
+        localImage: json["localImage"],
         price: json["price"],
         tags: json["tags"].cast<String>(),
         stock: json["stock"],
@@ -41,7 +44,8 @@ class Item {
         barcode: barcode,
         name: json["name"],
         desc: json["desc"],
-        image: json["image"],
+        remoteImage: json["image"],
+        localImage: "",
         price: json["price"].toDouble(),
         tags: json["tags"].cast<String>(),
         stock: json["stock"],
@@ -54,7 +58,8 @@ class Item {
         barcode: json["barcode"],
         name: json["name"],
         desc: json["desc"],
-        image: json["image"],
+        remoteImage: json["remoteImage"],
+        localImage: json["localImage"],
         price: json["price"],
         tags: json["tags"].split(","),
         stock: json["stock"],
@@ -67,7 +72,8 @@ class Item {
         "barcode": barcode,
         "name": name,
         "desc": desc,
-        "image": image,
+        "remoteImage": remoteImage,
+        "localImage": localImage,
         "price": price,
         "tags": tags,
         "stock": stock,
@@ -80,7 +86,8 @@ class Item {
         "barcode": barcode,
         "name": name,
         "desc": desc,
-        "image": image,
+        "remoteImage": remoteImage,
+        "localImage": localImage,
         "price": price,
         "tags": tags.join(","),
         "stock": stock,
