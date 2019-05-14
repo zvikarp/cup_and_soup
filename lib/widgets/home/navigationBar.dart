@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class NavigationBarWidget extends StatelessWidget {
   NavigationBarWidget({
@@ -27,16 +28,18 @@ class NavigationBarWidget extends StatelessWidget {
             child: Container(
               height: 36,
               width: 36,
-              child: FlareActor(page['icon'],
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: (currentPage == thisPage) ? "onClick" : 
-                  (lastPage == thisPage) ? "onLeave" : "idle",
-                  //   color: currentPage != thisPage
-                  //       ? Colors.white70
-                  //       : Theme.of(context).primaryColor,
-                  // ),
-                  ),
+              child: FlareActor(
+                page['icon'],
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
+                animation: (currentPage == thisPage)
+                    ? "onClick"
+                    : (lastPage == thisPage) ? "onLeave" : "idle",
+                //   color: currentPage != thisPage
+                //       ? Colors.white70
+                //       : Theme.of(context).primaryColor,
+                // ),
+              ),
             ),
           ),
         ),
@@ -51,8 +54,11 @@ class NavigationBarWidget extends StatelessWidget {
       children: <Widget>[
         Transform.translate(
           offset: Offset(0, -5),
-          child: Image.asset(
-            "assets/images/navBar.png",
+          child: FadeInImage(
+            placeholder: MemoryImage(kTransparentImage),
+            image: AssetImage(
+              "assets/images/navBar.png",
+            ),
             height: 70,
             width: double.infinity,
             alignment: Alignment(0, -1),

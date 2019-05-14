@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -87,8 +88,11 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset(
-          "assets/images/navBar.png",
+        FadeInImage(
+          placeholder: MemoryImage(kTransparentImage),
+          image: AssetImage(
+            "assets/images/navBar.png",
+          ),
           height: 70,
           width: double.infinity,
           fit: BoxFit.cover,

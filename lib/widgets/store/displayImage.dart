@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class DisplayImageWidget extends StatelessWidget {
   DisplayImageWidget({
@@ -12,15 +13,19 @@ class DisplayImageWidget extends StatelessWidget {
   final String localImage;
 
   Widget _noImage() {
-    return Image.asset(
-      'assets/images/loading.png',
+    return FadeInImage(
+      placeholder: MemoryImage(kTransparentImage),
+      image: AssetImage(
+        'assets/images/loading.png',
+      ),
       fit: BoxFit.contain,
     );
   }
 
   Widget _localImage() {
-    return Image.file(
-      File(localImage),
+    return FadeInImage(
+      placeholder: MemoryImage(kTransparentImage),
+      image: FileImage(File(localImage)),
       fit: BoxFit.contain,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class PageWidget extends StatelessWidget {
   PageWidget({
@@ -36,7 +37,10 @@ class PageWidget extends StatelessWidget {
           ),
         ),
         IgnorePointer(
-          child: Image.asset("assets/images/header.png"),
+          child: FadeInImage(
+            placeholder: MemoryImage(kTransparentImage),
+            image: AssetImage("assets/images/header.png"),
+          ),
         ),
       ],
     );

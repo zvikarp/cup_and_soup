@@ -38,6 +38,7 @@ dependencies:
   sqflite: ^1.1.5
   path_provider: ^1.0.0
   http: ^0.12.0+2
+  transparent_image: ^1.0.0
 
 flutter_icons:
   android: "launcher_icon" 
