@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cup_and_soup/models/item.dart';
+import 'package:cup_and_soup/services/firebaseDatabase.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -104,76 +105,102 @@ class SqfliteService {
   /* ITEMS >>> */
 
   BehaviorSubject<List<Item>> _itemsStream = BehaviorSubject();
-  List<Item> _items = [];
+  Map<String,Item> _items = {};
 
   Stream streamItems() => _itemsStream.stream;
 
-  void updateItems(List<Item> items) {
-    print(items);
+  void updateItems(Map<String,Item> items) {
     _items = items;
-    _itemsStream.add(items);
+    _itemsStream.add(items.values.toList());
   }
 
   void loadItems(String role) async {
-    List<Item> localItems = await getLocalItems(role);
-    updateItems(localItems.toList());
+    Map<String,Item> localItems = await getLocalItems(role);
+    updateItems(localItems);
     String lastUpdatedAsString =
         await getSetting("lastUpdatedStore", DateTime(1970).toString());
     DateTime lastUpdated = dateTimeUtil.dateStringToDate(lastUpdatedAsString);
-    List<Item> newItems =
+    Map<String,Item> newItems =
         await cloudFirestoreService.getUpdatedItems(lastUpdated, role);
-    List<Item> updatedItems = mergeUpdatedItems(_items, newItems);
+    Map<String,Item> updatedItems = mergeUpdatedItems(_items, newItems);
     updateItems(updatedItems);
-    updateLocalItems(localItems, newItems);
+    newItems.forEach((k,v) => print(k)); 
+    updateLocaleItems(localItems, newItems);
     DateTime lastItemUpdated = getLastItemUpdated(newItems);
     if (lastItemUpdated != null)
       await updateSetting("lastUpdatedStore", lastItemUpdated.toString());
+    _listenToStockChanges();
   }
 
-  DateTime getLastItemUpdated(List<Item> items) {
+  void _listenToStockChanges() {
+    firebaseDatabaseService.streamItemsStock().listen((Map<String,int> snapshot) {
+      List<String> currentItemsBarcodes = _items.keys.toList();
+      Map<String,Item> itemsMap = Map.from(_items);
+      for (String barcode in snapshot.keys) {
+        if (itemsMap.containsKey(barcode)) {
+          itemsMap[barcode].stock = snapshot[barcode];
+          updateLocaleItem(itemsMap[barcode]);
+          currentItemsBarcodes.remove(barcode);
+        }
+      }
+      updateItems(itemsMap);
+      if (currentItemsBarcodes.length > 0) _deleteOldItems(currentItemsBarcodes);
+    });
+  }
+
+  void _deleteOldItems(List<String> currentItemsBarcodes) {
+    Map<String,Item> items = Map.from(_items);
+    currentItemsBarcodes.forEach((barcode) {
+      items.remove(barcode);
+      removeLocaleItem(_items[barcode]);
+      deleteLocaleImage(_items[barcode]);
+    });
+    updateItems(items);
+  }
+
+  DateTime getLastItemUpdated(Map<String,Item> items) {
     if (items.length < 1)
       return null;
     else
-      return items
+      return items.values
           .reduce((a, b) => a.lastUpdated.isAfter(b.lastUpdated) ? a : b)
           .lastUpdated;
   }
 
-  List<Item> mergeUpdatedItems(List<Item> initalItems, List<Item> newItems) {
-    for (Item item in newItems) {
+  Map<String,Item> mergeUpdatedItems(Map<String,Item> initalItems, Map<String,Item> newItems) {
+    for (Item item in newItems.values) {
       String barcode = item.barcode;
-      int index =
-          initalItems.indexWhere((Item item) => item.barcode == barcode);
-      if (index < 0)
-        initalItems.add(item);
-      else
-        initalItems[index] = item;
+      if (!newItems.containsKey(barcode))
+        initalItems.putIfAbsent(barcode, () => item);
     }
     return initalItems;
   }
 
-  void updateLocalItems(List<Item> initalItems, List<Item> newItems) {
-    for (Item item in newItems) {
+  void updateLocaleItems(Map<String,Item> initalItems, Map<String,Item> newItems) {
+    for (Item item in newItems.values) {
       String barcode = item.barcode;
-      int index =
-          initalItems.indexWhere((Item item) => item.barcode == barcode);
-      if (index >= 0)
-        updateLocalItem(item);
+      if (initalItems.containsKey(barcode))
+        updateLocaleItem(item);
       else
-        setLocalItem(item);
+        setLocaleItem(item);
       updateImage(item);
     }
   }
 
-  void updateLocalItem(Item item) async {
+  void updateLocaleItem(Item item) async {
     final db = await database;
     await db.update("Items", item.toSqlMap(),
         where: "barcode = ?", whereArgs: [item.barcode]);
   }
 
-  void setLocalItem(Item item) async {
+  void setLocaleItem(Item item) async {
     final db = await database;
     await db.insert("Items", item.toSqlMap());
+  }
+
+  void removeLocaleItem(Item item) async {
+    final db = await database;
+    await db.delete("Items", where: "barcode = ?", whereArgs: [item.barcode]);
   }
 
   void updateImage(Item item) async {
@@ -184,16 +211,22 @@ class SqfliteService {
     File file = File(path);
     file.writeAsBytesSync(image.bodyBytes);
     item.localImage = path;
-    updateLocalItem(item);
+    updateLocaleItem(item);
   }
 
-  Future<List<Item>> getLocalItems(String role) async {
+  void deleteLocaleImage(Item item) async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    String path = join(dir.path, item.barcode + '.png');
+    Directory imageDir = Directory(path);
+    imageDir.delete();
+  }
+
+  Future<Map<String,Item>> getLocalItems(String role) async {
     final db = await database;
     var itemsList = await db.query("Items", orderBy: "position");
-    List<Item> list = itemsList.isNotEmpty
-        ? itemsList.map((i) => Item.fromSqflite(i)).toList()
-        : [];
-    return list;
+    Map<String,Item> itemsMap = {};
+    itemsList.forEach((i) => itemsMap.putIfAbsent(i['barcode'], () => Item.fromSqflite(i)));
+    return itemsMap;
   }
 
   Future<Item> getLocalItem(String barcode) async {

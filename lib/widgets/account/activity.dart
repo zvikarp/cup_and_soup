@@ -9,11 +9,6 @@ import 'package:cup_and_soup/dialogs/activityDetails.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
-  ActivityWidget({
-    @required this.uid,
-  });
-
-  final String uid;
 
   @override
   _ActivityWidgetState createState() => _ActivityWidgetState();

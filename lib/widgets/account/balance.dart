@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/models/user.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
 
 class BalanceWidget extends StatefulWidget {
   BalanceWidget({
-    @required this.uid,
-    @required this.userData,
+    @required this.user,
   });
 
-  final String uid;
-  final Map<String, dynamic> userData;
+  final User user;
 
   @override
   _BalanceWidgetState createState() => _BalanceWidgetState();
@@ -30,7 +29,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
           child: CenterWidget(
             child: Center(
               child: Text(
-                widget.userData["money"].toString() ?? "...",
+                widget.user.money.toString() ?? "...",
                 style: Theme.of(context).textTheme.display1.merge(
                       TextStyle(color: Theme.of(context).primaryColor),
                     ),
@@ -42,7 +41,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 64),
           child: Text(
             "You have up to " +
-                widget.userData["allowdCredit"].toString() +
+                widget.user.allowedCredit.toString() +
                 " NIS in credit, ask a admin to give you more.",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.subtitle,

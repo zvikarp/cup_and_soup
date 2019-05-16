@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cup_and_soup/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -54,22 +57,33 @@ class _HomePageState extends State<HomePage> {
   String _currentPage = 'store';
   String _lastPage = "";
 
-  void _getUserData() async {
-    Map userData = await cloudFirestoreService.getUserData();
+  void _updateUserRoles(List<String> roles) {
     setState(() {
-      _roles = userData['roles'].cast<String>();
+      _roles = roles;
     });
-    _updatePages();
     if (_roles.contains("admin")) cloudFirestoreService.clearSupriseBox();
-    if (userData['disabled']) {
-      Navigator.of(context).push(
-        TransparentRoute(
-          builder: (BuildContext context) => BlockDialog(
-                type: "disabled",
-              ),
-        ),
-      );
-    }
+    _updatePages();
+  }
+
+  void _getUserData() async {
+    cloudFirestoreService.streamUserData().listen((User user) {
+      if (user.roles != _roles) _updateUserRoles(user.roles);
+
+      if (user.disabled) {
+        Navigator.of(context).push(
+          TransparentRoute(
+            builder: (BuildContext context) => BlockDialog(
+                  type: "disabled",
+                ),
+          ),
+        );
+      }
+    });
+    // Map userData = await cloudFirestoreService.getUserData();
+    // setState(() {
+    //   _roles = userData['roles'].cast<String>();
+    // });
+    // _updatePages();
     var storeStatus = await cloudFirestoreService.loadStoreStatus();
     if (DateTime.now().isAfter(storeStatus['closeingDate'].toDate()) &&
         DateTime.now().isBefore(storeStatus['openingDate'].toDate())) {

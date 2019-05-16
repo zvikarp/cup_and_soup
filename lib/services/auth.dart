@@ -2,13 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/services/cloudFunctions.dart';
 
 class AuthService {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser _user;
+  FirebaseUser _firebaseUser;
 
   Future<FirebaseUser> loginWithGoogle() async {
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -22,7 +21,7 @@ class AuthService {
     try {
       FirebaseUser user = await _auth.signInWithCredential(credential);
       if (user != null) {
-        _user = user;
+        _firebaseUser = user;
         return user;
       }
     } catch (e) {
@@ -37,27 +36,15 @@ class AuthService {
   }
 
   Future<String> getUid() async {
-    if (_user != null)
-      return _user.uid;
+    if (_firebaseUser != null)
+      return _firebaseUser.uid;
     else {
       await refreshUser();
-      if (_user != null) 
-        return _user.uid;
+      if (_firebaseUser != null) 
+        return _firebaseUser.uid;
       await loginWithGoogle();
-      if (_user != null)
-        return _user.uid;
-      else
-        return null;
-    }
-  }
-
-  Future<List<String>> getRoles() async {
-    if (_user != null)
-      return await cloudFirestoreService.getRoles();
-    else {
-      await loginWithGoogle();
-      if (_user != null)
-        return await cloudFirestoreService.getRoles();
+      if (_firebaseUser != null)
+        return _firebaseUser.uid;
       else
         return null;
     }
@@ -66,24 +53,14 @@ class AuthService {
     Future<bool> signOut() async {
     await FirebaseAuth.instance.signOut();
     await _googleSignIn.signOut();
-    cloudFirestoreService.resetUserData();
-    _user = null;
+    await cloudFirestoreService.resetUserData();
+    _firebaseUser = null;
     return true;
-  }
-
-  Future<bool> changeName(String name) async {
-    String uid = await getUid();
-    if (uid == null) return false;
-    bool res = await cloudFunctionsService.changeName(uid, name);
-    if (res) {
-      await cloudFirestoreService.loadUserData();
-    }
-    return res;
   }
 
   Future<FirebaseUser> refreshUser() async {
     FirebaseUser user = await _auth.currentUser();
-    _user = user;
+    _firebaseUser = user;
     return user;
   }
 

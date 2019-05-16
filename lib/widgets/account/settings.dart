@@ -1,9 +1,10 @@
 import 'package:cup_and_soup/utils/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/services/cloudFunctions.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/models/user.dart';
 import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
@@ -11,12 +12,10 @@ import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class SettingsWidget extends StatefulWidget {
   SettingsWidget({
-    @required this.uid,
-    @required this.userData,
+    @required this.user,
   });
 
-  final String uid;
-  final Map<String, dynamic> userData;
+  final User user;
 
   @override
   _SettingsWidgetState createState() => _SettingsWidgetState();
@@ -47,9 +46,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     super.initState();
     _getSetting();
     setState(() {
-      nameCtr.text = widget.userData["name"];
-      _name = widget.userData["name"];
-      _newName = widget.userData["name"];
+      nameCtr.text = widget.user.name;
+      _name = widget.user.name;
+      _newName = widget.user.name;
     });
   }
 
@@ -57,7 +56,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     setState(() {
       _loading = true;
     });
-    bool res = await authService.changeName(_newName);
+    bool res = await cloudFunctionsService.changeName(_newName);
     if (res)
       SnackbarWidget.successBar(
           context, "Your name hase been updated successfully.");
@@ -120,7 +119,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(widget.userData["email"]),
+      Text(widget.user.email),
     ];
   }
 
@@ -167,7 +166,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   List<Widget> _rolesRow() {
-    return widget.userData["roles"].join() != "customer"
+    return widget.user.roles.join() != "customer"
         ? [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -176,7 +175,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 style: Theme.of(context).textTheme.body2,
               ),
             ),
-            Text(widget.userData["roles"].join(", ")),
+            Text(widget.user.roles.join(", ")),
           ]
         : [Container()];
   }

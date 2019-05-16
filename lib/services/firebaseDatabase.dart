@@ -7,21 +7,22 @@ class FirebaseDatabaseService {
   FirebaseDatabase _db = FirebaseDatabase.instance;
   Stream<Event> _firebaseItemsStock;
 
-  BehaviorSubject _itemsStock = BehaviorSubject();
+  BehaviorSubject<Map<String,int>> _itemsStock;
 
-  Stream streamItemsStock() {
-    if (_firebaseItemsStock == null) _listenToItemStock();
+  Stream<Map<String,int>> streamItemsStock() {
+    if (_firebaseItemsStock == null) {
+      _itemsStock = BehaviorSubject();
+      _listenToItemStock();
+    }
     return _itemsStock.stream;
   }
 
   void _listenToItemStock() async {
-    DataSnapshot _stockSnapshot = await _db.reference().child('store/itemsStock').once();
-    _firebaseItemsStock = _db.reference().child('store/itemsStock/').onChildChanged;
-    _firebaseItemsStock.listen((Event snapshot) {
-      print(snapshot.snapshot.key);
-      print(snapshot.snapshot.value);
-      print(snapshot.previousSiblingKey);
-      print(snapshot.runtimeType);
+    _firebaseItemsStock = _db.reference().child('store/itemsStock/').onValue;
+    _firebaseItemsStock.listen((Event event) {
+      Map<String,int> stocks = event.snapshot.value.cast<String,int>();
+      print(stocks);
+      _itemsStock.add(stocks);
     });
   }
 

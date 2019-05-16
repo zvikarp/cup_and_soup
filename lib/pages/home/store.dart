@@ -1,4 +1,5 @@
 import 'package:cup_and_soup/models/item.dart';
+import 'package:cup_and_soup/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -47,15 +48,16 @@ class _StorePageState extends State<StorePage> {
   }
 
   void _checkDiscount() async {
-    Map<dynamic, dynamic> discount = await cloudFirestoreService.getDiscount();
-    if (discount != null) {
-      print(discount);
-      if (discount["usageLimit"] > 0) {
-        setState(() {
-          _discount = discount;
-        });
+    cloudFirestoreService.streamUserData().listen((User user) {
+      if ((user.discount != {}) && (user.discount != null)) {
+        print(user.discount.toString() + "xvcxvcx");
+        if ((user.discount["usageLimit"] != null) && (user.discount["usageLimit"] > 0)) {
+          setState(() {
+            _discount = user.discount;
+          });
+        }
       }
-    }
+    });
   }
 
   Widget _discountContainer() {
@@ -100,7 +102,7 @@ class _StorePageState extends State<StorePage> {
   void initState() {
     _checkDiscount();
     _dataStream();
-    firebaseDatabaseService.streamItemsStock();
+    // firebaseDatabaseService.streamItemsStock();
     super.initState();
   }
 

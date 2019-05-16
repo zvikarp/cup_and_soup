@@ -8,61 +8,73 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cup_and_soup/services/cloudFunctions.dart';
 import 'package:cup_and_soup/services/firebaseStorage.dart';
 import 'package:cup_and_soup/services/auth.dart';
+import 'package:cup_and_soup/services/sharedPreferences.dart';
+import 'package:cup_and_soup/models/user.dart';
 import 'package:cup_and_soup/models/item.dart';
 
 class CloudFirestoreService {
   final Firestore _db = Firestore.instance;
   final _buyRequestsStream = PublishSubject();
   final _generalRequestsStream = PublishSubject();
-  Map<String, dynamic> _userData;
   List<dynamic> _activityList = [];
 
-/* ITEMS >>> */
+/* ITEMS >-> */
 
-  Future<List<Item>> getUpdatedItems(DateTime lastUpdatedDateTime, String role) async {
-    QuerySnapshot snapshot = await _db.collection('store').where("lastUpdated", isGreaterThan: lastUpdatedDateTime).getDocuments();
-    if (snapshot.documents.isNotEmpty)
-      return snapshot.documents.map((item) => Item.fromFirestore(item.documentID, item.data)).toList();
-    else return [];
+  Future<Map<String, Item>> getUpdatedItems(
+      DateTime lastUpdatedDateTime, String role) async {
+    QuerySnapshot snapshot = await _db
+        .collection('store')
+        .where("lastUpdated", isGreaterThan: lastUpdatedDateTime)
+        .getDocuments();
+    Map<String, Item> itemsMap = {};
+    snapshot.documents.forEach((i) {
+      itemsMap.putIfAbsent(
+          i.documentID, () => Item.fromFirestore(i.documentID, i.data));
+    });
+    return itemsMap;
   }
 
-/* <<< ITEMS */
+/* <-< ITEMS */
 
-  Future<List<String>> getRoles() async {
-    if (_userData != null) {
-      return _userData['roles'].cast<String>();
-    } else {
-      await loadUserData();
-      if (_userData != null) {
-        return _userData['roles'].cast<String>();
-      } else
-        return null;
+/* USER >-> */
+
+  BehaviorSubject<User> _userDataStream;
+  User _user;
+
+  Stream<User> streamUserData() {
+    if (_userDataStream == null) {
+      _userDataStream = BehaviorSubject();
+      listenToUserData();
     }
+    return _userDataStream.stream;
   }
 
-  Future<Map<dynamic, dynamic>> getDiscount() async {
-    if (_userData != null) {
-      return _userData['discount'];
-    } else {
-      await loadUserData();
-      if (_userData != null) {
-        return _userData['discount'];
-      } else
-        return null;
-    }
+  void listenToUserData() async {
+    _user = await sharedPreferencesService.getUserDetailes();
+    _userDataStream.add(_user);
+    String uid = await authService.getUid();
+    _db
+        .collection('users')
+        .document(uid)
+        .snapshots()
+        .listen((DocumentSnapshot snapshot) {
+      Map<String, dynamic> userAsMap = snapshot.data;
+      userAsMap.putIfAbsent("uid", () => uid);
+      _user = User.fromMap(userAsMap);
+      _userDataStream.add(_user);
+      sharedPreferencesService.updatedUserDetailes(_user);
+    });
   }
 
-  Future<Map> getUserData() async {
-    if (_userData != null) {
-      return _userData;
-    } else {
-      await loadUserData();
-      if (_userData != null) {
-        return _userData;
-      } else
-        return null;
-    }
+  Future<bool> resetUserData() async {
+    _user = User.defaultUser();
+    await _userDataStream.drain();
+    await _userDataStream.close();
+    await sharedPreferencesService.updatedUserDetailes(_user);
+    return true;
   }
+
+/* <-< USER */
 
   String generateBarcode(String prefix) {
     DateTime now = DateTime.now();
@@ -239,23 +251,6 @@ class CloudFirestoreService {
     return true;
   }
 
-  Future loadUserData() async {
-    String uid = await authService.getUid();
-    if (uid == null) return false;
-    var data = await _db.collection('users').document(uid).get();
-    var userData = {
-      "name": data["name"],
-      "money": data["money"],
-      "allowdCredit": data["allowedCredit"],
-      "roles": data["roles"].map((role) => role.toString()).toList(),
-      "email": data["email"],
-      "discount": data["discount"],
-      "disabled": data["disabled"],
-    };
-    _userData = userData;
-    return userData;
-  }
-
   Future loadStoreStatus() async {
     String uid = await authService.getUid();
     if (uid == null) return false;
@@ -265,11 +260,6 @@ class CloudFirestoreService {
       "closeingDate": data["store"]["closeingDate"],
     };
     return status;
-  }
-
-  bool resetUserData() {
-    _userData = null;
-    return true;
   }
 
   Future<String> updateItem(Item item,

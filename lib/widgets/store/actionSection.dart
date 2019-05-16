@@ -5,6 +5,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
+import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/dialogs/message.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 
@@ -27,16 +28,16 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
   String _price = "";
 
   void _checkDiscount() async {
-    Map<dynamic, dynamic> discount = await cloudFirestoreService.getDiscount();
-    if (discount != null) {
-      print(discount);
-      if (discount["usageLimit"] > 0) {
-        setState(() {
-          _price = (widget.price - (widget.price * (discount['amount'] / 100)))
-              .toString();
-        });
-      }
-    }
+    // Map<String, dynamic> discount = await sharedPreferencesService.getDiscount();
+    // if ((discount != {}) && (discount != null)) {
+    //   print(discount);
+    //   if (discount["usageLimit"] > 0) {
+    //     setState(() {
+    //       _price = (widget.price - (widget.price * (discount['amount'] / 100)))
+    //           .toString();
+    //     });
+    //   }
+    // }
   }
 
   @override

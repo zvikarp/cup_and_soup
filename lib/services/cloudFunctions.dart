@@ -1,7 +1,10 @@
 import 'package:cloud_functions/cloud_functions.dart';
 
+import 'package:cup_and_soup/services/auth.dart';
+
 class CloudFunctionsService {
-  Future<bool> changeName(String uid, String name) async {
+  Future<bool> changeName(String name) async {
+    String uid = await authService.getUid();
     await CloudFunctions.instance
         .call(functionName: "changeName", parameters: {
       "uid": uid,

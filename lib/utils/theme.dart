@@ -31,15 +31,29 @@ class ThemeUtil {
       ),
     ),
     "dark": ThemeData(
-      canvasColor: Colors.black87,
+      canvasColor: Colors.grey[800],
       primaryColor: Color(0xffd8d738),
       accentColor: Color(0xff000000),
       accentIconTheme: IconThemeData(
         color: Colors.white,
       ),
       textTheme: TextTheme(
+        headline: TextStyle(fontFamily: "BrandFont", fontSize: 65),
+        title: TextStyle(fontFamily: "PrimaryFont", fontSize: 24),
+        subtitle: TextStyle(
+            fontFamily: "PrimaryFont", fontSize: 16, color: Colors.black54),
+        display1: TextStyle(fontFamily: "PrimaryFont", fontSize: 34),
         body1: TextStyle(fontFamily: "PrimaryFont", fontSize: 18),
-        body2: TextStyle(fontFamily: "PrimaryFont", fontSize: 24),
+        body2: TextStyle(
+            fontFamily: "PrimaryFont",
+            fontSize: 18,
+            fontWeight: FontWeight.bold),
+        button: TextStyle(
+            fontFamily: "PrimaryFont",
+            fontSize: 14,
+            fontWeight: FontWeight.bold),
+        caption: TextStyle(
+            fontFamily: "PrimaryFont", fontSize: 12, color: Colors.black54),
       ),
     ),
   };
