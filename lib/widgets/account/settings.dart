@@ -1,4 +1,6 @@
+import 'package:cup_and_soup/dialogs/notificationsSettings.dart';
 import 'package:cup_and_soup/utils/theme.dart';
+import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/auth.dart';
@@ -33,7 +35,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   String _selectedMode = "light";
 
   void _getSetting() async {
-    String lang = localizationsUtil.localeToCode(await localizationsUtil.getLocale());
+    String lang =
+        localizationsUtil.localeToCode(await localizationsUtil.getLocale());
     String mode = themeUtil.themeToCode(await themeUtil.getTheme());
     setState(() {
       _selectedLang = lang ?? _langs.keys.toList().first;
@@ -142,8 +145,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           ),
           GestureDetector(
             onTap: () {
-              SnackbarWidget.infoBar(
-                  context, "This feature is still under develepment.");
+              Navigator.of(context).push(
+                TransparentRoute(
+                  builder: (BuildContext context) =>
+                      NotificationsSettingsDialog(user: widget.user),
+                ),
+              );
             },
             child: Container(
               width: 42,
@@ -227,7 +234,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ? EdgeInsets.only(left: 8, right: 8, bottom: 2)
             : EdgeInsets.only(bottom: 2),
         decoration: BoxDecoration(
-          color: selected ? ThemeWidget.of(context).theme.colorXYZ : Colors.transparent,
+          color: selected
+              ? ThemeWidget.of(context).theme.colorXYZ
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(

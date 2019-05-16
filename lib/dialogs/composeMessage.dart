@@ -14,6 +14,8 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
   TextEditingController _titleCtr = TextEditingController();
   TextEditingController _msgCtr = TextEditingController();
   DateTime _dateTime;
+  List<String> _topics = ["important", "general", "special"];
+  String _selectedTopic = "general";
 
   void onSend() {
     String errorMsg = "no error";
@@ -21,7 +23,7 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
       errorMsg = "the title can't be empty";
     else if (_msgCtr.text == "") errorMsg = "the message can't be empty";
     cloudFunctionsService.sendMessage(
-        _titleCtr.text, _msgCtr.text, _dateTime, "all users");
+        _titleCtr.text, _msgCtr.text, _dateTime, _selectedTopic);
     if (errorMsg != "no error") {
       print("error: " + errorMsg);
     }
@@ -38,7 +40,10 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
         ),
         ButtonWidget(
           text: "SEND",
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            onSend();
+            Navigator.pop(context);
+          },
         ),
       ],
     );
@@ -68,12 +73,15 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Message:",
-        style: Theme.of(context).textTheme.body2,),
+        child: Text(
+          "Message:",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       TextField(
         controller: _msgCtr,
         style: Theme.of(context).textTheme.body1,
+        maxLines: null,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
           hintText: "Message",
@@ -86,8 +94,10 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Send At:",
-        style: Theme.of(context).textTheme.body2,),
+        child: Text(
+          "Send At:",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
       DateTimePicker(
         initDateTime: DateTime.now(),
@@ -102,10 +112,32 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Text("Send To:",
-        style: Theme.of(context).textTheme.body2,),
+        child: Text(
+          "Send To:",
+          style: Theme.of(context).textTheme.body2,
+        ),
       ),
-      Text("All users"),
+      DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: _selectedTopic,
+          onChanged: (topic) {
+            setState(() {
+              _selectedTopic = topic;
+            });
+          },
+          items: _topics
+              .map(
+                (topic) => DropdownMenuItem(
+                      value: topic,
+                      child: Text(
+                        topic,
+                        style: Theme.of(context).textTheme.body1,
+                      ),
+                    ),
+              )
+              .toList(),
+        ),
+      ),
     ]);
   }
 
@@ -127,13 +159,13 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
     return DialogWidget(
       scrollable: true,
       heading: Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "Compose Message",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.title,
-            ),
-          ),
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Compose Message",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.title,
+        ),
+      ),
       child: Column(
         children: <Widget>[
           Padding(
@@ -143,9 +175,9 @@ class _ComposeMessageDialogState extends State<ComposeMessageDialog> {
         ],
       ),
       actionSection: Padding(
-            padding: const EdgeInsets.all(16),
-            child: _actionSection(context),
-          ),
+        padding: const EdgeInsets.all(16),
+        child: _actionSection(context),
+      ),
     );
   }
 }

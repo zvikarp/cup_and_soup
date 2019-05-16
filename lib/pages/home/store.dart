@@ -49,7 +49,6 @@ class _StorePageState extends State<StorePage> {
   void _checkDiscount() async {
     cloudFirestoreService.streamUserData().listen((User user) {
       if ((user.discount != {}) && (user.discount != null)) {
-        print(user.discount.toString() + "xvcxvcx");
         if ((user.discount["usageLimit"] != null) && (user.discount["usageLimit"] > 0)) {
           setState(() {
             _discount = user.discount;

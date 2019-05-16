@@ -51,6 +51,18 @@ class SharedPreferencesService {
     return true;
   }
 
+  Future<List<String>> getNtifications() async {
+    SharedPreferences prefs = await _getInstance();
+    List<String> notifications = prefs.getStringList('notifications');
+    return notifications;
+  }
+
+  Future<bool> setNotifications(List<String> notifications) async {
+    SharedPreferences prefs = await _getInstance();
+    await prefs.setStringList('notifications', notifications);
+    return true;
+  }
+
   Future<bool> setFcmToken(String fcmToken) async {
     SharedPreferences prefs = await _getInstance();
     await prefs.setString('fcmToken', fcmToken);
@@ -74,6 +86,7 @@ class SharedPreferencesService {
     await prefs.setStringList('roles', user.roles);
     await prefs.setString('discount', json.encode(user.discount));
     await prefs.setString('fcmToken', user.fcmToken);
+    await prefs.setStringList('notifications', user.notifications);
     return true;
   }
 
@@ -89,6 +102,7 @@ class SharedPreferencesService {
     user.roles = prefs.getStringList('roles') ?? User.defaultUser().roles;
     user.discount = json.decode(prefs.getString('discount') ?? json.encode(User.defaultUser().discount)) ?? User.defaultUser().discount;
     user.fcmToken = prefs.getString('fcmTocken') ?? User.defaultUser().fcmToken;
+    user.notifications = prefs.getStringList('notifications') ?? User.defaultUser().notifications;
     return user;
   }
 }

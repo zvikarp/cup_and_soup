@@ -9,6 +9,7 @@ class User {
     this.roles,
     this.discount,
     this.fcmToken,
+    this.notifications,
   });
 
   String uid;
@@ -20,6 +21,7 @@ class User {
   List<String> roles;
   Map<String,dynamic> discount;
   String fcmToken;
+  List<String> notifications;
 
 
   factory User.fromMap(Map<String, dynamic> json) => User(
@@ -32,6 +34,7 @@ class User {
         roles: (json['roles'] ?? User.defaultUser().roles).cast<String>(),
         discount: (json['discount'] ?? User.defaultUser().discount).cast<String,dynamic>(),
         fcmToken: json['fcmTocken'] ?? User.defaultUser().fcmToken,
+        notifications: (json['notifications'] ?? User.defaultUser().notifications).cast<String>(),
       );
 
   Map<String, dynamic> toMap() => {
@@ -44,6 +47,7 @@ class User {
         'roles': roles,
         'discount': discount,
         'fcmToken': fcmToken,
+        'notifications': notifications,
       };
 
   factory User.defaultUser() => User(
@@ -56,5 +60,6 @@ class User {
         roles: ["customer"],
         discount: {},
         fcmToken: "",
+        notifications: ["important", "general"],
       );
 }

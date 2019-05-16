@@ -12,10 +12,22 @@ class FirebaseMessagingService {
     _firebaseMessaging.getToken().then((String fcmToken) async {
       String currentFcmToken = await sharedPreferencesService.getFcmToken();
       if (fcmToken != currentFcmToken) {
+        List<String> topicsList = await sharedPreferencesService.getNtifications();
+        updateUserNotificationsTopics(topicsList, topicsList);
         sharedPreferencesService.setFcmToken(fcmToken);
         cloudFunctionsService.changeFcmToken(fcmToken);
       }
     });
+  }
+
+  bool updateUserNotificationsTopics(List<String> topicsToSubscribe, List<String> allTopics) {
+    allTopics.forEach((topic) {
+      if (topicsToSubscribe.contains(topic))
+        _firebaseMessaging.subscribeToTopic(topic);
+      else
+        _firebaseMessaging.unsubscribeFromTopic(topic);
+    });
+    return true;
   }
 
   void firebaseCloudMessagingListeners(BuildContext context) {

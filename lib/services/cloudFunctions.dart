@@ -27,6 +27,19 @@ class CloudFunctionsService {
     return true;
   }
 
+  Future<bool> changeNotifications(List<String> notifications) async {
+    String uid = await authService.getUid();
+    await CloudFunctions.instance
+        .call(functionName: "changeNotifications", parameters: {
+      "uid": uid,
+      "notifications": notifications,
+    }).catchError((err) {
+      print(err);
+      return false;
+    });
+    return true;
+  }
+
   Future<bool> changeUserStatus(String uid, bool status) async {
     await CloudFunctions.instance
         .call(functionName: "changeUserStatus", parameters: {

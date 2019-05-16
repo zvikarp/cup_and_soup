@@ -101,7 +101,7 @@ class SnackbarWidget {
       isDismissible: true,
       title: title,
       titleText: Text(
-        message,
+        title,
         style: Theme.of(context).textTheme.body2.merge(TextStyle(color: Colors.white)),
       ),
       message: message,
