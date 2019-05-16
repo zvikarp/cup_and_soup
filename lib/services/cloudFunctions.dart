@@ -15,6 +15,18 @@ class CloudFunctionsService {
     return true;
   }
 
+  Future<bool> changeFcmToken(String fcmToken) async {
+    String uid = await authService.getUid();
+    await CloudFunctions.instance
+        .call(functionName: "changeFcmToken", parameters: {
+      "uid": uid,
+      "fcmToken": fcmToken,
+    }).catchError((err) {
+      return false;
+    });
+    return true;
+  }
+
   Future<bool> changeUserStatus(String uid, bool status) async {
     await CloudFunctions.instance
         .call(functionName: "changeUserStatus", parameters: {

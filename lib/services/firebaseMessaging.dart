@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:cup_and_soup/services/sharedPreferences.dart';
+import 'package:cup_and_soup/services/cloudFunctions.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class FirebaseMessagingService {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   void getUsersTocken() {
-    _firebaseMessaging.getToken().then((token) {
-      
+    _firebaseMessaging.getToken().then((String fcmToken) async {
+      String currentFcmToken = await sharedPreferencesService.getFcmToken();
+      if (fcmToken != currentFcmToken) {
+        sharedPreferencesService.setFcmToken(fcmToken);
+        cloudFunctionsService.changeFcmToken(fcmToken);
+      }
     });
   }
 
   void firebaseCloudMessagingListeners(BuildContext context) {
-    _firebaseMessaging.getToken().then((token) {
-      print(token);
-    });
+    getUsersTocken();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {

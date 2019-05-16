@@ -29,7 +29,6 @@ class _ScannerPageState extends State<ScannerPage> {
     if (_requestStream != null) _requestStream.cancel();
     _requestStream =
         cloudFirestoreService.subscribeToGeneralRequestsStream().listen((snap) {
-      print(snap['barcode']);
       if (snap['barcode'] == barcode) {
         _requestStream.cancel();
         cloudFirestoreService.deleteRequest(barcode);

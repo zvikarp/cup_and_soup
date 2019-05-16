@@ -51,6 +51,18 @@ class SharedPreferencesService {
     return true;
   }
 
+  Future<bool> setFcmToken(String fcmToken) async {
+    SharedPreferences prefs = await _getInstance();
+    await prefs.setString('fcmToken', fcmToken);
+    return true;
+  }
+
+  Future<String> getFcmToken() async {
+    SharedPreferences prefs = await _getInstance();
+    String fcmToken = prefs.getString('fcmToken');
+    return fcmToken;
+  }
+
   Future<bool> updatedUserDetailes(User user) async {
     SharedPreferences prefs = await _getInstance();
     await prefs.setString('uid', user.uid);
@@ -61,6 +73,7 @@ class SharedPreferencesService {
     await prefs.setBool('disabled', user.disabled);
     await prefs.setStringList('roles', user.roles);
     await prefs.setString('discount', json.encode(user.discount));
+    await prefs.setString('fcmToken', user.fcmToken);
     return true;
   }
 
@@ -75,6 +88,7 @@ class SharedPreferencesService {
     user.disabled = prefs.getBool('disabled') ?? User.defaultUser().disabled;
     user.roles = prefs.getStringList('roles') ?? User.defaultUser().roles;
     user.discount = json.decode(prefs.getString('discount') ?? json.encode(User.defaultUser().discount)) ?? User.defaultUser().discount;
+    user.fcmToken = prefs.getString('fcmTocken') ?? User.defaultUser().fcmToken;
     return user;
   }
 }

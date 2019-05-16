@@ -5,7 +5,6 @@ import 'package:transparent_image/transparent_image.dart';
 
 import 'package:cup_and_soup/widgets/core/button.dart';
 import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/dialogs/message.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 

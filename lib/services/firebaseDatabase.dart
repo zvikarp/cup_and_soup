@@ -21,7 +21,6 @@ class FirebaseDatabaseService {
     _firebaseItemsStock = _db.reference().child('store/itemsStock/').onValue;
     _firebaseItemsStock.listen((Event event) {
       Map<String,int> stocks = event.snapshot.value.cast<String,int>();
-      print(stocks);
       _itemsStock.add(stocks);
     });
   }

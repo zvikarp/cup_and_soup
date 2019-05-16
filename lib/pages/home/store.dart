@@ -3,7 +3,6 @@ import 'package:cup_and_soup/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
-import 'package:cup_and_soup/services/firebaseDatabase.dart';
 import 'package:cup_and_soup/services/sqflite.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:cup_and_soup/utils/dateTime.dart';

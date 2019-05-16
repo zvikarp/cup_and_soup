@@ -124,7 +124,6 @@ class SqfliteService {
         await cloudFirestoreService.getUpdatedItems(lastUpdated, role);
     Map<String,Item> updatedItems = mergeUpdatedItems(_items, newItems);
     updateItems(updatedItems);
-    newItems.forEach((k,v) => print(k)); 
     updateLocaleItems(localItems, newItems);
     DateTime lastItemUpdated = getLastItemUpdated(newItems);
     if (lastItemUpdated != null)
