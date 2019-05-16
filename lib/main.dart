@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:cup_and_soup/utils/theme.dart';
 import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/models/appTheme.dart';
 
 void main() {
   Crashlytics.instance.enableInDevMode = false;
@@ -27,7 +28,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   Locale _locale;
-  ThemeData _theme;
+  AppTheme _theme;
   bool _localeLoaded = false;
   bool _themeLoaded = false;
 
@@ -35,16 +36,16 @@ class _AppState extends State<App> {
     Stream<Locale> _localeStream = localizationsUtil.streamLocale();
     _localeStream.listen((Locale locale) {
       setState(() {
-       _locale = locale;
+        _locale = locale;
       });
     });
   }
 
   void listenToThemeChange() {
-    Stream<ThemeData> _themeStream = themeUtil.streamTheme();
-    _themeStream.listen((ThemeData theme) {
+    Stream<AppTheme> _themeStream = themeUtil.streamTheme();
+    _themeStream.listen((AppTheme theme) {
       setState(() {
-       _theme = theme;
+        _theme = theme;
       });
     });
   }
@@ -52,16 +53,16 @@ class _AppState extends State<App> {
   void getLocale() async {
     Locale locale = await localizationsUtil.getLocale();
     setState(() {
-     _locale = locale; 
+      _locale = locale;
       _localeLoaded = true;
     });
   }
 
   void getTheme() async {
-    ThemeData theme = await themeUtil.getTheme();
+    AppTheme theme = await themeUtil.getTheme();
     setState(() {
-     _theme = theme;
-  _themeLoaded = true;
+      _theme = theme;
+      _themeLoaded = true;
     });
   }
 
@@ -79,21 +80,24 @@ class _AppState extends State<App> {
     if ((_localeLoaded == false) || (_themeLoaded == false)) {
       return MaterialApp(home: Scaffold());
     } else {
-      return MaterialApp(
-        title: 'cup&soup',
+      return ThemeWidget(
         theme: _theme,
-        home: SplashPage(),
-        supportedLocales: localizationsUtil.getLocalesList(),
-        locale: _locale,
-        localizationsDelegates: [
-          LanguageDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
-        ],
-        localeResolutionCallback:
-            (Locale locale, Iterable<Locale> supportedLocales) {
-          return _locale;
-        },
+        child: MaterialApp(
+          title: 'cup&soup',
+          theme: _theme.materialTheme,
+          home: SplashPage(),
+          supportedLocales: localizationsUtil.getLocalesList(),
+          locale: _locale,
+          localizationsDelegates: [
+            LanguageDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          localeResolutionCallback:
+              (Locale locale, Iterable<Locale> supportedLocales) {
+            return _locale;
+          },
+        ),
       );
     }
   }

@@ -39,7 +39,8 @@ dependencies:
   path_provider: ^1.0.0
   http: ^0.12.0+2
   transparent_image: ^1.0.0
-
+  flutter_svg: 0.12.4+1
+  
 flutter_icons:
   android: "launcher_icon" 
   ios: true
@@ -63,6 +64,8 @@ flutter:
    - assets/images/divider.png
    - assets/images/dialogBackground.png
    - assets/images/add.png
+
+   - assets/images/divider.svg
 
    - assets/flare/basket.flr
    - assets/flare/barcode.flr

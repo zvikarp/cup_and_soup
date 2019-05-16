@@ -102,7 +102,6 @@ class _StorePageState extends State<StorePage> {
   void initState() {
     _checkDiscount();
     _dataStream();
-    // firebaseDatabaseService.streamItemsStock();
     super.initState();
   }
 

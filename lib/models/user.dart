@@ -1,4 +1,3 @@
-/// Todo object
 class User {
   User({
     this.uid,

@@ -227,7 +227,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ? EdgeInsets.only(left: 8, right: 8, bottom: 2)
             : EdgeInsets.only(bottom: 2),
         decoration: BoxDecoration(
-          color: selected ? Colors.black : Colors.transparent,
+          color: selected ? ThemeWidget.of(context).theme.colorXYZ : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(
