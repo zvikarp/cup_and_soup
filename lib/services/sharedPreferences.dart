@@ -84,7 +84,8 @@ class SharedPreferencesService {
     await prefs.setString('email', user.email);
     await prefs.setBool('disabled', user.disabled);
     await prefs.setStringList('roles', user.roles);
-    await prefs.setString('discount', json.encode(user.discount));
+    // await prefs.setString('discount', json.encode(user.discount));
+    await prefs.setString('discount', json.encode({}));
     await prefs.setString('fcmToken', user.fcmToken);
     await prefs.setStringList('notifications', user.notifications);
     return true;

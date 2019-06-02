@@ -32,8 +32,10 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     Navigator.of(context).push(
       TransparentRoute(
         builder: (BuildContext context) => ActivityDetailsDialog(
+              aid: doc['aid'] ?? "not provided",
               type: doc['type'],
               name: doc['desc'],
+              status: doc['status'] ?? "success",
               amount: doc['money'].toDouble(),
               timestamp: dateTimeUtil.timestampStringToDate(doc['timestamp'].toString()),
             ),
@@ -56,7 +58,10 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             child: _typeIcon(doc['type']),
           ),
         ),
-        Text(doc['desc'].toString()),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(doc['desc'].toString()),
+        ),
         Text(doc['money'].toString()),
         Center(child: _date(doc['timestamp'].toString())),
         _more(doc),

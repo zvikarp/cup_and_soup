@@ -1,26 +1,69 @@
+// import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/widgets/core/dialog.dart';
 import 'package:cup_and_soup/widgets/core/button.dart';
 
-class ActivityDetailsDialog extends StatelessWidget {
+class ActivityDetailsDialog extends StatefulWidget {
   ActivityDetailsDialog({
+    @required this.aid,
     @required this.type,
     @required this.name,
     @required this.amount,
     @required this.timestamp,
+    @required this.status,
   });
 
+  final String aid;
   final String type;
   final String name;
+  final String status;
   final double amount;
   final DateTime timestamp;
 
-  Widget _actionSection(BuildContext context) {
-    return ButtonWidget(
+  @override
+  _ActivityDetailsDialogState createState() => _ActivityDetailsDialogState();
+}
+
+class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
+  List<Widget> _actionWidgets(BuildContext context) {
+    List<Widget> list = [];
+    if ((widget.type == "buy") &&
+        (widget.aid != "not provided") &&
+        (widget.status == "success") &&
+        (widget.timestamp.isAfter(DateTime.now().add(Duration(days: -1))))) {
+      list.add(
+        GestureDetector(
+          onTap: () {
+            cloudFirestoreService.requestRefund(widget.aid);
+            SnackbarWidget.infoBar(context,
+                "Your request has been sent, we well notify you in under 1 hour if your request has been exepted.");
+            // Navigator.pop(context);
+          },
+          child: Text(
+            "Request Refund",
+            style: Theme.of(context)
+                .textTheme
+                .subtitle
+                .merge(TextStyle(decoration: TextDecoration.underline)),
+          ),
+        ),
+      );
+    }
+    list.add(ButtonWidget(
       text: "CLOSE",
       onPressed: () => Navigator.pop(context),
       primary: false,
+    ));
+    return list;
+  }
+
+  Widget _actionSection(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: _actionWidgets(context),
     );
   }
 
@@ -33,7 +76,7 @@ class ActivityDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(type),
+      Text(widget.type),
     ]);
   }
 
@@ -46,7 +89,7 @@ class ActivityDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(name),
+      Text(widget.name),
     ]);
   }
 
@@ -59,7 +102,7 @@ class ActivityDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(amount.toString()),
+      Text(widget.amount.toString()),
     ]);
   }
 
@@ -72,7 +115,20 @@ class ActivityDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(timestamp.toString()),
+      Text(widget.timestamp.toString()),
+    ]);
+  }
+
+  TableRow _aidRow(BuildContext context) {
+    return TableRow(children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          "Receipt Number:",
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
+      Text(widget.aid.toString()),
     ]);
   }
 
@@ -85,7 +141,7 @@ class ActivityDetailsDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text("success"),
+      Text(widget.status.toString()),
     ]);
   }
 
@@ -98,6 +154,7 @@ class ActivityDetailsDialog extends StatelessWidget {
         _nameRow(context),
         _amountRow(context),
         _timestampRow(context),
+        _aidRow(context),
         _statusRow(context),
       ],
     );

@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:cup_and_soup/services/cloudFirestore.dart';
 import 'package:cup_and_soup/services/sharedPreferences.dart';
 import 'package:cup_and_soup/services/cloudFunctions.dart';
+import 'package:cup_and_soup/models/user.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 
 class FirebaseMessagingService {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  void getUsersTocken() {
+  void getUsersToken() {
     _firebaseMessaging.getToken().then((String fcmToken) async {
-      String currentFcmToken = await sharedPreferencesService.getFcmToken();
+      User user = await cloudFirestoreService.streamUserData().first;
+      String currentFcmToken = user.fcmToken;
       if (fcmToken != currentFcmToken) {
-        List<String> topicsList = await sharedPreferencesService.getNtifications();
+        List<String> topicsList =
+            await sharedPreferencesService.getNtifications();
         updateUserNotificationsTopics(topicsList, topicsList);
         sharedPreferencesService.setFcmToken(fcmToken);
         cloudFunctionsService.changeFcmToken(fcmToken);
+        if (user.roles.contains("admin"))
+          cloudFirestoreService.updateAdminFcmToken(fcmToken);
       }
     });
   }
 
-  bool updateUserNotificationsTopics(List<String> topicsToSubscribe, List<String> allTopics) {
+  bool updateUserNotificationsTopics(
+      List<String> topicsToSubscribe, List<String> allTopics) {
     allTopics.forEach((topic) {
       if (topicsToSubscribe.contains(topic))
         _firebaseMessaging.subscribeToTopic(topic);
@@ -31,7 +38,7 @@ class FirebaseMessagingService {
   }
 
   void firebaseCloudMessagingListeners(BuildContext context) {
-    getUsersTocken();
+    getUsersToken();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {

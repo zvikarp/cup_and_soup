@@ -8,6 +8,7 @@ import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
 import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
 import 'package:cup_and_soup/pages/admin/giveDiscount.dart';
+import 'package:cup_and_soup/pages/admin/refundRequests.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
 import 'package:cup_and_soup/widgets/core/center.dart';
@@ -100,7 +101,57 @@ class _AdminPageState extends State<AdminPage> {
         ),
         DividerWidget(),
         Text(
-          "More Options",
+          "Requests",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.title
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Orders",
+              ),
+              ButtonWidget(
+                text: "VIEW",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ActiveBarcodesPage()),
+                  );
+                },
+                primary: false,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Refund Requests",
+              ),
+              ButtonWidget(
+                text: "VIEW",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RefundRequestsPage()),
+                  );
+                },
+                primary: false,
+              ),
+            ],
+          ),
+        ),
+        DividerWidget(),
+        Text(
+          "More",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title
         ),

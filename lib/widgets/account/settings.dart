@@ -139,7 +139,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         children: <Widget>[
           Expanded(
             child: Text(
-              "Change when you recive notifications",
+              "Change when you receive notifications",
               style: Theme.of(context).textTheme.subtitle,
             ),
           ),

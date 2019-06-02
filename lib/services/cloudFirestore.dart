@@ -345,6 +345,43 @@ class CloudFirestoreService {
     return true;
   }
 
+  Future<bool> requestRefund(String aid) async {
+    String uid = await authService.getUid();
+    var doc = await _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document('refund')
+        .get();
+    if (doc.exists) {
+      DateTime expiringDate = doc.data['expiringDate'].toDate();
+      if (DateTime.now().millisecondsSinceEpoch >
+          expiringDate.millisecondsSinceEpoch) {
+        await _db
+            .collection('users')
+            .document(uid)
+            .collection('requests')
+            .document('refund')
+            .delete();
+      } else {
+        return false;
+      }
+    }
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document('refund')
+        .setData({
+      'aid': aid,
+      'client': 'server',
+      'expiringDate': DateTime.now().add(Duration(minutes: 60)),
+    });
+    // SnackbarWidget.infoBar(context,
+    //     "Your request has been sent, we well notify you in under 1 hour if your request has been exepted.");
+    return true;
+  }
+
   Future<bool> sendRequest(String barcode) async {
     String type = "";
     if (barcode[0] == "M")
@@ -443,6 +480,8 @@ class CloudFirestoreService {
             'desc': v['desc'],
             'money': v['money'],
             'type': v['type'],
+            'aid': v['aid'] ?? "not provided",
+            'status': v['status'] ?? "success",
           };
           _activityList.add(data);
         });
@@ -457,6 +496,15 @@ class CloudFirestoreService {
     if (uid == null) return null;
     var doc = await _db.collection('general').document('updates').get();
     return doc.data['appVersion'];
+  }
+
+  void updateAdminFcmToken(String fcmToken) async {
+    String uid = await authService.getUid();
+    if (uid == null) return;
+    await _db.collection('admin').document('adminFcmTokens').updateData({
+      uid: fcmToken,
+    });
+    return;
   }
 }
 

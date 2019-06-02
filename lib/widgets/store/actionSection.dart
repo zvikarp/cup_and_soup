@@ -55,6 +55,7 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
       if (snap['barcode'] == widget.barcode) {
         _requestStream.cancel();
         cloudFirestoreService.deleteRequest("buy");
+        if (!mounted) return;
         setState(() {
           loading = false;
         });

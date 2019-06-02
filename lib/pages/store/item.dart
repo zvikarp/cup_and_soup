@@ -15,8 +15,7 @@ class ItemPage extends StatelessWidget {
   List<Tag> _getTags() {
     List<String> tags = [];
     for (String t in item.tags) {
-      if (t.split(':').first != "setting")
-      tags.add(t);
+      if (t.split(':').first != "setting") tags.add(t);
     }
     return (tags).map((tag) {
       return Tag(
@@ -38,17 +37,26 @@ class ItemPage extends StatelessWidget {
                 Stack(
                   children: <Widget>[
                     Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.navigate_before,
+                          size: 42,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    Align(
                       alignment: Alignment.center,
                       child: Container(
                         margin: EdgeInsets.all(36),
                         height: 230,
                         child: Hero(
-                          tag: item.barcode,
-                          child: DisplayImageWidget(
-                            localImage: item.localImage,
-                            remoteImage: item.remoteImage,
-                          )
-                        ),
+                            tag: item.barcode,
+                            child: DisplayImageWidget(
+                              localImage: item.localImage,
+                              remoteImage: item.remoteImage,
+                            )),
                       ),
                     ),
                     Positioned(
@@ -76,11 +84,10 @@ class ItemPage extends StatelessWidget {
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline,
+                  style: TextStyle(fontFamily: "PrimaryFont", fontSize: 42),
                 ),
                 Text(
-                  "Hechsher: " +
-                      (item.hechsherim.toString() ?? "Not kosher.."),
+                  "Hechsher: " + (item.hechsherim.toString() ?? "Not kosher.."),
                   style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(
