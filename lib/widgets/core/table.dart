@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 class TableWidget extends StatelessWidget {
@@ -11,7 +13,7 @@ class TableWidget extends StatelessWidget {
     this.itemsPerPage = 10,
     this.onPageChange,
     this.page,
-    this.itemType = "items",
+    this.itemType = "",
   });
 
   final List<List<Widget>> items;
@@ -29,6 +31,8 @@ class TableWidget extends StatelessWidget {
       child: Center(
         child: Text(
           text,
+          overflow: TextOverflow.clip,
+          maxLines: 1,
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -40,36 +44,37 @@ class TableWidget extends StatelessWidget {
       children: headings.map((heading) => _title(context, heading)).toList(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        color: Colors.grey[200],
+        color: themes.load("tableColor"),
       ),
     );
   }
 
-  List<TableRow> _content() {
+  List<TableRow> _content(BuildContext context) {
     List<TableRow> tableRows = [];
     int rows = length == -1
         ? items.length
         : min(itemsPerPage, ((length) - (itemsPerPage * page)));
     for (int i = 0; i < rows; i++) {
-      if (items[i].toString() == "[Container]") continue;
+      if (items[i].toString() == "[Container]")
+        continue;
       else
         tableRows.add(
           TableRow(
             children: items[i],
-            decoration: BoxDecoration(color: Colors.grey[200]),
+            decoration: BoxDecoration(color: themes.load("tableColor")),
           ),
         );
     }
     return tableRows;
   }
 
-  Widget _bottomBar() {
+  Widget _bottomBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 4),
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-        color: Colors.grey[200],
+        color: themes.load("tableColor"),
       ),
       child: length == -1 ? Container() : _bottomNavbar(),
     );
@@ -81,19 +86,24 @@ class TableWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            child: Icon(Icons.navigate_before),
+            child: Icon(
+              Icons.navigate_before,
+              color: themes.load("body1"),
+            ),
             onTap: () => onPageChange(page - 1),
           ),
-          Text("displaying " +
+          Text(translate.text("core-table:w-st")[0] +
               itemType +
-              " " +
               ((page * itemsPerPage) + 1).toString() +
-              " - " +
+              translate.text("core-table:w-st")[1] +
               (min(((page + 1) * itemsPerPage), length)).toString() +
-              " of " +
+              translate.text("core-table:w-st")[2] +
               length.toString()),
           GestureDetector(
-            child: Icon(Icons.navigate_next),
+            child: Icon(
+              Icons.navigate_next,
+              color: themes.load("body1"),
+            ),
             onTap: () => onPageChange(page + 1),
           ),
         ],
@@ -102,16 +112,15 @@ class TableWidget extends StatelessWidget {
   }
 
   List<TableRow> _children(BuildContext context) {
-    List<TableRow> children = _content();
+    List<TableRow> children = _content(context);
     children.insert(0, _topBar(context));
     return children;
   }
 
   Map<int, FractionColumnWidth> _widths() {
     Map<int, FractionColumnWidth> widths = {};
-    for(int i = 0; i < flex.length; i++) {
-      widths.putIfAbsent(i, () => FractionColumnWidth(flex[i])
-      );
+    for (int i = 0; i < flex.length; i++) {
+      widths.putIfAbsent(i, () => FractionColumnWidth(flex[i]));
     }
     return widths;
   }
@@ -130,7 +139,7 @@ class TableWidget extends StatelessWidget {
             color: Theme.of(context).canvasColor,
           )),
         ),
-        _bottomBar(),
+        _bottomBar(context),
       ],
     );
   }

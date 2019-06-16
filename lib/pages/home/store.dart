@@ -111,7 +111,7 @@ class _StorePageState extends State<StorePage> {
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      title: Language.of(context).translate("storePageName"),
+      title: translate.text("store:p-t"),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

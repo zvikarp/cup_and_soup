@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/models/user.dart';
@@ -20,7 +21,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
     return Column(
       children: <Widget>[
         Text(
-          "Balance",
+          translate.text("acc:p-balance:w-t"),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),
@@ -40,9 +41,9 @@ class _BalanceWidgetState extends State<BalanceWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64),
           child: Text(
-            "You have up to " +
+            translate.text("acc:p-balance:w-st")[0] +
                 widget.user.allowedCredit.toString() +
-                " NIS in credit, ask a admin to give you more.",
+                translate.text("acc:p-balance:w-st")[1],
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.subtitle,
           ),

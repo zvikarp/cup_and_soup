@@ -1,4 +1,5 @@
 import 'package:cup_and_soup/utils/dateTime.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 class DateTimePicker extends StatefulWidget {
@@ -79,7 +80,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
       child: Container(
         decoration: BoxDecoration(
             border:
-                Border(bottom: BorderSide(color: Colors.black54, width: 1))),
+                Border(bottom: BorderSide(color: themes.load("body1"), width: 1))),
         child: Text(dateTimeUtil.date(dateTime)),
       ),
     );
@@ -91,7 +92,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
       child: Container(
         decoration: BoxDecoration(
             border:
-                Border(bottom: BorderSide(color: Colors.black54, width: 1))),
+                Border(bottom: BorderSide(color: themes.load("body1"), width: 1))),
         child: Text(dateTimeUtil.time(dateTime)),
       ),
     );

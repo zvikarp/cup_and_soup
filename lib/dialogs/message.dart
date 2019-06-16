@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/widgets/core/dialog.dart';
@@ -25,24 +26,24 @@ class MessageDialog extends StatelessWidget {
     if (collection == 'g') {
       switch (responseCode) {
         case 'gs0':
-          return "The operation was successfull.";
+          return translate.text("mag:d-gs0");
         case 'ge0':
-          return "Oops... Something unexpected happened, please try again later.";
+          return translate.text("mag:d-ge0");
         case 'ge1':
-          return "Error connecting to network, please check your internet connection.";
+          return translate.text("mag:d-ge1");
         case 'ge2':
-          return "We are sorry, we are unable to connect to our servers right now, please try again later.";
+          return translate.text("mag:d-ge2");
         case 'ge3':
-          return "The request use-by date has expierd.";
+          return translate.text("mag:d-ge3");
         case 'ge4':
-          return "Can not sign in with the current user id, please try restarting the app.";
+          return translate.text("mag:d-ge4");
         default:
-          return "An unknown error occured, we would be able to help me if you leave us some feadback.";
+          return translate.text("mag:d-geUnknown");
       }
     } else if (collection == 'b') {
       switch (responseCode) {
         case 'b-gs0':
-          return "Enjoy your soup!.";
+          return translate.text("mag:d-b-gs0");
         case 'b-ge0':
         case 'b-ge1':
         case 'b-ge2':
@@ -50,18 +51,18 @@ class MessageDialog extends StatelessWidget {
         case 'b-ge4':
           return _textMessage(code);
         case 'b-e0':
-          return "We are sorry, currently this item is out of stock. We are trying are best to get it back to you!";
+          return translate.text("mag:d-b-e0");
         case 'b-e1':
-          return "Ouch. It seems like you don't have enough money to my this. You might want to add money to your account.";
+          return translate.text("mag:d-b-e1");
         case 'b-e2':
-          return "The requested item doesn't exist in the store, please try selecting a differant item.";
+          return translate.text("mag:d-b-e2");
         default:
           return _textMessage("g");
       }
     } else if (collection == 'm') {
       switch (responseCode) {
         case 'm-gs0':
-          return "The money was successfully transfered to your account!";
+          return translate.text("mag:d-m-gs0");
         case 'm-ge0':
         case 'm-ge1':
         case 'm-ge2':
@@ -69,18 +70,18 @@ class MessageDialog extends StatelessWidget {
         case 'm-ge4':
           return _textMessage(code);
         case 'm-e0':
-          return "The scanned code doesn't exist anymore.";
+          return translate.text("mag:d-m-e0");
         case 'm-e1':
-          return "It looks like you have successfully used the code already. It can't be used twice.";
+          return translate.text("mag:d-m-e1");
         case 'm-e2':
-          return "The barcode has expired.";
+          return translate.text("mag:d-m-e2");
         default:
           return _textMessage("g");
       }
     } else if (collection == 'd') {
       switch (responseCode) {
         case 'd-gs0':
-          return "The discount was successfully applied to your account!";
+          return translate.text("mag:d-d-gs0");
         case 'd-ge0':
         case 'd-ge1':
         case 'd-ge2':
@@ -88,18 +89,18 @@ class MessageDialog extends StatelessWidget {
         case 'd-ge4':
           return _textMessage(code);
         case 'd-e0':
-          return "The scanned code doesn't exist anymore.";
+          return translate.text("mag:d-d-e0");
         case 'd-e1':
-          return "It looks like you have successfully used the code already. It can't be used twice.";
+          return translate.text("mag:d-d-e1");
         case 'd-e2':
-          return "The barcode has expired.";
+          return translate.text("mag:d-d-e2");
         default:
           return _textMessage("g");
       }
     } else if (collection == 'c') {
       switch (responseCode) {
         case 'c-gs0':
-          return "The credit update was successfully applied account!";
+          return translate.text("mag:d-c-gs0");
         case 'c-ge0':
         case 'c-ge1':
         case 'c-ge2':
@@ -107,9 +108,9 @@ class MessageDialog extends StatelessWidget {
         case 'c-ge4':
           return _textMessage(code);
         case 'c-e0':
-          return "The scanned code doesn't exist anymore.";
+          return translate.text("mag:d-c-e0");
         case 'c-e1':
-          return "The barcode has expired.";
+          return translate.text("mag:d-c-e1");
         default:
           return _textMessage("g");
       }
@@ -118,11 +119,11 @@ class MessageDialog extends StatelessWidget {
         case 's-ge0':
           return _textMessage(code);
         case 's-e0':
-          return "There is a problem recognising the barcode, please make your you are in a light place.";
+          return translate.text("mag:d-s-e0");
         case 's-e1':
-          return "Please enable camera permissions so you can use the scanner.";
+          return translate.text("mag:d-s-e1");
         case 's-e2':
-          return "Umm... It looks like this barcode dosn't exist.";
+          return translate.text("mag:d-s-e2");
         default:
           return _textMessage("g");
       }
@@ -133,7 +134,7 @@ class MessageDialog extends StatelessWidget {
   }
 
   Widget _actionSection(BuildContext context, String type) {
-    String buttonText = "BACK";
+    String buttonText = translate.text("button-back");
     if (type == 's') buttonText = "OK";
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -146,9 +147,9 @@ class MessageDialog extends StatelessWidget {
   }
 
   String _title(String title) {
-    if (title == "e") return "Error Message";
-    else if (title == "s") return "Success message";
-    else return "Unknown Message";
+    if (title == "e") return translate.text("mag:d-error-t");
+    else if (title == "s") return translate.text("mag:d-success-t");
+    else return translate.text("mag:d-unknown-t");
   }
 
   @override

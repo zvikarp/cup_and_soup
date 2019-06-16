@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/selectable_tags.dart';
 
@@ -37,7 +38,7 @@ class ItemPage extends StatelessWidget {
                 Stack(
                   children: <Widget>[
                     Align(
-                      alignment: Alignment.topLeft,
+                      alignment: translate.rtl() ? Alignment.topRight : Alignment.topLeft,
                       child: IconButton(
                         icon: Icon(
                           Icons.navigate_before,
@@ -60,7 +61,8 @@ class ItemPage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      right: 60.0,
+                      right: translate.rtl() ? null : 60,
+                      left: translate.rtl() ? 60 : null,
                       top: 40.0,
                       child: Container(
                         padding:
@@ -72,7 +74,7 @@ class ItemPage extends StatelessWidget {
                               : Colors.grey,
                         ),
                         child: Text(
-                          item.stock > 0 ? "In Stock" : "Out of stock",
+                          item.stock > 0 ? translate.text("item:p-inStock") : translate.text("item:p-outOfStock"),
                           style: TextStyle(
                             color: Colors.black,
                           ),
@@ -87,7 +89,10 @@ class ItemPage extends StatelessWidget {
                   style: TextStyle(fontFamily: "PrimaryFont", fontSize: 42),
                 ),
                 Text(
-                  "Hechsher: " + (item.hechsherim.toString() ?? "Not kosher.."),
+                  translate.text("item:p-hechesher") +
+                      ": " +
+                      (item.hechsherim.toString() ??
+                          translate.text("item:p-notKosher")),
                   style: Theme.of(context).textTheme.subtitle,
                 ),
                 Container(

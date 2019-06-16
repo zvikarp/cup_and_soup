@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DialogWidget extends StatelessWidget {
   DialogWidget({
@@ -10,8 +12,8 @@ class DialogWidget extends StatelessWidget {
     this.scrollable = false,
     this.padding = const EdgeInsets.all(0.0),
     this.margin = const EdgeInsets.all(16.0),
-    this.blurColor = const Color(0x10ffffff),
-    this.shadowColor = const Color(0xfff9E9E9E),
+    this.blurColor,
+    this.shadowColor,
   });
 
   final Widget child;
@@ -23,11 +25,10 @@ class DialogWidget extends StatelessWidget {
   final Color shadowColor;
   final Color blurColor;
 
-
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      backgroundColor: blurColor,
+      backgroundColor: blurColor ?? themes.load("dialogBlurColor"),
       body: BackdropFilter(
         filter: ui.ImageFilter.blur(
           sigmaX: 6.0,
@@ -36,14 +37,14 @@ class DialogWidget extends StatelessWidget {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("assets/images/dialogBackground.png"),
-                fit: BoxFit.contain,
-              ),
+              // image: new DecorationImage(
+              //   image: new AssetImage("assets/images/dialogBackground.png"),
+              //   fit: BoxFit.contain,
+              // ),
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 new BoxShadow(
-                  color: shadowColor,
+                  color: shadowColor ?? themes.load("dialogShadowColor"),
                   blurRadius: 20.0,
                 )
               ],
@@ -51,15 +52,25 @@ class DialogWidget extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 42.0, vertical: 80.0),
             child: AspectRatio(
               aspectRatio: 753 / 1183,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: <Widget>[
-                  heading,
-                  Expanded(child: scrollable ?
-                  SingleChildScrollView(child: child) :
-                  Center(child:child),
+                  SvgPicture.asset(
+                    "assets/images/dialogBackground.svg",
+                    width: double.infinity,
+                    color: themes.load("canvasColor"),
                   ),
-                  actionSection,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      heading,
+                      Expanded(
+                        child: scrollable
+                            ? SingleChildScrollView(child: child)
+                            : Center(child: child),
+                      ),
+                      actionSection,
+                    ],
+                  ),
                 ],
               ),
             ),

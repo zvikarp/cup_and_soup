@@ -3,18 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-import 'package:cup_and_soup/utils/theme.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:cup_and_soup/pages/splash.dart';
 import 'package:cup_and_soup/utils/localizations.dart';
-import 'package:cup_and_soup/models/appTheme.dart';
+import 'package:cup_and_soup/data/theme/app.dart';
 
-void main() {
+void main() async {
   Crashlytics.instance.enableInDevMode = false;
 
   FlutterError.onError = (FlutterErrorDetails details) {
     Crashlytics.instance.onError(details);
   };
 
+  await translate.init();
+  await themes.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(App());
@@ -27,78 +29,43 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Locale _locale;
-  AppTheme _theme;
-  bool _localeLoaded = false;
-  bool _themeLoaded = false;
-
-  void listenToLocaleChange() {
-    Stream<Locale> _localeStream = localizationsUtil.streamLocale();
-    _localeStream.listen((Locale locale) {
-      setState(() {
-        _locale = locale;
-      });
-    });
-  }
-
-  void listenToThemeChange() {
-    Stream<AppTheme> _themeStream = themeUtil.streamTheme();
-    _themeStream.listen((AppTheme theme) {
-      setState(() {
-        _theme = theme;
-      });
-    });
-  }
-
-  void getLocale() async {
-    Locale locale = await localizationsUtil.getLocale();
-    setState(() {
-      _locale = locale;
-      _localeLoaded = true;
-    });
-  }
-
-  void getTheme() async {
-    AppTheme theme = await themeUtil.getTheme();
-    setState(() {
-      _theme = theme;
-      _themeLoaded = true;
-    });
-  }
+  Locale _locale = translate.locale;
+  String _theme = themes.theme;
 
   @override
   void initState() {
     super.initState();
-    getLocale();
-    getTheme();
-    listenToLocaleChange();
-    listenToThemeChange();
+    translate.onLocaleChangedCallback = _onLocaleChanged;
+    themes.onThemeChangedCallback = _onThemeChanged;
+    setState(() {
+      _locale = translate.locale;
+    });
+  }
+
+  _onLocaleChanged() async {
+    setState(() {
+      _locale = translate.locale;
+    });
+  }
+
+  _onThemeChanged() async {
+    setState(() {
+      _theme = themes.theme;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if ((_localeLoaded == false) || (_themeLoaded == false)) {
-      return MaterialApp(home: Scaffold());
-    } else {
-      return ThemeWidget(
-        theme: _theme,
-        child: MaterialApp(
-          title: 'cup&soup',
-          theme: _theme.materialTheme,
-          home: SplashPage(),
-          supportedLocales: localizationsUtil.getLocalesList(),
-          locale: _locale,
-          localizationsDelegates: [
-            LanguageDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
-          ],
-          localeResolutionCallback:
-              (Locale locale, Iterable<Locale> supportedLocales) {
-            return _locale;
-          },
-        ),
-      );
-    }
+    return MaterialApp(
+      title: 'cup&soup',
+      theme: appTheme.getThemeData(_theme),
+      home: SplashPage(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      locale: _locale,
+      supportedLocales: translate.supportedLocales(),
+    );
   }
 }

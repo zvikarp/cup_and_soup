@@ -1,5 +1,6 @@
 import 'package:cup_and_soup/models/user.dart';
 import 'package:cup_and_soup/pages/home.dart';
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -42,7 +43,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      title: "account",
+      title: translate.text("acc:p-t"),
       child: AnimatedOpacity(
         opacity: (_user != null) ? 1.0 : 0.0,
         duration: Duration(milliseconds: 500),
@@ -67,14 +68,11 @@ class _AccountPageState extends State<AccountPage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 36),
                   child: Text(
-                    !_upToDate
-                        ? "There is a new version to download from the Play Store!"
-                        : "",
+                    !_upToDate ? translate.text("acc:p-newVersion") : "",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.body2,
                   ),
                 ),
-                SizedBox(height: 36),
               ])
             : Container(),
       ),

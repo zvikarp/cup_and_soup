@@ -1,5 +1,5 @@
 import 'package:cup_and_soup/dialogs/notificationsSettings.dart';
-import 'package:cup_and_soup/utils/theme.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:cup_and_soup/utils/transparentRoute.dart';
 import 'package:flutter/material.dart';
 
@@ -30,17 +30,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   bool _loading = false;
 
   Map<String, String> _langs = {'en': 'English', 'he': 'עברית'};
-  Map<String, String> _modes = {'light': 'Light', 'dark': 'Dark'};
+  List<String> _modes = ['light', 'dark'];
   String _selectedLang = "";
   String _selectedMode = "light";
 
   void _getSetting() async {
-    String lang =
-        localizationsUtil.localeToCode(await localizationsUtil.getLocale());
-    String mode = themeUtil.themeToCode(await themeUtil.getTheme());
+    String lang = await translate.getPreferredLanguage();
+    String mode = await themes.getPreferredTheme();
     setState(() {
       _selectedLang = lang ?? _langs.keys.toList().first;
-      _selectedMode = mode ?? _modes.keys.toList().first;
+      _selectedMode = mode ?? _modes.toList().first;
     });
   }
 
@@ -76,7 +75,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          "Name: ",
+          translate.text("field-name") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -97,17 +96,21 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: _loading
-                ? Icon(Icons.rotate_right)
-                : _newName != _name
-                    ? GestureDetector(
-                        onTap: _nameChangeRequest,
-                        child: Icon(Icons.save),
-                      )
-                    : Container(),
-          ),
+          _loading
+              ? Icon(Icons.rotate_right)
+              : _newName != _name
+                  ? Column(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: _nameChangeRequest,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Icon(Icons.save),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(width: 16),
         ],
       ),
     ];
@@ -118,7 +121,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          "Email: ",
+          translate.text("field-email") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -131,7 +134,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          "Notifications: ",
+          translate.text("field-notifications") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -139,7 +142,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         children: <Widget>[
           Expanded(
             child: Text(
-              "Change when you receive notifications",
+              translate.text("acc:p-settings:w-notifications"),
               style: Theme.of(context).textTheme.subtitle,
             ),
           ),
@@ -173,22 +176,29 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   List<Widget> _rolesRow() {
-    return widget.user.roles.join() != "customer"
-        ? [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                "Roles: ",
-                style: Theme.of(context).textTheme.body2,
-              ),
-            ),
-            Text(widget.user.roles.join(", ")),
-          ]
-        : [Container()];
+    if (widget.user.roles.join() != "customer") {
+      List<String> roles = widget.user.roles;
+      Map<String, String> translatedRoles = translate.text("roles-types");
+      List<String> translatedUserRoles = [];
+      for (String role in roles) {
+        translatedUserRoles.add(translatedRoles[role]);
+      }
+      return [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            translate.text("field-roles") + ": ",
+            style: Theme.of(context).textTheme.body2,
+          ),
+        ),
+        Text(translatedUserRoles.join(", ")),
+      ];
+    } else
+      return [Container()];
   }
 
   void _setLang(String lang) async {
-    localizationsUtil.setLocal(localizationsUtil.codeToLocale(lang));
+    translate.setNewLanguage(lang);
     setState(() {
       _selectedLang = lang;
     });
@@ -210,7 +220,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           _langs[lang],
           style: Theme.of(context).textTheme.body1.merge(
                 TextStyle(
-                  color: selected ? Colors.grey[200] : Colors.black,
+                  color: selected ? Colors.grey[200] : themes.load("body2"),
                 ),
               ),
         ),
@@ -219,7 +229,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   void _setTheme(String theme) async {
-    themeUtil.setTheme(themeUtil.codeToTheme(theme));
+    themes.setNewTheme(theme);
     setState(() {
       _selectedMode = theme;
     });
@@ -234,16 +244,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ? EdgeInsets.only(left: 8, right: 8, bottom: 2)
             : EdgeInsets.only(bottom: 2),
         decoration: BoxDecoration(
-          color: selected
-              ? ThemeWidget.of(context).theme.colorXYZ
-              : Colors.transparent,
+          color: selected ? Colors.black : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(
-          _modes[mode],
+          translate.text("acc:p-settings:w-viewMode")[mode],
           style: Theme.of(context).textTheme.body1.merge(
                 TextStyle(
-                  color: selected ? Colors.grey[200] : Colors.black,
+                  color: selected ? Colors.grey[200] : themes.load("body2"),
                 ),
               ),
         ),
@@ -256,7 +264,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          "Language: ",
+          translate.text("field-language") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -274,12 +282,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          "View Mode: ",
+          translate.text("field-viewMode") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
       Row(
-        children: _modes.keys
+        children: _modes
             .toList()
             .map((mode) => _modeButton(mode, mode == _selectedMode))
             .toList(),
@@ -294,7 +302,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       children: <Widget>[
         Center(
           child: Text(
-            "Settings",
+            translate.text("acc:p-settings:w-t"),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.title,
           ),
@@ -320,7 +328,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ButtonWidget(
-                  text: "SIGN OUT",
+                  text: translate.text("acc:p-settings:w-signOut-b"),
                   onPressed: () {
                     authService.signOut();
                     Navigator.pushReplacement(context,
@@ -328,16 +336,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   },
                   primary: false,
                 ),
-                Opacity(
-                  opacity: 0.3,
-                  child: ButtonWidget(
-                    text: "DELETE ACCOUNT",
-                    onPressed: () {
-                      SnackbarWidget.infoBar(
-                          context, "This feature is still under develepment.");
-                    },
-                    primary: false,
-                  ),
+                ButtonWidget(
+                  text: translate.text("acc:p-settings:w-deleteAccount-b"),
+                  disabled: true,
+                  onPressed: () {
+                    SnackbarWidget.infoBar(
+                        context, "This feature is still under develepment.");
+                  },
+                  primary: false,
                 ),
               ],
             )),

@@ -1,3 +1,4 @@
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/widgets/core/dialog.dart';
@@ -40,7 +41,7 @@ class _SigninDialogState extends State<SigninDialog> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                valueColor: AlwaysStoppedAnimation<Color>(themes.load("body2")),
               ),
             ),
             Padding(

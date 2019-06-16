@@ -1,4 +1,5 @@
 // import 'package:cup_and_soup/widgets/core/snackbar.dart';
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:cup_and_soup/widgets/core/snackbar.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
             // Navigator.pop(context);
           },
           child: Text(
-            "Request Refund",
+            translate.text("activityDetailes:d-requestRefund"),
             style: Theme.of(context)
                 .textTheme
                 .subtitle
@@ -53,7 +54,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       );
     }
     list.add(ButtonWidget(
-      text: "CLOSE",
+      text: translate.text("button-close"),
       onPressed: () => Navigator.pop(context),
       primary: false,
     ));
@@ -72,11 +73,11 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Type:",
+          translate.text("field-type") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(widget.type),
+      Text(translate.text("action-types")[widget.type.toString()]),
     ]);
   }
 
@@ -85,7 +86,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Name:",
+          translate.text("field-name") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -98,7 +99,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Amount:",
+          translate.text("field-amount") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -111,7 +112,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Timestamp:",
+          translate.text("field-timestamp") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
@@ -120,15 +121,18 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
   }
 
   TableRow _aidRow(BuildContext context) {
+    String aid = widget.aid.toString();
+    if (aid == "not provided")
+      aid = translate.text("activityDetailes:d-notProvided");
     return TableRow(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Receipt Number:",
+          translate.text("field-receiptNumber") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(widget.aid.toString()),
+      Text(aid),
     ]);
   }
 
@@ -137,11 +141,11 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          "Status:",
+          translate.text("field-status") + ": ",
           style: Theme.of(context).textTheme.body2,
         ),
       ),
-      Text(widget.status.toString()),
+      Text(translate.text("status-types")[widget.status.toString()]),
     ]);
   }
 
@@ -167,7 +171,7 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
       heading: Padding(
         padding: EdgeInsets.all(16),
         child: Text(
-          "Activity Details",
+          translate.text("activityDetailes:d-t"),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),

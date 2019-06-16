@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -113,7 +114,9 @@ class _ActionSectionWidgetState extends State<ActionSectionWidget> {
                     ],
                   )
                 : ButtonWidget(
-                    text: "BUY NOW FOR " + _price + " NIS",
+                    text: translate.text("item:p-buyButton")[0] +
+                        _price +
+                        translate.text("item:p-buyButton")[1],
                     onPressed: () {
                       setState(() {
                         loading = true;

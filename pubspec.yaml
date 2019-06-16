@@ -64,17 +64,20 @@ flutter:
    - assets/images/divider.png
    - assets/images/dialogBackground.png
    - assets/images/add.png
+   - assets/images/icon.png
 
    - assets/images/divider.svg
+   - assets/images/dialogBackground.svg
+   - assets/images/center.svg
+   - assets/images/navBar.svg
+   
+   - assets/images/navigation.png
 
    - assets/flare/basket.flr
    - assets/flare/barcode.flr
    - assets/flare/user.flr
    - assets/flare/lock.flr
    - assets/flare/star.flr
-
-   - resources/lang/en.json
-   - resources/lang/he.json
 
   fonts:
     - family: BrandFont
@@ -86,3 +89,6 @@ flutter:
     - family: SeconderyFont
       fonts:
         - asset: assets/fonts/coffee+teademo-Regular.ttf
+    - family: HeBrandFont
+      fonts:
+        - asset: assets/fonts/TsMatka-Regular.ttf

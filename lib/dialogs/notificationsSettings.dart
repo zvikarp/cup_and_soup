@@ -1,4 +1,5 @@
 import 'package:cup_and_soup/models/user.dart';
+import 'package:cup_and_soup/utils/localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFunctions.dart';
@@ -23,27 +24,27 @@ class _NotificationsSettingsDialogState
   final List<Map<String, String>> _notificatinTypes = [
     {
       "topic": "important",
-      "desc": "Receive important notifications",
+      "desc": translate.text("notificationSettings:d-1"),
     },
     {
       "topic": "general",
-      "desc": "Receive general notifications",
+      "desc": translate.text("notificationSettings:d-2"),
     },
     {
       "topic": "special",
-      "desc": "Receive special discounts and sales notifications",
+      "desc": translate.text("notificationSettings:d-3"),
     },
   ];
 
   List<String> _userNotificationsSettings = [];
-  String _save = "SAVE";
+  String _save = translate.text("button-save");
 
   Future<bool> _updateNotificationSettings() async {
     print(_userNotificationsSettings);
     print(widget.user.notifications);
     if (_userNotificationsSettings != widget.user.notifications) {
       setState(() {
-        _save = "SAVING...";
+        _save = translate.text("button-saving");
       });
       List<String> allTopics =
           _notificatinTypes.map((topic) => topic['topic']).toList();
@@ -51,7 +52,7 @@ class _NotificationsSettingsDialogState
           _userNotificationsSettings, allTopics);
       await cloudFunctionsService.changeNotifications(_userNotificationsSettings);
       setState(() {
-        _save = "SAVED";
+        _save = translate.text("button-saved");
       });
     }
     Navigator.pop(context, true);
@@ -75,7 +76,7 @@ class _NotificationsSettingsDialogState
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           ButtonWidget(
-            text: "CLOSE",
+            text: translate.text("button-close"),
             onPressed: () => Navigator.pop(context, false),
             primary: false,
           ),
@@ -132,7 +133,7 @@ class _NotificationsSettingsDialogState
       heading: Padding(
         padding: EdgeInsets.all(16),
         child: Text(
-          "Notification Settings",
+          translate.text("notificationSettings:d-t"),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cup_and_soup/models/user.dart';
+import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, Map<String, dynamic>> _pages = {};
   String _currentPage = 'store';
   String _lastPage = "";
+  PageController pageCtr = PageController();
 
   void _updateUserRoles(List<String> roles) {
     setState(() {
@@ -88,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     if (DateTime.now().isAfter(storeStatus['closeingDate'].toDate()) &&
         DateTime.now().isBefore(storeStatus['openingDate'].toDate())) {
       if (_roles.contains("admin")) {
-        SnackbarWidget.infoBar(context, "The store is closed!");
+        SnackbarWidget.infoBar(context, translate.text("home:p-storeClosed-sb"));
       } else {
         Navigator.of(context).push(
           TransparentRoute(
@@ -124,7 +127,7 @@ class _HomePageState extends State<HomePage> {
     bool upToDate = await HomePage.newVersion();
     if (!upToDate) {
       SnackbarWidget.infoBar(
-          context, "There is a new version to download from the Play Store!");
+          context, translate.text("home:p-newVersion-sb"));
     }
   }
 
@@ -148,18 +151,51 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget _content() {
+    if (_pages[_currentPage] != null) {
+      return  _pages[_currentPage]['page'];
+    } else {
+      return StorePage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return !_roles.contains("cashRegister")
-        ? Scaffold(
-            body: _pages[_currentPage] != null
-                ? _pages[_currentPage]['page']
-                : StorePage(),
-            bottomNavigationBar: NavigationBarWidget(
-              currentPage: _currentPage,
-              lastPage: _lastPage,
-              tabTapped: _onTabTaped,
-              pages: _pages,
+    return (!_roles.contains("cashRegister") && _pages.length > 0)
+        ? Theme(
+            data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+            child: Scaffold(
+              resizeToAvoidBottomPadding: false,
+              body: Stack(
+                children: <Widget>[
+              //     PageView(
+              //       controller: pageCtr,
+              //       // physics: NeverScrollableScrollPhysics(),
+              //       children: (_pages.keys
+              //               .toList()
+              //               .map<Widget>((page) => _pages[page]['page']))
+              //           .toList(),
+              //       onPageChanged: (pos) {
+              //         setState(() {
+              //           _currentPage = pos;
+              //         });
+              //       },
+              //     ),
+                  Theme(
+                      data: Theme.of(context)
+                          .copyWith(canvasColor: themes.load("canvasColor")),
+                      child: _content()),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: NavigationBarWidget(
+                      currentPage: _currentPage,
+                      lastPage: _lastPage,
+                      tabTapped: _onTabTaped,
+                      pages: _pages,
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         : Scaffold(

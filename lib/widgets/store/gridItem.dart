@@ -1,3 +1,5 @@
+import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/models/item.dart';
@@ -68,12 +70,12 @@ class GridItemWidget extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Container(
-          foregroundDecoration: item.stock < 1
-              ? BoxDecoration(
-                  color: Colors.grey,
-                  backgroundBlendMode: BlendMode.saturation,
-                )
-              : BoxDecoration(),
+          // foregroundDecoration: item.stock < 1
+          //     ? BoxDecoration(
+          //         color: Colors.grey,
+          //         backgroundBlendMode: BlendMode.saturation,
+          //       )
+          //     : BoxDecoration(),
           margin: EdgeInsets.all(16),
           child: Stack(
             children: <Widget>[
@@ -93,12 +95,12 @@ class GridItemWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      _visible() + _hot() + " ${item.price.toString()} NIS",
+                      _visible() + _hot() + " " + item.price.toString() + " " + translate.text("store:p-itemPrice"),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.title.merge(TextStyle(
                           color: item.stock < 1
-                              ? Colors.grey[300]
-                              : Colors.black)),
+                              ? themes.load("disabled")
+                              : themes.load("title"))),
                     ),
                   ],
                 ),

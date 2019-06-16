@@ -52,28 +52,39 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Transform.translate(
-          offset: Offset(0, -5),
-          child: FadeInImage(
-            placeholder: MemoryImage(kTransparentImage),
-            image: AssetImage(
-              "assets/images/navBar.png",
-            ),
-            height: 70,
-            width: double.infinity,
-            alignment: Alignment(0, -1),
-            fit: BoxFit.cover,
+        FadeInImage(
+          placeholder: MemoryImage(kTransparentImage),
+          image: AssetImage(
+            "assets/images/navigation.png",
           ),
+          // child: Container(
+          //   height: 70,
+          //   width: 500,
+          //   child: SvgPicture.asset(
+          //     "assets/images/navBar.svg",
+          //     // height: 70,
+          //     color: Colors.yellow,
+          //     // fit: BoxFit.cover,
+          //     // alignment: Alignment(0, -1),
+          //     // width: 1000,
+          //   ),
+          // ),
+          height: 70,
+          width: double.infinity,
+          alignment: Alignment(0, -1),
+          fit: BoxFit.cover,
         ),
         Container(
           alignment: Alignment.bottomCenter,
           height: 70,
-          color: Colors.black,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: appBarIcons(context),
+          child: Transform.translate(
+            offset: Offset(0, 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: appBarIcons(context),
+            ),
           ),
         ),
       ],

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cup_and_soup/models/item.dart';
 import 'package:cup_and_soup/pages/store/item.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -100,7 +101,7 @@ class _ScannerPageState extends State<ScannerPage> {
     return Container(
       child: Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+          valueColor: AlwaysStoppedAnimation<Color>(themes.load("body2")),
         ),
       ),
     );

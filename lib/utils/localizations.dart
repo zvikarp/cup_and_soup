@@ -1,108 +1,84 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:rxdart/subjects.dart';
+import 'dart:ui';
 
 import 'package:cup_and_soup/services/sharedPreferences.dart';
+import 'package:cup_and_soup/data/lang/en.dart';
+import 'package:cup_and_soup/data/lang/he.dart';
 
-class Language {
-  Language(this.locale);  
-  
-  final Locale locale;  
-  
-  static Language of(BuildContext context) {  
-    return Localizations.of<Language>(context, Language);  
-  }  
-  
-  Map<String, String> _sentences;
-  
-  Future<bool> load() async {
-    String data = await rootBundle.loadString('resources/lang/${this.locale.languageCode}.json');
-    Map<String, dynamic> _result = json.decode(data);
+Map<String, dynamic> _supportedLanguages = {
+  'en': enLang.lang,
+  'he': heLang.lang
+};
 
-    this._sentences = Map();
-    _result.forEach((String key, dynamic value) {
-      this._sentences[key] = value.toString();
-    });
+class TranslationsUtil {
+  Locale _locale;
+  Map<String, dynamic> _localizedValues;
+  VoidCallback _onLocaleChangedCallback;
 
-    return true;
-  }
-  
-  String translate(String key) {  
-    return this._sentences[key];  
-  }  
-}
+  Iterable<Locale> supportedLocales() =>
+      _supportedLanguages.keys.map<Locale>((lang) => new Locale(lang, ''));
 
-class LanguageDelegate extends LocalizationsDelegate<Language> {  
-  const LanguageDelegate();  
-  
-  @override  
-  bool isSupported(Locale locale) => ['en', 'he'].contains(locale.languageCode);  
-  
-  @override  
-  Future<Language> load(Locale locale) async {
-    Language localizations = Language(locale);  
-  await localizations.load();  
-  
-  print("Load ${locale.languageCode}");  
-  
-  return localizations;
-  }
-  
-  @override  
-  bool shouldReload(LanguageDelegate old) => false;  
-}
-
-class LocalizationsUtil {
-
-  BehaviorSubject<Locale> _localeStream = BehaviorSubject();
-  Locale _locale = Locale('en', 'US');
-  List<Locale> _locales = [
-    const Locale('he', 'IL'),
-    const Locale('en', 'US'),
-  ];
-
-  Stream streamLocale() {
-    if (_localeStream == null) updateStreamLocale(_locale);
-    return _localeStream.stream;
+  dynamic text(String key) {
+    return (_localizedValues == null || _localizedValues[key] == null)
+        ? '** $key not found'
+        : _localizedValues[key];
   }
 
-  Future<Locale> getLocale() async {
-    String code = await sharedPreferencesService.getLang() ?? 'en';
-    Locale locale = codeToLocale(code);
-    _locale = locale;
-    return _locale;
-  }
+  bool rtl() => _locale.languageCode == 'he';
 
-  List<Locale> getLocalesList() => _locales;
+  get currentLanguage => _locale == null ? '' : _locale.languageCode;
 
-  Future<bool> setLocal(Locale locale) async {
-    _locale = locale;
-    await sharedPreferencesService.setLang(localeToCode(locale));
-    updateStreamLocale(_locale);
-    return true;
-  }
+  get locale => _locale;
 
-  void updateStreamLocale(Locale locale) {
-    _localeStream.add(_locale);
-  }
-
-  Locale codeToLocale(String code) {
-    for (var l in _locales) {
-      if (code == l.languageCode) return l;
+  Future<Null> init([String language]) async {
+    if (_locale == null) {
+      await setNewLanguage(language);
     }
-    return _locales.first;
+    return null;
   }
 
-  String localeToCode(Locale locale) {
-    for (var l in _locales) {
-      if (locale == l) return l.languageCode;
-    }
-    return _locales.first.languageCode;
-  } 
+  Future<String> getPreferredLanguage() async {
+    String lang = await sharedPreferencesService.getLang() ?? 'en';
+    if (!_supportedLanguages.keys.contains(lang)) lang = 'en';
+    return lang;
+  }
 
+  setPreferredLanguage(String lang) async {
+    return await sharedPreferencesService.setLang(lang);
+  }
+
+  Future<Null> setNewLanguage(
+      [String newLanguage, bool saveInPrefs = true]) async {
+    String language = newLanguage;
+    if (language == null) {
+      language = await getPreferredLanguage();
+    }
+    if (language == "") {
+      language = "en";
+    }
+    _locale = Locale(language, "");
+    _localizedValues = _supportedLanguages[_locale.languageCode];
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    print(_localizedValues);
+    if (saveInPrefs) {
+      await setPreferredLanguage(language);
+    }
+    if (_onLocaleChangedCallback != null) {
+      _onLocaleChangedCallback();
+    }
+    return null;
+  }
+
+  set onLocaleChangedCallback(VoidCallback callback) {
+    _onLocaleChangedCallback = callback;
+  }
+
+  static final TranslationsUtil _translations =
+      new TranslationsUtil._internal();
+  factory TranslationsUtil() {
+    return _translations;
+  }
+  TranslationsUtil._internal();
 }
 
-final LocalizationsUtil localizationsUtil = LocalizationsUtil();
+TranslationsUtil translate = new TranslationsUtil();

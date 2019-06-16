@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:cup_and_soup/utils/localizations.dart';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cup_and_soup/services/cloudFirestore.dart';
@@ -9,7 +11,6 @@ import 'package:cup_and_soup/dialogs/activityDetails.dart';
 import 'package:cup_and_soup/widgets/core/table.dart';
 
 class ActivityWidget extends StatefulWidget {
-
   @override
   _ActivityWidgetState createState() => _ActivityWidgetState();
 }
@@ -37,7 +38,8 @@ class _ActivityWidgetState extends State<ActivityWidget> {
               name: doc['desc'],
               status: doc['status'] ?? "success",
               amount: doc['money'].toDouble(),
-              timestamp: dateTimeUtil.timestampStringToDate(doc['timestamp'].toString()),
+              timestamp: dateTimeUtil
+                  .timestampStringToDate(doc['timestamp'].toString()),
             ),
       ),
     );
@@ -55,7 +57,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
           alignment: Alignment(-1, 0),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: _typeIcon(doc['type']),
+            child: Icon(
+              _typeIcon(doc['type']),
+              color: themes.load("body2"),
+              size: 16,
+            ),
           ),
         ),
         Padding(
@@ -68,11 +74,11 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       ]);
     });
     if (mounted) {
-    setState(() {
-      _activities = activities;
-      _length = _activities.length;
-      _refreshed = true;
-    });
+      setState(() {
+        _activities = activities;
+        _length = _activities.length;
+        _refreshed = true;
+      });
     }
     _onPageChanged(0);
   }
@@ -111,33 +117,26 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     });
   }
 
-  Widget _typeIcon(String type) {
-    if (type == "buy") {
-      return Icon(
-        Icons.fastfood,
-        size: 16,
-      );
-    } else if (type == "money") {
-      return Icon(
-        Icons.monetization_on,
-        size: 16,
-      );
-    } else if (type == "credit") {
-      return Icon(
-        Icons.atm,
-        size: 16,
-      );
-    } else if (type == "discount") {
-      return Icon(
-        Icons.attach_money,
-        size: 16,
-      );
-    } else {
-      return Icon(
-        Icons.error,
-        size: 16,
-      );
+  IconData _typeIcon(String type) {
+    IconData icon = Icons.error;
+    switch (type) {
+      case "buy":
+        icon = Icons.fastfood;
+        break;
+      case "money":
+        icon = Icons.monetization_on;
+        break;
+      case "credit":
+        icon = Icons.atm;
+        break;
+      case "discount":
+        icon = Icons.attach_money;
+        break;
+      default:
+        icon = Icons.error;
+        break;
     }
+    return icon;
   }
 
   Widget _date(String stringDate) {
@@ -162,14 +161,14 @@ class _ActivityWidgetState extends State<ActivityWidget> {
     return Column(
       children: <Widget>[
         Text(
-          "Activity",
+          translate.text("acc:p-activity:w-t"),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
           child: Text(
-            "This list contains every successful activity that occurred in your account.",
+            translate.text("acc:p-activity:w-st"),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.subtitle,
           ),
@@ -178,24 +177,24 @@ class _ActivityWidgetState extends State<ActivityWidget> {
             ? IconButton(
                 icon: Icon(
                   Icons.refresh,
-                  color: Colors.black54,
+                  color: themes.load("body1"),
                 ),
                 onPressed: _getActivities,
               )
             : Padding(
                 padding: EdgeInsets.all(15),
-                child: Text("Refreshing..."),
+                child: Text(translate.text("core-refreshing")),
               ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: _length == 0
               ? Text(
-                  "Hey! it looks like there is nothing to see here.",
+                  translate.text("core-emptySpace"),
                   textAlign: TextAlign.center,
                 )
               : TableWidget(
                   length: _length,
-                  headings: ["", "Name", "Amo.", "Date", " "],
+                  headings: ["", translate.text("field-name"), translate.text("field-amount"), translate.text("field-date"), " "],
                   items: _activitiesOnPage,
                   flex: [.2, .3, .1, .2, .2],
                   page: _page,
