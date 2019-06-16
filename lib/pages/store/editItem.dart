@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cup_and_soup/utils/themes.dart';
 import 'package:flutter_tags/input_tags.dart';
 import 'package:flutter/material.dart';
 
@@ -26,13 +27,16 @@ class EditItemPage extends StatefulWidget {
 }
 
 class _EditItemPageState extends State<EditItemPage> {
-  TextEditingController nameCtr = TextEditingController();
+  TextEditingController enNameCtr = TextEditingController();
+  TextEditingController heNameCtr = TextEditingController();
   TextEditingController barcodeCtr = TextEditingController();
-  TextEditingController descCtr = TextEditingController();
+  TextEditingController enDescCtr = TextEditingController();
+  TextEditingController heDescCtr = TextEditingController();
   TextEditingController priceCtr = TextEditingController();
   TextEditingController stockCtr = TextEditingController();
   TextEditingController positionCtr = TextEditingController();
-  TextEditingController hechsherimCtr = TextEditingController();
+  TextEditingController enHechsherimCtr = TextEditingController();
+  TextEditingController heHechsherimCtr = TextEditingController();
 
   File _imageFile;
   String _imageChanged = "no image";
@@ -46,8 +50,10 @@ class _EditItemPageState extends State<EditItemPage> {
     String errorMessage = "no error";
     if ((barcodeCtr.text.trim() == null) || (barcodeCtr.text.trim() == ""))
       errorMessage = "Please enter a barcode.";
-    else if ((nameCtr.text.trim() == null) || (nameCtr.text.trim() == ""))
-      errorMessage = "Please enter a name.";
+    else if ((enNameCtr.text.trim() == null) || (enNameCtr.text.trim() == ""))
+      errorMessage = "Please enter a EN name.";
+    else if ((heNameCtr.text.trim() == null) || (heNameCtr.text.trim() == ""))
+      errorMessage = "Please enter a HE name.";
     else if ((priceCtr.text.trim() == null) || (priceCtr.text.trim() == ""))
       errorMessage = "Please enter a price.";
     else if (double.tryParse(priceCtr.text.trim()) == null)
@@ -70,13 +76,13 @@ class _EditItemPageState extends State<EditItemPage> {
     }
     Item item = Item(
       barcode: widget.newItem ? barcodeCtr.text.trim() : widget.item.barcode,
-      name: nameCtr.text.trim(),
-      desc: descCtr.text,
+      name: {"en": enNameCtr.text.trim(), "he": heNameCtr.text.trim()},
+      desc: {"en": enDescCtr.text.trim(), "he": heDescCtr.text.trim()},
       remoteImage: _imagePath(),
       price: double.parse(priceCtr.text.trim()),
       stock: int.parse(stockCtr.text.trim()),
       tags: _tags,
-      hechsherim: hechsherimCtr.text.trim(),
+      hechsherim: {"en": enHechsherimCtr.text.trim(), "he": heHechsherimCtr.text.trim()},
       position: int.tryParse(positionCtr.text) ?? 0,
       lastUpdated: DateTime.now(),
     );
@@ -104,28 +110,31 @@ class _EditItemPageState extends State<EditItemPage> {
     super.initState();
     if (!widget.newItem) {
       setState(() {
-        nameCtr.text = widget.item.name;
-        descCtr.text = widget.item.desc;
+        enNameCtr.text = widget.item.getName("en");
+        heNameCtr.text = widget.item.getName("he");
+        enDescCtr.text = widget.item.getDesc("en");
+        heDescCtr.text = widget.item.getDesc("he");
         priceCtr.text = widget.item.price.toString();
         _tags = widget.item.tags;
         stockCtr.text = widget.item.stock.toString();
         positionCtr.text = widget.item.position.toString();
         barcodeCtr.text = widget.item.barcode;
-        hechsherimCtr.text = widget.item.hechsherim;
+        enHechsherimCtr.text = widget.item.getHechsherim("en");
+        heHechsherimCtr.text = widget.item.getHechsherim("he");
       });
     }
   }
 
-  Widget _nameInput() {
+  Widget _enNameInput() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: TextFieldWrapperWidget(
         prefix: Text(
-          "Name: ",
-          style: Theme.of(context).textTheme.headline,
+          "EN Name: ",
+          style: Theme.of(context).textTheme.headline.merge(TextStyle(color: themes.load("title"))),
         ),
         textField: TextFormField(
-          controller: nameCtr,
+          controller: enNameCtr,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.words,
           style: Theme.of(context).textTheme.headline,
@@ -134,13 +143,31 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
-  Widget _hechsherInput() {
+  Widget _heNameInput() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: TextFieldWrapperWidget(
-        prefix: Text("Hechsher: "),
+        prefix: Text(
+          "HE Name: ",
+          style: Theme.of(context).textTheme.headline.merge(TextStyle(color: themes.load("title"))),
+        ),
         textField: TextFormField(
-          controller: hechsherimCtr,
+          controller: heNameCtr,
+          decoration: InputDecoration(border: InputBorder.none),
+          textCapitalization: TextCapitalization.words,
+          style: Theme.of(context).textTheme.headline,
+        ),
+      ),
+    );
+  }
+
+  Widget _enHechsherInput() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: TextFieldWrapperWidget(
+        prefix: Text("EN Hechsher: "),
+        textField: TextFormField(
+          controller: enHechsherimCtr,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.sentences,
           style: Theme.of(context).textTheme.body1,
@@ -149,14 +176,44 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
-  Widget _descInput() {
+  Widget _heHechsherInput() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: TextFieldWrapperWidget(
-        prefix: Text("Description: "),
+        prefix: Text("HE Hechsher: "),
         textField: TextFormField(
-          controller: descCtr,
-          maxLines: 7,
+          controller: heHechsherimCtr,
+          decoration: InputDecoration(border: InputBorder.none),
+          textCapitalization: TextCapitalization.sentences,
+          style: Theme.of(context).textTheme.body1,
+        ),
+      ),
+    );
+  }
+
+  Widget _enDescInput() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: TextFieldWrapperWidget(
+        prefix: Text("EN Description: "),
+        textField: TextFormField(
+          controller: enDescCtr,
+          maxLines: null,
+          decoration: InputDecoration(border: InputBorder.none),
+          textCapitalization: TextCapitalization.sentences,
+          style: Theme.of(context).textTheme.body1,
+        ),
+      ),
+    );
+  }
+  Widget _heDescInput() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: TextFieldWrapperWidget(
+        prefix: Text("HE Description: "),
+        textField: TextFormField(
+          controller: heDescCtr,
+          maxLines: null,
           decoration: InputDecoration(border: InputBorder.none),
           textCapitalization: TextCapitalization.sentences,
           style: Theme.of(context).textTheme.body1,
@@ -261,9 +318,12 @@ class _EditItemPageState extends State<EditItemPage> {
                     currantImage: widget.newItem ? "no image" : (widget.item.remoteImage != null) && (widget.item.remoteImage != "") && (widget.item.remoteImage != "no image") ? widget.item.remoteImage : "no image",
                     onImageChanged: _onImageChanged,
                   )),
-              _nameInput(),
-              _hechsherInput(),
-              _descInput(),
+              _enNameInput(),
+              _heNameInput(),
+              _enHechsherInput(),
+              _heHechsherInput(),
+              _enDescInput(),
+              _heDescInput(),
               _priceInput(),
               _stockInput(),
               _barcodeInput(),

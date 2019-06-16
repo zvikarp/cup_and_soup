@@ -58,8 +58,6 @@ class TranslationsUtil {
     }
     _locale = Locale(language, "");
     _localizedValues = _supportedLanguages[_locale.languageCode];
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    print(_localizedValues);
     if (saveInPrefs) {
       await setPreferredLanguage(language);
     }

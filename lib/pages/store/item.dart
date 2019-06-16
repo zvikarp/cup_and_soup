@@ -84,14 +84,14 @@ class ItemPage extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  item.name,
+                  item.getName(translate.currentLanguage),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontFamily: "PrimaryFont", fontSize: 42),
                 ),
                 Text(
                   translate.text("item:p-hechesher") +
                       ": " +
-                      (item.hechsherim.toString() ??
+                      (item.getHechsherim(translate.currentLanguage).toString() ??
                           translate.text("item:p-notKosher")),
                   style: Theme.of(context).textTheme.subtitle,
                 ),
@@ -99,7 +99,7 @@ class ItemPage extends StatelessWidget {
                   alignment: Alignment(-1, 0),
                   padding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 43),
-                  child: Text(item.desc),
+                  child: Text(item.getDesc(translate.currentLanguage),),
                 ),
                 SelectableTags(
                   backgroundContainer: Theme.of(context).canvasColor,
