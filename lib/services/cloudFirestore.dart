@@ -358,8 +358,9 @@ class CloudFirestoreService {
         .get();
     if (doc.exists) {
       DateTime expiringDate = doc.data['expiringDate'].toDate();
+      String client = doc.data['client'].toString();
       if (DateTime.now().millisecondsSinceEpoch >
-          expiringDate.millisecondsSinceEpoch) {
+          expiringDate.millisecondsSinceEpoch || client == "app") {
         await _db
             .collection('users')
             .document(uid)

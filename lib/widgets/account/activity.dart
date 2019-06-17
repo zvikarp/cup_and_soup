@@ -132,6 +132,12 @@ class _ActivityWidgetState extends State<ActivityWidget> {
       case "discount":
         icon = Icons.attach_money;
         break;
+      case "note":
+        icon = Icons.note;
+        break;
+      case "refund":
+        icon = Icons.healing;
+        break;
       default:
         icon = Icons.error;
         break;

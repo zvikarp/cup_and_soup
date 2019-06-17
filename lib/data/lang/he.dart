@@ -43,6 +43,7 @@ class HeLang {
       "credit": "עדכון מכסת אשראי",
       "money": "העברה כספית",
       "refund": "החזר כספי",
+      "note": "הודעה",
     },
 
     // roles types

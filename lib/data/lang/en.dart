@@ -42,7 +42,8 @@ class EnLang {
       "discount": "Added Discount",
       "credit": "Credit Update",
       "money": "Money Transfer",
-      "refund": "refund",
+      "refund": "Refund",
+      "note": "Note",
     },
 
     "roles-types": {
