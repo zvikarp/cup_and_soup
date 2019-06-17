@@ -47,7 +47,7 @@ class _SigninDialogState extends State<SigninDialog> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "logging in with Google...",
+                "Signing in with Google...",
                 style: Theme.of(context).textTheme.title,
               ),
             ),

@@ -124,6 +124,26 @@ class CloudFirestoreService {
     }
   }
 
+  Future<String> uploadNoteBarcode(String note, DateTime dateTime,
+      int usageLimit, bool userLimit, int quantity) async {
+    String barcode = generateBarcode("N");
+    var data = await _db.collection('surpriseBox').document(barcode).get();
+    if (data.exists)
+      return uploadNoteBarcode(
+          note, dateTime, usageLimit, userLimit, quantity);
+    else {
+      await _db.collection('surpriseBox').document(barcode).setData({
+        'type': "note",
+        'note': note,
+        'expiringDate': dateTime,
+        'usageLimit': usageLimit,
+        'userLimit': userLimit,
+        'quantity': quantity,
+      });
+      return barcode;
+    }
+  }
+
   Future<String> updateCreditBarcode(double amount, DateTime dateTime) async {
     String barcode = generateBarcode("C");
     var data = await _db.collection('surpriseBox').document(barcode).get();
@@ -184,6 +204,24 @@ class CloudFirestoreService {
           var request = {
             "barcode": snap.data['barcode'],
             "responseCode": snap.data['responseCode']
+          };
+          _generalRequestsStream.add(request);
+        }
+      }
+    });
+    _db
+        .collection('users')
+        .document(uid)
+        .collection('requests')
+        .document('note')
+        .snapshots()
+        .listen((snap) {
+      if (snap.exists) {
+        if (snap.data['client'] == "app") {
+          var request = {
+            "barcode": snap.data['barcode'],
+            "responseCode": snap.data['responseCode'],
+            "note": snap.data['note'],
           };
           _generalRequestsStream.add(request);
         }
@@ -390,6 +428,8 @@ class CloudFirestoreService {
       type = "discount";
     else if (barcode[0] == "C")
       type = "credit";
+    else if (barcode[0] == "N")
+      type = "note";
     else
       return false;
     String uid = await authService.getUid();

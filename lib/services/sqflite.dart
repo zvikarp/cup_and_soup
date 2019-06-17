@@ -89,7 +89,7 @@ class SqfliteService {
   Future setSetting(String key, String value) async {
     final db = await database;
     await db.rawInsert(
-        "INSERT Into Settings (key, value)"
+        "INSERT or REPLACE into Settings (key, value)"
         " VALUES (?,?)",
         [key, value]);
   }
@@ -111,6 +111,7 @@ class SqfliteService {
 
   void updateItems(Map<String,Item> items) {
     _items = items;
+    print(items.values.toList());
     _itemsStream.add(items.values.toList());
   }
 
@@ -169,7 +170,7 @@ class SqfliteService {
   Map<String,Item> mergeUpdatedItems(Map<String,Item> initalItems, Map<String,Item> newItems) {
     for (Item item in newItems.values) {
       String barcode = item.barcode;
-      if (!newItems.containsKey(barcode))
+      if (!initalItems.containsKey(barcode))
         initalItems.putIfAbsent(barcode, () => item);
     }
     return initalItems;

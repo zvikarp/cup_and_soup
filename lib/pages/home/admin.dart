@@ -8,6 +8,7 @@ import 'package:cup_and_soup/pages/admin/updateCredit.dart';
 import 'package:cup_and_soup/pages/admin/transferMoney.dart';
 import 'package:cup_and_soup/pages/admin/activeBarcodes.dart';
 import 'package:cup_and_soup/pages/admin/giveDiscount.dart';
+import 'package:cup_and_soup/pages/admin/createNote.dart';
 import 'package:cup_and_soup/pages/admin/refundRequests.dart';
 import 'package:cup_and_soup/widgets/core/page.dart';
 import 'package:cup_and_soup/widgets/core/divider.dart';
@@ -25,13 +26,14 @@ class _AdminPageState extends State<AdminPage> {
     return PageWidget(
       title: "admin",
       child: Column(children: <Widget>[
+        SizedBox(height: 36),
         Text(
-          "Quick Actions",
+          "Generate Barcodes",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.title,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           child: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -54,57 +56,72 @@ class _AdminPageState extends State<AdminPage> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UpdateCreditPage()),
-              );
-            },
-            child: CenterWidget(
-              child: Center(
-                child: Text(
-                  "Update User Credit",
-                  style: Theme.of(context).textTheme.title.merge(
-                        TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                ),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Update User Credit",
               ),
-            ),
+              ButtonWidget(
+                text: "UPDATE",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UpdateCreditPage()),
+                  );
+                },
+                primary: false,
+              ),
+            ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GiveDiscountPage()),
-              );
-            },
-            child: CenterWidget(
-              child: Center(
-                child: Text(
-                  "Give Discount",
-                  style: Theme.of(context).textTheme.title.merge(
-                        TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                ),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Give Discount",
               ),
-            ),
+              ButtonWidget(
+                text: "GIVE",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GiveDiscountPage()),
+                  );
+                },
+                primary: false,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Create Note",
+              ),
+              ButtonWidget(
+                text: "CREATE",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateNotePage()),
+                  );
+                },
+                primary: false,
+              ),
+            ],
           ),
         ),
         DividerWidget(),
-        Text(
-          "Requests",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.title
-        ),
+        Text("Requests & Reports",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.title),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Row(
@@ -148,12 +165,6 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ],
           ),
-        ),
-        DividerWidget(),
-        Text(
-          "More",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.title
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -199,6 +210,10 @@ class _AdminPageState extends State<AdminPage> {
             ],
           ),
         ),
+        DividerWidget(),
+        Text("More",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.title),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Row(

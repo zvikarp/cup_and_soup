@@ -7,9 +7,11 @@ import 'package:cup_and_soup/widgets/core/button.dart';
 class MessageDialog extends StatelessWidget {
   MessageDialog({
     @required this.responseCode,
+    this.responseNote = "",
   });
 
   final String responseCode;
+  final String responseNote;
 
   Widget _icon(String type) {
     if (type == 's')
@@ -124,6 +126,19 @@ class MessageDialog extends StatelessWidget {
           return translate.text("mag:d-s-e1");
         case 's-e2':
           return translate.text("mag:d-s-e2");
+        default:
+          return _textMessage("g");
+      }
+    } else if (collection == 'n') {
+      switch (responseCode) {
+        case 'n-gs0':
+          return responseNote;
+        case 'n-e0':
+          return translate.text("mag:d-n-e0");
+        case 'n-e1':
+          return translate.text("mag:d-n-e1");
+        case 'n-e2':
+          return translate.text("mag:d-n-e2");
         default:
           return _textMessage("g");
       }

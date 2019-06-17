@@ -26,8 +26,8 @@ class FirebaseMessagingService {
     });
   }
 
-  bool updateUserNotificationsTopics(
-      List<String> topicsToSubscribe, List<String> allTopics) {
+  bool updateUserNotificationsTopics(List<String> topicsToSubscribe, List<String> allTopics) {
+    if (allTopics == null) return false;
     allTopics.forEach((topic) {
       if (topicsToSubscribe.contains(topic))
         _firebaseMessaging.subscribeToTopic(topic);

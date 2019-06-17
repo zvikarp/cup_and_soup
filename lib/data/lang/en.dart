@@ -138,6 +138,12 @@ class EnLang {
         "It looks like you have successfully used the code already. It can't be used twice.",
     "mag:d-d-e2": "The barcode has expired.",
 
+    // messages [note]
+    "mag:d-n-e0": "The scanned code doesn't exist anymore.",
+    "mag:d-n-e1":
+        "It looks like you have successfully used the code already. It can't be used twice.",
+    "mag:d-n-e2": "The barcode has expired.",
+
     // messages [credit]
     "mag:d-c-gs0": "The credit update was successfully applied account!",
     "mag:d-c-e0": "The scanned code doesn't exist anymore.",

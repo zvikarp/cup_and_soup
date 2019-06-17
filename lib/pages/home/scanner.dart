@@ -24,7 +24,7 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   StreamSubscription _requestStream;
-  List<String> types = ['M', 'C', 'D'];
+  List<String> types = ['M', 'C', 'D', 'N'];
 
   void _waitForResponce(String barcode) {
     if (_requestStream != null) _requestStream.cancel();
@@ -37,6 +37,7 @@ class _ScannerPageState extends State<ScannerPage> {
           TransparentRoute(
             builder: (BuildContext context) => MessageDialog(
                   responseCode: snap['responseCode'],
+                  responseNote: snap['note'] ?? "",
                 ),
           ),
         );
