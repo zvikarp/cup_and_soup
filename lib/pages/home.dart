@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 
   _HomePageState createState() => _HomePageState();
 
-  static String getVersion() => "v0.2.1";
+  static String getVersion() => "v0.3.0";
   static Future<bool> newVersion() async {
     String lastVersion = await cloudFirestoreService.getLastVersion();
     return (getVersion() == lastVersion);

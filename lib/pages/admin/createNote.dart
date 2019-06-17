@@ -12,14 +12,12 @@ class CreateNotePage extends StatefulWidget {
 
 class _CreateNotePageState extends State<CreateNotePage> {
   int _step = 1;
-  String _note = "";
   String _barcode = "";
 
   void _amountSubmited(String note, DateTime dateTime, int usageLimit, bool userLimit, int scans) async {
     String barcode = await cloudFirestoreService.uploadNoteBarcode(note, dateTime, usageLimit, userLimit, scans);
     setState(() {
       _step = 2;
-      _note = note;
       _barcode = barcode;
     });
   }
